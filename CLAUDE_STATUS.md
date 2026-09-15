@@ -25,6 +25,8 @@
 - Expanded the HTML layout to full width and gave the live preview the larger desktop column for readability.
 - Restored a balanced 50/50 editor-preview desktop layout and made Work experience heading span both experience columns in HTML and PDF.
 - Changed experience entries to full-width blocks stacked vertically in both preview and PDF.
+- Added skill-icons.dev icons for supported skills in the editor and live preview, with the existing fallback for unsupported skills.
+- Added icon-based skill autocomplete with filtering, mouse selection, and keyboard navigation.
 
 ## Verification
 
@@ -32,6 +34,7 @@
 - `npm run lint`
 - `npm run test`
 - `npm run build`
+- `npm run test` after adding skill icon coverage
 
 ## Next
 

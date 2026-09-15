@@ -1,9 +1,11 @@
+import { SkillIcon } from "@/components/SkillIcon";
 import type { Translation } from "@/services/copy";
 import { createEmptyExperience } from "@/services/initialResume";
 import { resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
+import { getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ChangeEvent, FormEvent, ReactNode } from "react";
-import { useState } from "react";
+import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ResumeFormProps {
@@ -19,6 +21,7 @@ const inputClass =
 
 export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeChange }: ResumeFormProps) {
 	const [newSkill, setNewSkill] = useState("");
+	const [highlightedSkill, setHighlightedSkill] = useState(0);
 	const {
 		register,
 		formState: { errors },
@@ -33,12 +36,41 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 			},
 		};
 	};
+	const skillSuggestions = useMemo(() => {
+		const query = newSkill.trim().toLowerCase();
+		if (!query) return [];
+		return skillIconSuggestions
+			.filter(({ label, id }) => `${label} ${id}`.toLowerCase().includes(query) && !resume.skills.includes(label))
+			.slice(0, 6);
+	}, [newSkill, resume.skills]);
+	const addSkillValue = (value: string) => {
+		const trimmedValue = value.trim();
+		if (trimmedValue && !resume.skills.includes(trimmedValue)) {
+			onResumeChange((current) => ({ ...current, skills: [...current.skills, trimmedValue] }));
+			setNewSkill("");
+			setHighlightedSkill(0);
+		}
+	};
 	const addSkill = (event: FormEvent) => {
 		event.preventDefault();
-		const value = newSkill.trim();
-		if (value && !resume.skills.includes(value)) {
-			onResumeChange((current) => ({ ...current, skills: [...current.skills, value] }));
-			setNewSkill("");
+		addSkillValue(newSkill);
+	};
+	const selectSkillSuggestion = (label: string) => {
+		addSkillValue(label);
+	};
+	const handleSkillKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (!skillSuggestions.length) return;
+		if (event.key === "ArrowDown") {
+			event.preventDefault();
+			setHighlightedSkill((current) => (current + 1) % skillSuggestions.length);
+		}
+		if (event.key === "ArrowUp") {
+			event.preventDefault();
+			setHighlightedSkill((current) => (current - 1 + skillSuggestions.length) % skillSuggestions.length);
+		}
+		if (event.key === "Enter") {
+			event.preventDefault();
+			selectSkillSuggestion(skillSuggestions[highlightedSkill].label);
 		}
 	};
 	const handlePhoto = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,21 +147,51 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								onResumeChange((current) => ({ ...current, skills: current.skills.filter((item) => item !== skill) }))
 							}
 						>
-							<span className='grid h-5 w-5 place-items-center rounded-full bg-[#d36f48] font-mono text-[10px] text-[#f9f7ef]'>
-								{skill.slice(0, 1)}
-							</span>
+							<SkillIcon skill={skill} />
+							{!getSkillIconUrl(skill) ? (
+								<span className='grid h-5 w-5 place-items-center rounded-full bg-[#d36f48] font-mono text-[10px] text-[#f9f7ef]'>
+									{skill.slice(0, 1)}
+								</span>
+							) : null}
 							{skill}
 							<span className='text-[15px] text-[#91a095]'>×</span>
 						</button>
 					))}
 				</div>
-				<form className='mt-4 flex w-[190px]' onSubmit={addSkill}>
-					<input
-						className={`${inputClass} rounded-r-none border-r-0`}
-						value={newSkill}
-						onChange={(event) => setNewSkill(event.target.value)}
-						placeholder={t.addSkill}
-					/>
+				<form className='relative mt-4 flex w-[250px]' onSubmit={addSkill}>
+					<div className='relative min-w-0 flex-1'>
+						<input
+							className={`${inputClass} rounded-r-none border-r-0`}
+							value={newSkill}
+							onChange={(event) => {
+								setNewSkill(event.target.value);
+								setHighlightedSkill(0);
+							}}
+							onKeyDown={handleSkillKeyDown}
+							placeholder={t.addSkill}
+							aria-autocomplete='list'
+							aria-controls='skill-suggestions'
+						/>
+						{skillSuggestions.length ? (
+							<div
+								id='skill-suggestions'
+								className='absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded border border-[#d0d4cb] bg-[#fbfaf5] shadow-lg'
+							>
+								{skillSuggestions.map(({ id, label }, index) => (
+									<button
+										className={`flex w-full items-center gap-2 px-2 py-2 text-left text-[11px] text-[#2d4b40] ${index === highlightedSkill ? "bg-[#e8eee7]" : "hover:bg-[#f1f3ed]"}`}
+										key={id}
+										type='button'
+										onMouseDown={(event) => event.preventDefault()}
+										onClick={() => selectSkillSuggestion(label)}
+									>
+										<SkillIcon skill={label} className='h-5 w-5' />
+										{label}
+									</button>
+								))}
+							</div>
+						) : null}
+					</div>
 					<button
 						className='w-10 rounded-r border border-[#d0d4cb] text-[#153b34]'
 						type='submit'

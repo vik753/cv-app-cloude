@@ -1,3 +1,4 @@
+import { SkillIcon } from "@/components/SkillIcon";
 import type { Translation } from "@/services/copy";
 import type { Resume } from "@/services/resumeSchema";
 
@@ -59,7 +60,11 @@ export function ResumePreview({ resume, t }: ResumePreviewProps) {
 							<h3 className='pt-1 font-display text-sm font-semibold text-[#153b34]'>{t.skills}</h3>
 							<div className='mt-3 flex flex-wrap content-start gap-1.5 sm:mt-0'>
 								{resume.skills.map((skill) => (
-									<span className='rounded-sm bg-[#e8eee7] px-2 py-1.5 text-[11px] text-[#3d6254]' key={skill}>
+									<span
+										className='flex items-center gap-1 rounded-sm bg-[#e8eee7] px-2 py-1.5 text-[11px] text-[#3d6254]'
+										key={skill}
+									>
+										<SkillIcon skill={skill} className='h-4 w-4' />
 										{skill}
 									</span>
 								))}
