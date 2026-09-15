@@ -8,6 +8,8 @@ const validResume = {
 	phone: "+44 20 0000 0000",
 	location: "London",
 	website: "alex.dev",
+	github: "github.com/alex",
+	linkedin: "linkedin.com/in/alex",
 	summary: "Builds useful interfaces.",
 	skills: ["React"],
 	experience: [{ id: 1, company: "Studio", role: "Developer", period: "2024", description: "Built products." }],

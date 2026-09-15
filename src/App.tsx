@@ -1,5 +1,6 @@
 import { LanguageSwitcher, ResumeForm, ResumePreview, translations, useLanguage, useResumeStore } from "@/index";
-import { useState } from "react";
+import { DownloadSimple, Eye, EyeSlash, Moon, Palette, Sun } from "@phosphor-icons/react";
+import { useEffect, useMemo, useState } from "react";
 
 export function App() {
 	const resume = useResumeStore((state) => state.resume);
@@ -7,8 +8,41 @@ export function App() {
 	const updateExperience = useResumeStore((state) => state.updateExperience);
 	const updateResume = useResumeStore((state) => state.updateResume);
 	const resetResume = useResumeStore((state) => state.reset);
+	const palette = useResumeStore((state) => state.palette);
+	const mode = useResumeStore((state) => state.mode);
+	const setPalette = useResumeStore((state) => state.setPalette);
+	const setMode = useResumeStore((state) => state.setMode);
 	const { language, setLanguage, t } = useLanguage();
 	const [notice, setNotice] = useState(t.autoSave);
+	const [previewVisible, setPreviewVisible] = useState(true);
+	const [previewEntering, setPreviewEntering] = useState(false);
+	useEffect(() => {
+		localStorage.setItem("resume-canvas-palette", palette);
+		localStorage.setItem("resume-canvas-mode", mode);
+	}, [mode, palette]);
+
+	const completion = useMemo(() => {
+		const values = [
+			resume.name,
+			resume.role,
+			resume.summary,
+			resume.email,
+			resume.phone,
+			resume.location,
+			resume.website,
+			resume.github,
+			resume.linkedin,
+			resume.photo,
+			resume.skills.length ? "filled" : "",
+			resume.experience.length ? "filled" : "",
+			...resume.experience.flatMap((item) => [item.company, item.role, item.period, item.description]),
+			resume.education,
+			resume.certificates,
+		];
+		const filled = values.filter(Boolean).length;
+		const total = 18;
+		return { filled: Math.min(filled, total), total, percent: Math.min(100, Math.round((filled / total) * 100)) };
+	}, [resume]);
 
 	const clearDraft = () => {
 		if (window.confirm(t.confirmClear)) {
@@ -16,17 +50,61 @@ export function App() {
 			setNotice(t.reset);
 		}
 	};
+	const togglePreview = () => {
+		if (previewVisible) {
+			setPreviewVisible(false);
+			return;
+		}
+		setPreviewVisible(true);
+		setPreviewEntering(true);
+		window.setTimeout(() => setPreviewEntering(false), 360);
+	};
 
 	return (
-		<main className='min-h-screen bg-[#f2f1eb]'>
-			<header className='print-header flex min-h-[60px] flex-col items-start justify-between gap-4 border-b border-[#d7d8d0] bg-[#f2f1eb]/90 px-5 py-4 sm:flex-row sm:items-center sm:px-[3.4vw] sm:py-0'>
-				<div className='flex items-center gap-2.5 font-display text-[15px] font-semibold'>
-					<span className='grid h-7 w-7 place-items-center rounded-full bg-[#153b34] font-mono text-[13px] text-[#f5f4ee]'>
-						cv
-					</span>
+		<main data-palette={palette} data-mode={mode} className='app-shell min-h-screen'>
+			<header className='print-header app-header'>
+				<div className='app-brand'>
+					<span className='brand-mark'>cv</span>
 					<span>Resume Canvas</span>
 				</div>
-				<div className='flex w-full items-center justify-between gap-3 sm:w-auto sm:gap-4'>
+				<button className='header-download' type='button' onClick={() => window.print()}>
+					<DownloadSimple size={16} />
+					{t.download}
+				</button>
+				<div className='header-actions'>
+					<div className='segmented' aria-label={t.mode}>
+						<button
+							className={mode === "dark" ? "active" : ""}
+							type='button'
+							aria-label={t.dark}
+							onClick={() => setMode("dark")}
+						>
+							<Moon size={15} />
+						</button>
+						<button
+							className={mode === "light" ? "active" : ""}
+							type='button'
+							aria-label={t.light}
+							onClick={() => setMode("light")}
+						>
+							<Sun size={15} />
+						</button>
+					</div>
+					<div className='palette-switcher' aria-label={t.palette}>
+						<Palette size={15} />
+						<button
+							className={palette === "blurple" ? "swatch active" : "swatch blurple"}
+							type='button'
+							aria-label='Blurple'
+							onClick={() => setPalette("blurple")}
+						/>
+						<button
+							className={palette === "cream" ? "swatch active" : "swatch cream"}
+							type='button'
+							aria-label='Cream'
+							onClick={() => setPalette("cream")}
+						/>
+					</div>
 					<LanguageSwitcher
 						language={language}
 						onChange={(nextLanguage) => {
@@ -34,45 +112,53 @@ export function App() {
 							setNotice(translations[nextLanguage].autoSave);
 						}}
 					/>
-					<span className='hidden items-center gap-2 font-mono text-[11px] text-[#68716c] md:flex'>
-						<span className='h-1.5 w-1.5 rounded-full bg-[#83b96d]' />
+					<span className='autosave'>
+						<span />
 						{notice}
 					</span>
-					<button className='text-[13px] text-[#59625e]' type='button' onClick={clearDraft}>
+					<button className='header-clear' type='button' onClick={clearDraft}>
 						{t.clear}
 					</button>
 					<button
-						className='rounded bg-[#153b34] px-3 py-2 text-[13px] text-[#f6f5ef]'
+						className='preview-toggle'
 						type='button'
-						onClick={() => window.print()}
+						aria-expanded={previewVisible}
+						aria-label={previewVisible ? t.previewHide : t.previewShow}
+						title={previewVisible ? t.previewHide : t.previewShow}
+						onClick={togglePreview}
 					>
-						{t.download} <span className='ml-2 text-base'>↗</span>
+						{previewVisible ? <EyeSlash size={16} /> : <Eye size={16} />}
 					</button>
 				</div>
 			</header>
-			<div className='print-workspace grid w-full min-w-0 lg:grid-cols-2'>
-				<section className='print-editor min-w-0 px-5 py-8 sm:px-8 lg:px-[4vw] lg:py-11' aria-label={t.create}>
-					<div className='mb-6 flex justify-between font-mono text-[11px] uppercase tracking-[.08em] text-[#768079]'>
-						{t.create}
-						<span>01 / 01</span>
-					</div>
-					<div className='flex items-end justify-between gap-6 border-b border-[#d7d8d0] pb-11'>
-						<div>
-							<h1 className='font-display text-[clamp(35px,4vw,57px)] font-semibold leading-[.99] tracking-[-.055em] text-[#153b34]'>
-								{language === "en" ? "Build a resume," : "Зберіть резюме,"}
-								<br />
-								<em className='text-[#d36f48] not-italic'>
-									{language === "en" ? "that gets noticed." : "яке помітять."}
-								</em>
-							</h1>
-							<p className='mt-5 max-w-[430px] text-sm leading-[1.55] text-[#69736d]'>{t.notice}</p>
-						</div>
-						<div className='min-w-[100px] text-right font-mono text-[11px] text-[#78817c]'>
-							<strong className='block font-display text-2xl text-[#153b34]'>72%</strong>
-							<span>{t.completion}</span>
-							<div className='mt-3 h-[3px] w-[100px] bg-[#d5d5cd]'>
-								<i className='block h-full w-[72%] bg-[#d36f48]' />
-							</div>
+			<div
+				className={`print-workspace app-body ${previewVisible ? "" : "preview-hidden"} ${previewEntering ? "preview-entering" : ""}`}
+			>
+				<section className='print-editor form-column' aria-label={t.create}>
+					<div className='form-hero'>
+						<h1>
+							{language === "en" ? (
+								<>
+									Build a resume,
+									<br />
+									<em>that gets noticed.</em>
+								</>
+							) : (
+								<>
+									Зберіть резюме,
+									<br />
+									<em>яке помітять.</em>
+								</>
+							)}
+						</h1>
+						<div className='completion'>
+							<strong>{completion.percent}%</strong>
+							<span>
+								{completion.filled} of {completion.total} {t.fields}
+							</span>
+							<i>
+								<b style={{ width: `${completion.percent}%` }} />
+							</i>
 						</div>
 					</div>
 					<ResumeForm

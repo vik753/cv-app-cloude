@@ -27,6 +27,18 @@ export interface Translation {
 	phone: string;
 	city: string;
 	website: string;
+	github: string;
+	linkedin: string;
+	mode: string;
+	palette: string;
+	light: string;
+	dark: string;
+	fields: string;
+	pageOf: string;
+	zoomOut: string;
+	zoomIn: string;
+	previewHide: string;
+	previewShow: string;
 	addSkill: string;
 	company: string;
 	jobTitle: string;
@@ -78,14 +90,26 @@ export const translations: Record<Language, Translation> = {
 		email: "Email",
 		phone: "Phone",
 		city: "City",
-		website: "Website or LinkedIn",
+		website: "Website",
+		github: "GitHub",
+		linkedin: "LinkedIn",
+		mode: "Color mode",
+		palette: "Palette",
+		light: "Light",
+		dark: "Dark",
+		fields: "fields",
+		pageOf: "A4 · page {page} of {pages}",
+		zoomOut: "Zoom out",
+		zoomIn: "Zoom in",
+		previewHide: "Hide preview",
+		previewShow: "Show preview",
 		addSkill: "Add a skill",
 		company: "Company",
 		jobTitle: "Job title",
 		period: "Period",
 		achievements: "Achievements",
 		remove: "Remove",
-		addWork: "＋ Add workplace",
+		addWork: "Add workplace",
 		degree: "Education",
 		certificates: "Courses and certificates",
 		preview: "Live preview",
@@ -128,14 +152,26 @@ export const translations: Record<Language, Translation> = {
 		email: "Email",
 		phone: "Телефон",
 		city: "Місто",
-		website: "Сайт або LinkedIn",
+		website: "Сайт",
+		github: "GitHub",
+		linkedin: "LinkedIn",
+		mode: "Колірний режим",
+		palette: "Палітра",
+		light: "Світла",
+		dark: "Темна",
+		fields: "полів",
+		pageOf: "A4 · сторінка {page} з {pages}",
+		zoomOut: "Зменшити",
+		zoomIn: "Збільшити",
+		previewHide: "Сховати попередній перегляд",
+		previewShow: "Показати попередній перегляд",
 		addSkill: "Додати навичку",
 		company: "Компанія",
 		jobTitle: "Посада",
 		period: "Період",
 		achievements: "Досягнення",
 		remove: "Видалити",
-		addWork: "＋ Додати місце роботи",
+		addWork: "Додати місце роботи",
 		degree: "Освіта",
 		certificates: "Курси та сертифікати",
 		preview: "Живий попередній перегляд",

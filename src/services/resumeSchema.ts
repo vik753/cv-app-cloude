@@ -15,6 +15,8 @@ export const resumeSchema = z.object({
 	phone: z.string(),
 	location: z.string(),
 	website: z.string(),
+	github: z.string(),
+	linkedin: z.string(),
 	summary: z.string(),
 	skills: z.array(z.string()),
 	experience: z.array(experienceSchema),

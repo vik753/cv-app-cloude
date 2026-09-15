@@ -15,6 +15,8 @@ export const initialResume: Resume = {
 	phone: "+7 999 123-45-67",
 	location: "London, UK",
 	website: "alexey.dev",
+	github: "github.com/alexsmith",
+	linkedin: "linkedin.com/in/alexsmith",
 	summary: "I create fast, clear interfaces and turn complex problems into thoughtful digital products.",
 	skills: ["React", "TypeScript", "Figma", "Node.js"],
 	experience: [

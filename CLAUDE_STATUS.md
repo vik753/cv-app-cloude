@@ -27,6 +27,8 @@
 - Changed experience entries to full-width blocks stacked vertically in both preview and PDF.
 - Added skill-icons.dev icons for supported skills in the editor and live preview, with the existing fallback for unsupported skills.
 - Added icon-based skill autocomplete with filtering, mouse selection, and keyboard navigation.
+- Began the Resume Canvas split-desk redesign from the handoff: independent Blurple/Cream and light/dark themes, persisted theme controls, completion meter, zoom/page toolbar, new GitHub and LinkedIn fields, and education/courses below work experience.
+- Added Phosphor React icons and responsive themed shell styling for the redesign.
 
 ## Verification
 
@@ -35,6 +37,10 @@
 - `npm run test`
 - `npm run build`
 - `npm run test` after adding skill icon coverage
+- `npm run typecheck` after handoff implementation
+- `npm run lint` after handoff implementation
+- `npm run test` after handoff implementation
+- `npm run build` after handoff implementation
 
 ## Next
 

@@ -7,10 +7,10 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ language, onChange }: LanguageSwitcherProps) {
 	return (
-		<div className='flex gap-0.5 rounded border border-[#d7d8d0] p-0.5' aria-label='Language'>
+		<div className='language-switcher flex gap-0.5 rounded border p-0.5' aria-label='Language'>
 			{(["en", "uk"] as const).map((option) => (
 				<button
-					className={`rounded px-1.5 py-0.5 font-mono text-[10px] ${language === option ? "bg-[#153b34] text-[#f6f5ef]" : "text-[#78817c]"}`}
+					className={`rounded px-2 py-1 font-mono text-[10px] ${language === option ? "active" : ""}`}
 					key={option}
 					type='button'
 					onClick={() => onChange(option)}

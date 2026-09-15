@@ -4,6 +4,7 @@ import { createEmptyExperience } from "@/services/initialResume";
 import { resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
 import { getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera, Plus, Trash, X } from "@phosphor-icons/react";
 import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -99,7 +100,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 									loading='lazy'
 								/>
 							) : (
-								"＋"
+								<Camera size={20} />
 							)}
 						</span>
 						<strong className='text-[11px] text-[#30423b]'>{resume.photo ? t.photoAdded : t.photo}</strong>
@@ -133,6 +134,12 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 					<Field label={t.website}>
 						<input className={inputClass} {...bind("website")} />
 					</Field>
+					<Field label={t.github}>
+						<input className={inputClass} {...bind("github")} />
+					</Field>
+					<Field label={t.linkedin}>
+						<input className={inputClass} {...bind("linkedin")} />
+					</Field>
 				</div>
 			</section>
 			<section className={section}>
@@ -154,7 +161,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								</span>
 							) : null}
 							{skill}
-							<span className='text-[15px] text-[#91a095]'>×</span>
+							<X size={15} className='text-[var(--chip-x)]' />
 						</button>
 					))}
 				</div>
@@ -197,7 +204,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 						type='submit'
 						aria-label={t.addSkill}
 					>
-						＋
+						<Plus size={17} />
 					</button>
 				</form>
 			</section>
@@ -246,6 +253,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								}))
 							}
 						>
+							<Trash size={14} className='mr-1 inline' />
 							{t.remove}
 						</button>
 					</div>
@@ -257,15 +265,20 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 						onResumeChange((current) => ({ ...current, experience: [...current.experience, createEmptyExperience()] }))
 					}
 				>
-					{t.addWork}
+					<Plus size={15} className='mr-1 inline' /> {t.addWork}
 				</button>
 			</section>
 			<section className={section}>
-				<SectionHeading number='05' title={t.education} hint={t.educationHint} />
+				<SectionHeading number='05' title={t.degree} hint={t.educationHint} />
 				<div className='grid gap-4'>
 					<Field label={t.degree}>
 						<textarea className={inputClass} rows={2} {...bind("education")} />
 					</Field>
+				</div>
+			</section>
+			<section className={section}>
+				<SectionHeading number='06' title={t.certificates} hint={t.certificates} />
+				<div className='grid gap-4'>
 					<Field label={t.certificates}>
 						<textarea className={inputClass} rows={2} {...bind("certificates")} />
 					</Field>
