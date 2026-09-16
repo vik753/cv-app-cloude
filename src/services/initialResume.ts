@@ -19,6 +19,7 @@ export const initialResume: Resume = {
 	linkedin: "linkedin.com/in/alexsmith",
 	summary: "I create fast, clear interfaces and turn complex problems into thoughtful digital products.",
 	skills: ["React", "TypeScript", "Figma", "Node.js"],
+	languages: [{ id: 1, language: "English", level: "B2" }],
 	experience: [
 		{
 			id: 1,

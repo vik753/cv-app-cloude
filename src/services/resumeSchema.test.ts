@@ -12,6 +12,7 @@ const validResume = {
 	linkedin: "linkedin.com/in/alex",
 	summary: "Builds useful interfaces.",
 	skills: ["React"],
+	languages: [{ id: 1, language: "English", level: "B2" }],
 	experience: [{ id: 1, company: "Studio", role: "Developer", period: "2024", description: "Built products." }],
 	education: "Computer Science",
 	certificates: "Advanced React",
@@ -25,5 +26,11 @@ describe("resumeSchema", () => {
 
 	it("rejects an invalid email", () => {
 		expect(resumeSchema.safeParse({ ...validResume, email: "invalid" }).success).toBe(false);
+	});
+
+	it("rejects an invalid language level", () => {
+		expect(
+			resumeSchema.safeParse({ ...validResume, languages: [{ id: 1, language: "English", level: "Z9" }] }).success,
+		).toBe(false);
 	});
 });
