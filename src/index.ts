@@ -1,4 +1,5 @@
 export { LanguageSwitcher } from "@/components/LanguageSwitcher";
+export { PaletteSwitcher } from "@/components/PaletteSwitcher";
 export { ResumeForm } from "@/components/ResumeForm";
 export { ResumePreview } from "@/components/ResumePreview";
 export { useLanguage } from "@/hooks/useLanguage";
@@ -7,3 +8,4 @@ export type { Language, Translation } from "@/services/copy";
 export { resumeSchema } from "@/services/resumeSchema";
 export type { Experience, ExperienceField, Resume, ResumeField } from "@/services/resumeSchema";
 export { useResumeStore } from "@/services/resumeStore";
+export type { Palette } from "@/services/resumeStore";

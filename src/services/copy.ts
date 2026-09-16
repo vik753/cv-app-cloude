@@ -58,6 +58,28 @@ export interface Translation {
 	page: string;
 	jobPlaceholder: string;
 	namePlaceholder: string;
+	summaryPlaceholder: string;
+	emailPlaceholder: string;
+	phonePlaceholder: string;
+	locationPlaceholder: string;
+	websitePlaceholder: string;
+	githubPlaceholder: string;
+	linkedinPlaceholder: string;
+	degreePlaceholder: string;
+	certificatesPlaceholder: string;
+	companyPlaceholder: string;
+	jobTitlePlaceholder: string;
+	periodPlaceholder: string;
+	achievementsPlaceholder: string;
+	clearTooltip: string;
+	paletteBlurple: string;
+	paletteCream: string;
+	paletteSlate: string;
+	themeBlurpleName: string;
+	themeCreamName: string;
+	themeSlateName: string;
+	switchToEnglish: string;
+	switchToUkrainian: string;
 	previewRole: string;
 	previewName: string;
 	previewSummary: string;
@@ -95,7 +117,7 @@ export const translations: Record<Language, Translation> = {
 		about: "About you",
 		email: "Email",
 		phone: "Phone",
-		city: "City",
+		city: "City, Country",
 		website: "Website",
 		github: "GitHub",
 		linkedin: "LinkedIn",
@@ -128,6 +150,28 @@ export const translations: Record<Language, Translation> = {
 		page: "A4 · Page 1 of 1",
 		jobPlaceholder: "For example, Product Designer",
 		namePlaceholder: "For example, Anna Smith",
+		summaryPlaceholder: "Briefly describe your experience, key skills, and what makes you a strong candidate.",
+		emailPlaceholder: "you@example.com",
+		phonePlaceholder: "+1 234 567 8900",
+		locationPlaceholder: "For example, London, UK",
+		websitePlaceholder: "yourname.dev",
+		githubPlaceholder: "github.com/username",
+		linkedinPlaceholder: "linkedin.com/in/username",
+		degreePlaceholder: "University name · Degree · Graduation year",
+		certificatesPlaceholder: "Course name · Institution · Year",
+		companyPlaceholder: "For example, Northstar Studio",
+		jobTitlePlaceholder: "For example, Frontend Developer",
+		periodPlaceholder: "For example, 2022 — Present",
+		achievementsPlaceholder: "Describe your responsibilities and key achievements.",
+		clearTooltip: "Clear all form data — this permanently erases everything from the form and your browser's storage.",
+		paletteBlurple: "Cool violet accent",
+		paletteCream: "Warm neutral, the default",
+		paletteSlate: "No background fills — print-safe",
+		themeBlurpleName: "Blurple",
+		themeCreamName: "Cream",
+		themeSlateName: "Slate",
+		switchToEnglish: "Switch to English",
+		switchToUkrainian: "Switch to Ukrainian",
 		previewRole: "Desired position",
 		previewName: "Your name",
 		previewSummary: "Tell people about their professional path.",
@@ -163,7 +207,7 @@ export const translations: Record<Language, Translation> = {
 		about: "Коротко про себе",
 		email: "Email",
 		phone: "Телефон",
-		city: "Місто",
+		city: "Місто, країна",
 		website: "Сайт",
 		github: "GitHub",
 		linkedin: "LinkedIn",
@@ -196,6 +240,28 @@ export const translations: Record<Language, Translation> = {
 		page: "A4 · Сторінка 1 з 1",
 		jobPlaceholder: "Наприклад, Product Designer",
 		namePlaceholder: "Наприклад, Анна Петренко",
+		summaryPlaceholder: "Коротко опишіть свій досвід, ключові навички та чому ви сильний кандидат.",
+		emailPlaceholder: "you@example.com",
+		phonePlaceholder: "+380 12 345 6789",
+		locationPlaceholder: "Наприклад, Київ, Україна",
+		websitePlaceholder: "yourname.dev",
+		githubPlaceholder: "github.com/username",
+		linkedinPlaceholder: "linkedin.com/in/username",
+		degreePlaceholder: "Назва університету · Спеціальність · Рік випуску",
+		certificatesPlaceholder: "Назва курсу · Заклад · Рік",
+		companyPlaceholder: "Наприклад, Northstar Studio",
+		jobTitlePlaceholder: "Наприклад, Frontend Developer",
+		periodPlaceholder: "Наприклад, 2022 — дотепер",
+		achievementsPlaceholder: "Опишіть обов'язки та ключові досягнення.",
+		clearTooltip: "Очистити всі дані форми — це остаточно видалить усе з форми та пам'яті браузера.",
+		paletteBlurple: "Холодний фіолетовий акцент",
+		paletteCream: "Теплий нейтральний, типовий",
+		paletteSlate: "Без заливки фону — безпечно для друку",
+		themeBlurpleName: "Blurple",
+		themeCreamName: "Cream",
+		themeSlateName: "Slate",
+		switchToEnglish: "Переключити на англійську",
+		switchToUkrainian: "Переключити на українську",
 		previewRole: "Бажана посада",
 		previewName: "Ваше ім'я",
 		previewSummary: "Розкажіть про свій професійний шлях.",

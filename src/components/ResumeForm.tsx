@@ -1,4 +1,5 @@
 import { SkillIcon } from "@/components/SkillIcon";
+import { Tooltip } from "@/components/ui/tooltip";
 import type { Translation } from "@/services/copy";
 import { createEmptyExperience } from "@/services/initialResume";
 import { languageSuggestions } from "@/services/languageSuggestions";
@@ -167,7 +168,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							<input className={inputClass} placeholder={t.jobPlaceholder} {...bind("role")} />
 						</Field>
 						<Field className='sm:col-span-2' label={t.about}>
-							<textarea className={inputClass} rows={3} {...bind("summary")} />
+							<textarea className={inputClass} rows={3} placeholder={t.summaryPlaceholder} {...bind("summary")} />
 						</Field>
 					</div>
 				</div>
@@ -176,22 +177,22 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 				<SectionHeading number='02' title={t.contacts} hint={t.contactsHint} />
 				<div className='grid gap-4 sm:grid-cols-2'>
 					<Field label={t.email} error={errors.email?.message}>
-						<input className={inputClass} type='email' {...bind("email")} />
+						<input className={inputClass} type='email' placeholder={t.emailPlaceholder} {...bind("email")} />
 					</Field>
 					<Field label={t.phone}>
-						<input className={inputClass} {...bind("phone")} />
+						<input className={inputClass} placeholder={t.phonePlaceholder} {...bind("phone")} />
 					</Field>
 					<Field label={t.city}>
-						<input className={inputClass} {...bind("location")} />
+						<input className={inputClass} placeholder={t.locationPlaceholder} {...bind("location")} />
 					</Field>
 					<Field label={t.website}>
-						<input className={inputClass} {...bind("website")} />
+						<input className={inputClass} placeholder={t.websitePlaceholder} {...bind("website")} />
 					</Field>
 					<Field label={t.github}>
-						<input className={inputClass} {...bind("github")} />
+						<input className={inputClass} placeholder={t.githubPlaceholder} {...bind("github")} />
 					</Field>
 					<Field label={t.linkedin}>
-						<input className={inputClass} {...bind("linkedin")} />
+						<input className={inputClass} placeholder={t.linkedinPlaceholder} {...bind("linkedin")} />
 					</Field>
 				</div>
 			</section>
@@ -210,20 +211,21 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								</span>
 							) : null}
 							{skill}
-							<button
-								className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
-								type='button'
-								title={t.remove}
-								aria-label={t.remove}
-								onClick={() =>
-									onResumeChange((current) => ({
-										...current,
-										skills: current.skills.filter((item) => item !== skill),
-									}))
-								}
-							>
-								<X size={15} />
-							</button>
+							<Tooltip label={t.remove}>
+								<button
+									className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
+									type='button'
+									aria-label={t.remove}
+									onClick={() =>
+										onResumeChange((current) => ({
+											...current,
+											skills: current.skills.filter((item) => item !== skill),
+										}))
+									}
+								>
+									<X size={15} />
+								</button>
+							</Tooltip>
 						</span>
 					))}
 				</div>
@@ -261,13 +263,15 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							</div>
 						) : null}
 					</div>
-					<button
-						className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--tint)]'
-						type='submit'
-						aria-label={t.addSkill}
-					>
-						<Plus size={17} />
-					</button>
+					<Tooltip label={t.addSkill}>
+						<button
+							className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--tint)]'
+							type='submit'
+							aria-label={t.addSkill}
+						>
+							<Plus size={17} />
+						</button>
+					</Tooltip>
 				</form>
 				<div className='mt-6 border-t border-[var(--divider)] pt-5'>
 					<h3 className='mb-3 text-[11px] font-semibold uppercase tracking-[.06em] text-[#66716b]'>{t.languages}</h3>
@@ -278,20 +282,21 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								key={entry.id}
 							>
 								{entry.language} {entry.level}
-								<button
-									className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
-									type='button'
-									title={t.remove}
-									aria-label={t.remove}
-									onClick={() =>
-										onResumeChange((current) => ({
-											...current,
-											languages: current.languages.filter((item) => item.id !== entry.id),
-										}))
-									}
-								>
-									<X size={15} />
-								</button>
+								<Tooltip label={t.remove}>
+									<button
+										className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
+										type='button'
+										aria-label={t.remove}
+										onClick={() =>
+											onResumeChange((current) => ({
+												...current,
+												languages: current.languages.filter((item) => item.id !== entry.id),
+											}))
+										}
+									>
+										<X size={15} />
+									</button>
+								</Tooltip>
 							</span>
 						))}
 					</div>
@@ -332,26 +337,30 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							) : null}
 						</div>
 						<div className='w-[84px] shrink-0'>
-							<select
-								className={`${inputClass} rounded-none border-r-0 px-2`}
-								value={newLanguageLevel}
-								onChange={(event) => setNewLanguageLevel(event.target.value as (typeof languageLevels)[number])}
-								aria-label={t.levelLabel}
-							>
-								{languageLevels.map((level) => (
-									<option key={level} value={level}>
-										{level}
-									</option>
-								))}
-							</select>
+							<Tooltip label={t.levelLabel}>
+								<select
+									className={`${inputClass} rounded-none border-r-0 px-2`}
+									value={newLanguageLevel}
+									onChange={(event) => setNewLanguageLevel(event.target.value as (typeof languageLevels)[number])}
+									aria-label={t.levelLabel}
+								>
+									{languageLevels.map((level) => (
+										<option key={level} value={level}>
+											{level}
+										</option>
+									))}
+								</select>
+							</Tooltip>
 						</div>
-						<button
-							className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--lang-tint)]'
-							type='submit'
-							aria-label={t.addLanguage}
-						>
-							<Plus size={17} />
-						</button>
+						<Tooltip label={t.addLanguage}>
+							<button
+								className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--lang-tint)]'
+								type='submit'
+								aria-label={t.addLanguage}
+							>
+								<Plus size={17} />
+							</button>
+						</Tooltip>
 					</form>
 				</div>
 			</section>
@@ -363,6 +372,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							<Field label={t.company}>
 								<input
 									className={inputClass}
+									placeholder={t.companyPlaceholder}
 									value={item.company}
 									onChange={(event) => onExperienceChange(item.id, "company", event.target.value)}
 								/>
@@ -370,6 +380,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							<Field label={t.jobTitle}>
 								<input
 									className={inputClass}
+									placeholder={t.jobTitlePlaceholder}
 									value={item.role}
 									onChange={(event) => onExperienceChange(item.id, "role", event.target.value)}
 								/>
@@ -377,6 +388,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							<Field label={t.period}>
 								<input
 									className={inputClass}
+									placeholder={t.periodPlaceholder}
 									value={item.period}
 									onChange={(event) => onExperienceChange(item.id, "period", event.target.value)}
 								/>
@@ -385,6 +397,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								<textarea
 									className={inputClass}
 									rows={2}
+									placeholder={t.achievementsPlaceholder}
 									value={item.description}
 									onChange={(event) => onExperienceChange(item.id, "description", event.target.value)}
 								/>
@@ -419,7 +432,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 				<SectionHeading number='05' title={t.degree} hint={t.educationHint} />
 				<div className='grid gap-4'>
 					<Field label={t.degree}>
-						<textarea className={inputClass} rows={2} {...bind("education")} />
+						<textarea className={inputClass} rows={2} placeholder={t.degreePlaceholder} {...bind("education")} />
 					</Field>
 				</div>
 			</section>
@@ -427,7 +440,12 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 				<SectionHeading number='06' title={t.certificates} hint={t.certificatesHint} />
 				<div className='grid gap-4'>
 					<Field label={t.certificates}>
-						<textarea className={inputClass} rows={2} {...bind("certificates")} />
+						<textarea
+							className={inputClass}
+							rows={2}
+							placeholder={t.certificatesPlaceholder}
+							{...bind("certificates")}
+						/>
 					</Field>
 				</div>
 			</section>

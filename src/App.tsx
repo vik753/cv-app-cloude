@@ -1,5 +1,6 @@
-import { LanguageSwitcher, ResumeForm, ResumePreview, translations, useLanguage, useResumeStore } from "@/index";
-import { DownloadSimple, Eye, EyeSlash, Moon, Palette, Sun } from "@phosphor-icons/react";
+import { Tooltip } from "@/components/ui/tooltip";
+import { LanguageSwitcher, PaletteSwitcher, ResumeForm, ResumePreview, translations, useLanguage, useResumeStore } from "@/index";
+import { DownloadSimple, Eye, EyeSlash, Moon, Sun, Trash } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 
 export function App() {
@@ -62,7 +63,7 @@ export function App() {
 	};
 
 	return (
-		<main data-palette={palette} data-mode={mode} className='app-shell min-h-screen'>
+		<main data-palette={palette} data-mode={mode} className='app-shell'>
 			<header className='print-header app-header'>
 				<div className='app-brand'>
 					<span className='brand-mark'>cv</span>
@@ -74,40 +75,31 @@ export function App() {
 				</button>
 				<div className='header-actions'>
 					<div className='segmented' aria-label={t.mode}>
-						<button
-							className={mode === "dark" ? "active" : ""}
-							type='button'
-							aria-label={t.dark}
-							onClick={() => setMode("dark")}
-						>
-							<Moon size={15} />
-						</button>
-						<button
-							className={mode === "light" ? "active" : ""}
-							type='button'
-							aria-label={t.light}
-							onClick={() => setMode("light")}
-						>
-							<Sun size={15} />
-						</button>
+						<Tooltip label={t.dark}>
+							<button
+								className={mode === "dark" ? "active" : ""}
+								type='button'
+								aria-label={t.dark}
+								onClick={() => setMode("dark")}
+							>
+								<Moon size={15} />
+							</button>
+						</Tooltip>
+						<Tooltip label={t.light}>
+							<button
+								className={mode === "light" ? "active" : ""}
+								type='button'
+								aria-label={t.light}
+								onClick={() => setMode("light")}
+							>
+								<Sun size={15} />
+							</button>
+						</Tooltip>
 					</div>
-					<div className='palette-switcher' aria-label={t.palette}>
-						<Palette size={15} />
-						<button
-							className={palette === "blurple" ? "swatch active" : "swatch blurple"}
-							type='button'
-							aria-label='Blurple'
-							onClick={() => setPalette("blurple")}
-						/>
-						<button
-							className={palette === "cream" ? "swatch active" : "swatch cream"}
-							type='button'
-							aria-label='Cream'
-							onClick={() => setPalette("cream")}
-						/>
-					</div>
+					<PaletteSwitcher palette={palette} t={t} onChange={setPalette} />
 					<LanguageSwitcher
 						language={language}
+						t={t}
 						onChange={(nextLanguage) => {
 							setLanguage(nextLanguage);
 							setNotice(translations[nextLanguage].autoSave);
@@ -117,19 +109,23 @@ export function App() {
 						<span />
 						{notice}
 					</span>
-					<button className='header-clear' type='button' onClick={clearDraft}>
-						{t.clear}
-					</button>
-					<button
-						className='preview-toggle'
-						type='button'
-						aria-expanded={previewVisible}
-						aria-label={previewVisible ? t.previewHide : t.previewShow}
-						title={previewVisible ? t.previewHide : t.previewShow}
-						onClick={togglePreview}
-					>
-						{previewVisible ? <EyeSlash size={16} /> : <Eye size={16} />}
-					</button>
+					<Tooltip label={t.clearTooltip}>
+						<button className='header-clear' type='button' onClick={clearDraft} aria-label={t.clearTooltip}>
+							<Trash size={16} />
+							{t.clear}
+						</button>
+					</Tooltip>
+					<Tooltip label={previewVisible ? t.previewHide : t.previewShow}>
+						<button
+							className='preview-toggle'
+							type='button'
+							aria-expanded={previewVisible}
+							aria-label={previewVisible ? t.previewHide : t.previewShow}
+							onClick={togglePreview}
+						>
+							{previewVisible ? <EyeSlash size={16} /> : <Eye size={16} />}
+						</button>
+					</Tooltip>
 				</div>
 			</header>
 			<div
@@ -170,7 +166,7 @@ export function App() {
 						onResumeChange={updateResume}
 					/>
 				</section>
-				<ResumePreview resume={resume} t={t} />
+				<ResumePreview resume={resume} t={t} language={language} />
 			</div>
 		</main>
 	);

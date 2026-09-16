@@ -15,10 +15,13 @@ const readLegacyDraft = (): Resume => {
 	}
 };
 
-export type Palette = "blurple" | "cream";
+export type Palette = "blurple" | "cream" | "slate";
 export type Mode = "light" | "dark";
 
-const readPalette = (): Palette => (localStorage.getItem("resume-canvas-palette") === "blurple" ? "blurple" : "cream");
+const readPalette = (): Palette => {
+	const saved = localStorage.getItem("resume-canvas-palette");
+	return saved === "blurple" || saved === "slate" ? saved : "cream";
+};
 const readMode = (): Mode => {
 	const saved = localStorage.getItem("resume-canvas-mode");
 	if (saved === "light" || saved === "dark") return saved;
