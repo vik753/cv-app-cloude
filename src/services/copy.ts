@@ -40,6 +40,11 @@ export interface Translation {
 	previewHide: string;
 	previewShow: string;
 	addSkill: string;
+	languages: string;
+	languageLabel: string;
+	languagePlaceholder: string;
+	levelLabel: string;
+	addLanguage: string;
 	company: string;
 	jobTitle: string;
 	period: string;
@@ -48,6 +53,7 @@ export interface Translation {
 	addWork: string;
 	degree: string;
 	certificates: string;
+	certificatesHint: string;
 	preview: string;
 	page: string;
 	jobPlaceholder: string;
@@ -104,6 +110,11 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Hide preview",
 		previewShow: "Show preview",
 		addSkill: "Add a skill",
+		languages: "Languages",
+		languageLabel: "Language",
+		languagePlaceholder: "e.g. Ukrainian",
+		levelLabel: "Level",
+		addLanguage: "Add",
 		company: "Company",
 		jobTitle: "Job title",
 		period: "Period",
@@ -112,6 +123,7 @@ export const translations: Record<Language, Translation> = {
 		addWork: "Add workplace",
 		degree: "Education",
 		certificates: "Courses and certificates",
+		certificatesHint: "Add courses and certificates",
 		preview: "Live preview",
 		page: "A4 · Page 1 of 1",
 		jobPlaceholder: "For example, Product Designer",
@@ -166,6 +178,11 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Сховати попередній перегляд",
 		previewShow: "Показати попередній перегляд",
 		addSkill: "Додати навичку",
+		languages: "Мови",
+		languageLabel: "Мова",
+		languagePlaceholder: "Напр. Українська",
+		levelLabel: "Рівень",
+		addLanguage: "Додати",
 		company: "Компанія",
 		jobTitle: "Посада",
 		period: "Період",
@@ -174,6 +191,7 @@ export const translations: Record<Language, Translation> = {
 		addWork: "Додати місце роботи",
 		degree: "Освіта",
 		certificates: "Курси та сертифікати",
+		certificatesHint: "Додайте курси та сертифікати",
 		preview: "Живий попередній перегляд",
 		page: "A4 · Сторінка 1 з 1",
 		jobPlaceholder: "Наприклад, Product Designer",

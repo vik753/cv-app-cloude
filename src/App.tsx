@@ -34,13 +34,14 @@ export function App() {
 			resume.linkedin,
 			resume.photo,
 			resume.skills.length ? "filled" : "",
+			resume.languages.length ? "filled" : "",
 			resume.experience.length ? "filled" : "",
 			...resume.experience.flatMap((item) => [item.company, item.role, item.period, item.description]),
 			resume.education,
 			resume.certificates,
 		];
 		const filled = values.filter(Boolean).length;
-		const total = 18;
+		const total = 19;
 		return { filled: Math.min(filled, total), total, percent: Math.min(100, Math.round((filled / total) * 100)) };
 	}, [resume]);
 

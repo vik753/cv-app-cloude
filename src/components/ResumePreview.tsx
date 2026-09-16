@@ -48,16 +48,21 @@ export function ResumePreview({ resume, t }: ResumePreviewProps) {
 			<div className='paper-stage'>
 				<article className='print-paper' style={{ transform: `scale(${zoom / 100})` }}>
 					<div className='flex justify-between gap-5'>
-						<div>
+						<div className='min-w-0 flex-1'>
 							<p className='mb-3 font-mono text-[11px] uppercase tracking-[.08em] text-[#d36f48]'>
 								{resume.role || t.previewRole}
 							</p>
 							<h2 className='font-display text-[27px] font-semibold leading-none tracking-[-.05em] text-[#153b34] sm:text-[32px]'>
 								{resume.name || t.previewName}
 							</h2>
-							<p className='mt-4 max-w-[330px] text-[11px] leading-[1.55] text-[#66736b]'>
-								{resume.summary || t.previewSummary}
-							</p>
+							<div className='mt-4 flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-[9px] text-[#738078]'>
+								<span>✉ {resume.email}</span>
+								<span>⌕ {resume.phone}</span>
+								<span>⌖ {resume.location}</span>
+								<span>↗ {resume.website}</span>
+								<span>◉ {resume.github}</span>
+								<span>in {resume.linkedin}</span>
+							</div>
 						</div>
 						<div className='grid h-[82px] w-[82px] shrink-0 place-items-center overflow-hidden rounded-full bg-[#d36f48] font-display text-[31px] font-semibold text-[#fbfaf5]'>
 							{resume.photo ? (
@@ -74,19 +79,14 @@ export function ResumePreview({ resume, t }: ResumePreviewProps) {
 							)}
 						</div>
 					</div>
-					<div className='mt-7 flex flex-wrap gap-x-4 gap-y-1.5 border-y border-[#deded5] py-5 font-mono text-[9px] text-[#738078]'>
-						<span>✉ {resume.email}</span>
-						<span>⌕ {resume.phone}</span>
-						<span>⌖ {resume.location}</span>
-						<span>↗ {resume.website}</span>
-						<span>◉ {resume.github}</span>
-						<span>in {resume.linkedin}</span>
+					<div className='mt-7 border-y border-[#deded5] py-5'>
+						<p className='text-[11px] leading-[1.55] text-[#66736b]'>{resume.summary || t.previewSummary}</p>
 					</div>
 					<div className='resume-content pt-7'>
 						<div className='resume-summary'>
 							<section className='resume-summary-block resume-summary-skills rounded-sm border border-[#deded5] border-t-2 border-t-[#d36f48] bg-[#f8f7f1] p-4'>
 								<h3 className='pt-1 font-display text-sm font-semibold text-[#153b34]'>{t.skills}</h3>
-								<div className='mt-3 flex flex-wrap content-start gap-1.5 sm:mt-0'>
+								<div className='skills-chip-row mt-3 flex flex-wrap content-start gap-1.5 sm:mt-0'>
 									{resume.skills.map((skill) => (
 										<span
 											className='flex items-center gap-1 rounded-sm bg-[#e8eee7] px-2 py-1.5 text-[11px] text-[#3d6254]'
@@ -97,6 +97,23 @@ export function ResumePreview({ resume, t }: ResumePreviewProps) {
 										</span>
 									))}
 								</div>
+								{resume.languages.length ? (
+									<div className='col-span-full mt-3 border-t border-[#e2e2da] pt-3'>
+										<h4 className='mb-1.5 font-mono text-[9px] uppercase tracking-[.08em] text-[var(--paper-muted)]'>
+											{t.languages}
+										</h4>
+										<div className='flex flex-wrap gap-1.5'>
+											{resume.languages.map((entry) => (
+												<span
+													className='rounded-sm bg-[var(--paper-lang-chip)] px-2 py-1.5 text-[11px] text-[var(--paper-lang-chip-ink)]'
+													key={entry.id}
+												>
+													{entry.language} {entry.level}
+												</span>
+											))}
+										</div>
+									</div>
+								) : null}
 							</section>
 						</div>
 						<div className='resume-experience-grid mt-8'>

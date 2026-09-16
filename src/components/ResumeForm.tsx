@@ -1,7 +1,8 @@
 import { SkillIcon } from "@/components/SkillIcon";
 import type { Translation } from "@/services/copy";
 import { createEmptyExperience } from "@/services/initialResume";
-import { resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
+import { languageSuggestions } from "@/services/languageSuggestions";
+import { languageLevels, resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
 import { getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Plus, Trash, X } from "@phosphor-icons/react";
@@ -23,6 +24,10 @@ const inputClass =
 export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeChange }: ResumeFormProps) {
 	const [newSkill, setNewSkill] = useState("");
 	const [highlightedSkill, setHighlightedSkill] = useState(0);
+	const [newLanguage, setNewLanguage] = useState("");
+	const [newLanguageLevel, setNewLanguageLevel] = useState<(typeof languageLevels)[number]>(languageLevels[0]);
+	const [highlightedLanguage, setHighlightedLanguage] = useState(0);
+	const [showLanguageSuggestions, setShowLanguageSuggestions] = useState(false);
 	const {
 		register,
 		formState: { errors },
@@ -31,7 +36,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 		const registered = register(field);
 		return {
 			...registered,
-			onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 				registered.onChange(event);
 				onChange(field, event.target.value);
 			},
@@ -58,6 +63,54 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 	};
 	const selectSkillSuggestion = (label: string) => {
 		addSkillValue(label);
+	};
+	const languageAutocomplete = useMemo(() => {
+		const query = newLanguage.trim().toLowerCase();
+		if (!query) return [];
+		const addedLanguages = resume.languages.map((entry) => entry.language.toLowerCase());
+		return languageSuggestions
+			.filter((label) => label.toLowerCase().includes(query) && !addedLanguages.includes(label.toLowerCase()))
+			.slice(0, 6);
+	}, [newLanguage, resume.languages]);
+	const addLanguageValue = (value: string) => {
+		const trimmedLanguage = value.trim();
+		if (!trimmedLanguage) return;
+		const alreadyAdded = resume.languages.some(
+			(entry) => entry.language.toLowerCase() === trimmedLanguage.toLowerCase(),
+		);
+		if (alreadyAdded) return;
+		onResumeChange((current) => ({
+			...current,
+			languages: [...current.languages, { id: Date.now(), language: trimmedLanguage, level: newLanguageLevel }],
+		}));
+		setNewLanguage("");
+		setNewLanguageLevel(languageLevels[0]);
+		setHighlightedLanguage(0);
+		setShowLanguageSuggestions(false);
+	};
+	const addLanguage = (event: FormEvent) => {
+		event.preventDefault();
+		addLanguageValue(newLanguage);
+	};
+	const selectLanguageSuggestion = (label: string) => {
+		setNewLanguage(label);
+		setHighlightedLanguage(0);
+		setShowLanguageSuggestions(false);
+	};
+	const handleLanguageKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+		if (!showLanguageSuggestions || !languageAutocomplete.length) return;
+		if (event.key === "ArrowDown") {
+			event.preventDefault();
+			setHighlightedLanguage((current) => (current + 1) % languageAutocomplete.length);
+		}
+		if (event.key === "ArrowUp") {
+			event.preventDefault();
+			setHighlightedLanguage((current) => (current - 1 + languageAutocomplete.length) % languageAutocomplete.length);
+		}
+		if (event.key === "Enter") {
+			event.preventDefault();
+			selectLanguageSuggestion(languageAutocomplete[highlightedLanguage]);
+		}
 	};
 	const handleSkillKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (!skillSuggestions.length) return;
@@ -146,13 +199,9 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 				<SectionHeading number='03' title={t.skills} hint={t.skillsHint} />
 				<div className='flex flex-wrap gap-2'>
 					{resume.skills.map((skill) => (
-						<button
+						<span
 							className='flex items-center gap-2 rounded-full border border-[#ccd8ce] bg-[#eaf0e8] py-1.5 pl-1.5 pr-2.5 text-[11px] text-[#2d4b40]'
-							type='button'
 							key={skill}
-							onClick={() =>
-								onResumeChange((current) => ({ ...current, skills: current.skills.filter((item) => item !== skill) }))
-							}
 						>
 							<SkillIcon skill={skill} />
 							{!getSkillIconUrl(skill) ? (
@@ -161,8 +210,21 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 								</span>
 							) : null}
 							{skill}
-							<X size={15} className='text-[var(--chip-x)]' />
-						</button>
+							<button
+								className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
+								type='button'
+								title={t.remove}
+								aria-label={t.remove}
+								onClick={() =>
+									onResumeChange((current) => ({
+										...current,
+										skills: current.skills.filter((item) => item !== skill),
+									}))
+								}
+							>
+								<X size={15} />
+							</button>
+						</span>
 					))}
 				</div>
 				<form className='relative mt-4 flex w-[250px]' onSubmit={addSkill}>
@@ -186,7 +248,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							>
 								{skillSuggestions.map(({ id, label }, index) => (
 									<button
-										className={`flex w-full items-center gap-2 px-2 py-2 text-left text-[11px] text-[#2d4b40] ${index === highlightedSkill ? "bg-[#e8eee7]" : "hover:bg-[#f1f3ed]"}`}
+										className={`flex w-full items-center gap-2 px-2 py-2 text-left text-[11px] text-[#2d4b40] ${index === highlightedSkill ? "bg-[var(--tint)]" : "hover:bg-[var(--tint)]"}`}
 										key={id}
 										type='button'
 										onMouseDown={(event) => event.preventDefault()}
@@ -200,13 +262,98 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 						) : null}
 					</div>
 					<button
-						className='w-10 rounded-r border border-[#d0d4cb] text-[#153b34]'
+						className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--tint)]'
 						type='submit'
 						aria-label={t.addSkill}
 					>
 						<Plus size={17} />
 					</button>
 				</form>
+				<div className='mt-6 border-t border-[var(--divider)] pt-5'>
+					<h3 className='mb-3 text-[11px] font-semibold uppercase tracking-[.06em] text-[#66716b]'>{t.languages}</h3>
+					<div className='flex flex-wrap gap-2'>
+						{resume.languages.map((entry) => (
+							<span
+								className='flex items-center gap-2 rounded-full border border-[var(--lang-chip-border)] bg-[var(--lang-tint)] py-1.5 pl-3 pr-2.5 text-[11px] text-[var(--lang-on-tint)]'
+								key={entry.id}
+							>
+								{entry.language} {entry.level}
+								<button
+									className='chip-remove -m-0.5 grid place-items-center rounded-full p-0.5 transition duration-150 hover:rotate-90'
+									type='button'
+									title={t.remove}
+									aria-label={t.remove}
+									onClick={() =>
+										onResumeChange((current) => ({
+											...current,
+											languages: current.languages.filter((item) => item.id !== entry.id),
+										}))
+									}
+								>
+									<X size={15} />
+								</button>
+							</span>
+						))}
+					</div>
+					<form className='relative mt-4 flex w-[280px]' onSubmit={addLanguage}>
+						<div className='relative min-w-0 flex-1'>
+							<input
+								className={`${inputClass} rounded-r-none border-r-0`}
+								value={newLanguage}
+								onChange={(event) => {
+									setNewLanguage(event.target.value);
+									setHighlightedLanguage(0);
+									setShowLanguageSuggestions(true);
+								}}
+								onKeyDown={handleLanguageKeyDown}
+								onBlur={() => setShowLanguageSuggestions(false)}
+								placeholder={t.languagePlaceholder}
+								aria-label={t.languageLabel}
+								aria-autocomplete='list'
+								aria-controls='language-suggestions'
+							/>
+							{showLanguageSuggestions && languageAutocomplete.length ? (
+								<div
+									id='language-suggestions'
+									className='absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded border border-[#d0d4cb] bg-[#fbfaf5] shadow-lg'
+								>
+									{languageAutocomplete.map((label, index) => (
+										<button
+											className={`block w-full px-2 py-2 text-left text-[11px] text-[#2d4b40] ${index === highlightedLanguage ? "bg-[var(--lang-tint)]" : "hover:bg-[var(--lang-tint)]"}`}
+											key={label}
+											type='button'
+											onMouseDown={(event) => event.preventDefault()}
+											onClick={() => selectLanguageSuggestion(label)}
+										>
+											{label}
+										</button>
+									))}
+								</div>
+							) : null}
+						</div>
+						<div className='w-[84px] shrink-0'>
+							<select
+								className={`${inputClass} rounded-none border-r-0 px-2`}
+								value={newLanguageLevel}
+								onChange={(event) => setNewLanguageLevel(event.target.value as (typeof languageLevels)[number])}
+								aria-label={t.levelLabel}
+							>
+								{languageLevels.map((level) => (
+									<option key={level} value={level}>
+										{level}
+									</option>
+								))}
+							</select>
+						</div>
+						<button
+							className='grid w-10 shrink-0 place-items-center rounded-r border border-[#d0d4cb] text-[#153b34] transition hover:bg-[var(--lang-tint)]'
+							type='submit'
+							aria-label={t.addLanguage}
+						>
+							<Plus size={17} />
+						</button>
+					</form>
+				</div>
 			</section>
 			<section className={section}>
 				<SectionHeading number='04' title={t.experience} hint={t.experienceHint} />
@@ -277,7 +424,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 				</div>
 			</section>
 			<section className={section}>
-				<SectionHeading number='06' title={t.certificates} hint={t.certificates} />
+				<SectionHeading number='06' title={t.certificates} hint={t.certificatesHint} />
 				<div className='grid gap-4'>
 					<Field label={t.certificates}>
 						<textarea className={inputClass} rows={2} {...bind("certificates")} />

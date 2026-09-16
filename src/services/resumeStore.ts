@@ -56,6 +56,12 @@ export const useResumeStore = create<ResumeStore>()(
 			setPalette: (palette) => set({ palette }),
 			setMode: (mode) => set({ mode }),
 		}),
-		{ name: "resume-canvas-draft-v2" },
+		{
+			name: "resume-canvas-draft-v2",
+			merge: (persistedState, currentState) => {
+				const persisted = persistedState as Partial<ResumeStore> | undefined;
+				return { ...currentState, ...persisted, resume: { ...currentState.resume, ...persisted?.resume } };
+			},
+		},
 	),
 );

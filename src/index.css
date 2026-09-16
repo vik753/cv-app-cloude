@@ -30,6 +30,11 @@
 	--paper-chip: #eaf0e8;
 	--paper-chip-ink: #3d6254;
 	--paper-avatar: #e4d3be;
+	--lang-tint: #e7f1de;
+	--lang-chip-border: #c6ddb4;
+	--lang-on-tint: #3f6b2f;
+	--paper-lang-chip: #f7ece1;
+	--paper-lang-chip-ink: #8a4a2e;
 }
 
 .app-shell[data-palette="blurple"][data-mode="dark"] {
@@ -55,6 +60,11 @@
 	--paper-chip: #e7e5fe;
 	--paper-chip-ink: #5d5294;
 	--paper-avatar: #d2cefd;
+	--lang-tint: #1c2c45;
+	--lang-chip-border: #35507a;
+	--lang-on-tint: #a9d0fb;
+	--paper-lang-chip: #f7e3cf;
+	--paper-lang-chip-ink: #8a5a2e;
 }
 .app-shell[data-palette="blurple"][data-mode="light"] {
 	--ground: #f3f5fe;
@@ -79,6 +89,11 @@
 	--paper-chip: #e7e5fe;
 	--paper-chip-ink: #5d5294;
 	--paper-avatar: #d2cefd;
+	--lang-tint: #f1e6fb;
+	--lang-chip-border: #d1b3ec;
+	--lang-on-tint: #7a4a9e;
+	--paper-lang-chip: #f7e3cf;
+	--paper-lang-chip-ink: #8a5a2e;
 }
 .app-shell[data-palette="cream"][data-mode="dark"] {
 	--ground: #1a1512;
@@ -96,6 +111,9 @@
 	--accent-text: #e09271;
 	--chip-x: #a1745f;
 	--accent: #d36f48;
+	--lang-tint: #4a2f1c;
+	--lang-chip-border: #6b4a2c;
+	--lang-on-tint: #f0c896;
 }
 
 .app-shell {
@@ -108,6 +126,12 @@
 	box-shadow:
 		0 0 0 1px var(--border),
 		0 16px 40px color-mix(in srgb, #000 25%, transparent);
+}
+.app-shell[data-mode="dark"] {
+	color-scheme: dark;
+}
+.app-shell[data-mode="light"] {
+	color-scheme: light;
 }
 .app-header {
 	display: grid;
@@ -405,7 +429,8 @@
 }
 
 .form-column input,
-.form-column textarea {
+.form-column textarea,
+.form-column select {
 	border-color: var(--input-border) !important;
 	background: var(--ground) !important;
 	color: var(--text) !important;
@@ -427,6 +452,12 @@
 }
 .form-column button {
 	color: var(--on-tint);
+}
+.form-column button.chip-remove {
+	color: var(--chip-x);
+}
+.form-column button.chip-remove:hover {
+	color: var(--accent-text);
 }
 .form-column button[class*="bg-[#eaf0e8]"] {
 	border-color: var(--chip-border);
@@ -636,7 +667,7 @@ textarea:focus-visible {
 		gap: 0 24px;
 	}
 
-	.resume-summary-skills > div {
+	.resume-summary-skills > .skills-chip-row {
 		margin-top: 0;
 	}
 
@@ -736,7 +767,7 @@ textarea:focus-visible {
 		margin-bottom: 0;
 	}
 
-	.resume-summary-skills > div {
+	.resume-summary-skills > .skills-chip-row {
 		margin-top: 0;
 	}
 }
