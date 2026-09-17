@@ -39,6 +39,11 @@ export interface Translation {
 	zoomIn: string;
 	previewHide: string;
 	previewShow: string;
+	previewLabel: string;
+	sceneHide: string;
+	sceneShow: string;
+	sceneOn: string;
+	sceneOff: string;
 	addSkill: string;
 	languages: string;
 	languageLabel: string;
@@ -131,6 +136,11 @@ export const translations: Record<Language, Translation> = {
 		zoomIn: "Zoom in",
 		previewHide: "Hide preview",
 		previewShow: "Show preview",
+		previewLabel: "Preview",
+		sceneHide: "Turn off animated background",
+		sceneShow: "Turn on animated background",
+		sceneOn: "On",
+		sceneOff: "Off",
 		addSkill: "Add a skill",
 		languages: "Languages",
 		languageLabel: "Language",
@@ -221,6 +231,11 @@ export const translations: Record<Language, Translation> = {
 		zoomIn: "Збільшити",
 		previewHide: "Сховати попередній перегляд",
 		previewShow: "Показати попередній перегляд",
+		previewLabel: "Прев'ю",
+		sceneHide: "Вимкнути анімований фон",
+		sceneShow: "Увімкнути анімований фон",
+		sceneOn: "Увімк",
+		sceneOff: "Вимк",
 		addSkill: "Додати навичку",
 		languages: "Мови",
 		languageLabel: "Мова",
