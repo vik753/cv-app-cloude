@@ -88,7 +88,7 @@ export function App() {
 
 	return (
 		<>
-			<DayNightScene active={sceneEnabled} />
+			<DayNightScene active={sceneEnabled} language={language} />
 			<main data-palette={palette} data-mode={mode} className={`app-shell ${sceneEnabled ? "scene-active" : ""}`}>
 				<header className='print-header app-header'>
 					<div className='app-brand'>
