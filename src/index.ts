@@ -1,3 +1,4 @@
+export { DayNightScene } from "@/components/DayNightScene";
 export { LanguageSwitcher } from "@/components/LanguageSwitcher";
 export { PaletteSwitcher } from "@/components/PaletteSwitcher";
 export { ResumeForm } from "@/components/ResumeForm";

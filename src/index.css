@@ -39,6 +39,156 @@
 	--danger-border: #c9695a;
 }
 
+/* Registering these as <color> lets the browser interpolate the custom
+   property itself, so every element reading var(--ground) etc. crossfades
+   smoothly when the day/night cycle flips data-mode — no per-component
+   transition rules needed. Unsupported browsers just snap instantly. */
+@property --ground {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f2f1eb;
+}
+@property --panel {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e7e6df;
+}
+@property --card {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f7f6f0;
+}
+@property --divider {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d7d8d0;
+}
+@property --border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c9cabf;
+}
+@property --input-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d0d4cb;
+}
+@property --muted {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #68716c;
+}
+@property --label {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #59625e;
+}
+@property --text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #17201d;
+}
+@property --tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #eaf0e8;
+}
+@property --chip-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #ccd8ce;
+}
+@property --on-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #153b34;
+}
+@property --accent-text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d36f48;
+}
+@property --chip-x {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #91a095;
+}
+@property --accent {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d36f48;
+}
+@property --paper {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #fbfaf5;
+}
+@property --paper-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #263832;
+}
+@property --paper-muted {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #758079;
+}
+@property --paper-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #deded5;
+}
+@property --paper-chip {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #eaf0e8;
+}
+@property --paper-chip-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #3d6254;
+}
+@property --paper-avatar {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e4d3be;
+}
+@property --lang-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e7f1de;
+}
+@property --lang-chip-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c6ddb4;
+}
+@property --lang-on-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #3f6b2f;
+}
+@property --paper-lang-chip {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f7ece1;
+}
+@property --paper-lang-chip-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #8a4a2e;
+}
+@property --danger-text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #b8503f;
+}
+@property --danger-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c9695a;
+}
+
 .app-shell[data-palette="blurple"][data-mode="dark"] {
 	--ground: #161826;
 	--panel: #131424;
@@ -198,6 +348,127 @@
 .app-shell[data-mode="light"] {
 	color-scheme: light;
 }
+.app-shell.scene-active {
+	--glass-alpha: 77%;
+	--glass-blur: 6px;
+	background: transparent;
+	/* the scene toggle itself fades fast; the day/night colour swap (driven by
+	   data-mode flipping every half-cycle) fades slowly so the theme never blinks */
+	transition:
+		background 600ms ease,
+		--ground 10s ease-in-out,
+		--panel 10s ease-in-out,
+		--card 10s ease-in-out,
+		--divider 10s ease-in-out,
+		--border 10s ease-in-out,
+		--input-border 10s ease-in-out,
+		--muted 10s ease-in-out,
+		--label 10s ease-in-out,
+		--text 10s ease-in-out,
+		--tint 10s ease-in-out,
+		--chip-border 10s ease-in-out,
+		--on-tint 10s ease-in-out,
+		--accent-text 10s ease-in-out,
+		--chip-x 10s ease-in-out,
+		--accent 10s ease-in-out,
+		--paper 10s ease-in-out,
+		--paper-ink 10s ease-in-out,
+		--paper-muted 10s ease-in-out,
+		--paper-border 10s ease-in-out,
+		--paper-chip 10s ease-in-out,
+		--paper-chip-ink 10s ease-in-out,
+		--paper-avatar 10s ease-in-out,
+		--lang-tint 10s ease-in-out,
+		--lang-chip-border 10s ease-in-out,
+		--lang-on-tint 10s ease-in-out,
+		--paper-lang-chip 10s ease-in-out,
+		--paper-lang-chip-ink 10s ease-in-out,
+		--danger-text 10s ease-in-out,
+		--danger-border 10s ease-in-out;
+}
+.app-shell.scene-active .print-preview {
+	background: transparent !important;
+	transition: background 600ms ease;
+}
+.app-shell.scene-active .app-header,
+.app-shell.scene-active .preview-toolbar,
+.app-shell.scene-active .print-note {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .preview-toolbar,
+.app-shell.scene-active .print-note {
+	border-radius: 10px;
+}
+.app-shell.scene-active .preview-toolbar {
+	padding: 12px 16px;
+}
+.app-shell.scene-active .print-note {
+	padding: 8px 14px;
+}
+
+/* glass: the whole form column is ONE frosted panel — everything inside it
+   (hero, section headings, fields, the experience card) stays background-free
+   so their borders don't stack into extra blurred layers on top of it. */
+.app-shell.scene-active .form-column {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .form-column input,
+.app-shell.scene-active .form-column select,
+.app-shell.scene-active .form-column textarea {
+	background: transparent !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+.app-shell.scene-active .form-column [class*="bg-white/20"] {
+	background: transparent !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+/* Skills/Education/Courses containers already sit on the glass paper behind them —
+   keep just their border, no extra fill, so they don't read as a lighter patch. */
+.app-shell.scene-active .print-paper .bg-\[\#f8f7f1\] {
+	background: transparent !important;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+.app-shell.scene-active .print-paper .bg-\[\#e8eee7\] {
+	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .header-download,
+.app-shell.scene-active .header-clear,
+.app-shell.scene-active .preview-toggle,
+.app-shell.scene-active .scene-toggle,
+.app-shell.scene-active .segmented,
+.app-shell.scene-active .palette-trigger,
+.app-shell.scene-active .language-switcher,
+.app-shell.scene-active .zoom-stepper {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .segmented button.active,
+.app-shell.scene-active .scene-toggle.active,
+.app-shell.scene-active .language-switcher button.active {
+	background: color-mix(in srgb, var(--tint) var(--glass-alpha), transparent);
+}
+.app-shell.scene-active .print-paper {
+	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
+	backdrop-filter: blur(var(--glass-blur));
+	-webkit-backdrop-filter: blur(var(--glass-blur));
+}
+@media print {
+	.print-paper {
+		background: var(--paper) !important;
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+	}
+}
 .app-header {
 	display: grid;
 	flex-shrink: 0;
@@ -266,6 +537,15 @@
 }
 .segmented button.active {
 	background: var(--tint);
+	color: var(--on-tint);
+}
+.segmented button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+.scene-toggle.active {
+	background: var(--tint);
+	border-color: var(--accent);
 	color: var(--on-tint);
 }
 .palette-trigger {
@@ -389,10 +669,11 @@
 	font-size: 12px;
 }
 .preview-toggle {
-	display: grid;
-	width: 30px;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 	height: 30px;
-	place-items: center;
+	padding: 0 10px;
 	border: 1px solid var(--border);
 	border-radius: 8px;
 	background: transparent;
@@ -401,6 +682,57 @@
 .preview-toggle:hover {
 	background: color-mix(in srgb, var(--accent) 10%, transparent);
 	color: var(--on-tint);
+}
+.preview-toggle.active {
+	background: var(--tint);
+	border-color: var(--accent);
+	color: var(--on-tint);
+}
+.preview-toggle-state {
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.scene-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--label);
+}
+.scene-toggle:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--on-tint);
+}
+.scene-toggle-state {
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.glass-alpha-slider {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px dashed var(--accent);
+	border-radius: 8px;
+	color: var(--label);
+	font: 11px var(--font-mono);
+}
+.glass-alpha-slider input[type="range"] {
+	width: 70px;
+	accent-color: var(--accent);
+}
+.glass-alpha-slider span {
+	min-width: 30px;
+	text-align: right;
 }
 .language-switcher {
 	border-color: var(--border);
@@ -570,8 +902,8 @@
 .paper-stage {
 	width: 100%;
 	max-width: 100%;
-	overflow: hidden;
-	padding: 0 8px 12px;
+	overflow: visible;
+	padding: 8px 40px 24px;
 }
 .resume-bottom-summary {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -968,5 +1300,539 @@ textarea:focus-visible {
 
 	.resume-summary-skills {
 		grid-column: 1 / -1;
+	}
+}
+
+/* ============ Day/night background scene ============ */
+.scene {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	overflow: hidden;
+	pointer-events: none;
+	/* The landscape SVG paints over the sun and moon, so the arc has to bottom out
+	   right at the hill silhouette — otherwise they stay buried behind the hills
+	   until well inland. At x=0 and x=100% the back hill sits at viewBox y=560,
+	   i.e. 340/900 of the sliced SVG above its bottom edge; the slice scale is
+	   max(100vw/1600, 58vh/900), capped by the landscape's own 58vh height. */
+	--horizon: min(max(21.25vw, 21.92vh), 58vh);
+	--arc-low: calc(var(--horizon) - 60px);
+	--arc-peak: calc(100vh - 140px);
+	--arc-rise: calc(var(--arc-peak) - var(--arc-low));
+}
+
+.sky-layer {
+	position: absolute;
+	inset: 0;
+}
+.sky-day {
+	background: linear-gradient(#8fd0f2 0%, #cdeeff 65%, #eaf9ec 100%);
+	animation: day-opacity 46s linear infinite;
+}
+.sky-twilight {
+	background: linear-gradient(#5b6bab 0%, #e08a5b 55%, #ffd39a 100%);
+	animation: twilight-opacity 46s linear infinite;
+}
+.sky-night {
+	background: linear-gradient(#0b1030 0%, #1c2350 60%, #2c2f5c 100%);
+	animation: night-opacity 46s linear infinite;
+}
+
+@keyframes day-opacity {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	40% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+@keyframes twilight-opacity {
+	0% {
+		opacity: 1;
+	}
+	10% {
+		opacity: 0;
+	}
+	40% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 0;
+	}
+	90% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes night-opacity {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	60% {
+		opacity: 1;
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.star {
+	position: absolute;
+	width: 3px;
+	height: 3px;
+	border-radius: 50%;
+	background: #fff;
+	animation: twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle {
+	0%,
+	100% {
+		opacity: 0.25;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+.sun,
+.moon {
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+}
+.sun {
+	background: radial-gradient(circle at 35% 35%, #fff6d8, #ffd15c 55%, #ff9d3c 100%);
+	box-shadow: 0 0 46px 14px rgba(255, 180, 70, 0.55);
+	animation: sun-move 46s linear infinite;
+}
+.moon {
+	background: radial-gradient(circle at 38% 35%, #fbfcff, #d9e0ef 60%, #aab3cc 100%);
+	box-shadow: 0 0 30px 8px rgba(200, 210, 255, 0.35);
+	animation: moon-move 46s linear infinite;
+}
+.moon::before,
+.moon::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(150, 160, 190, 0.4);
+}
+.moon::before {
+	width: 14px;
+	height: 14px;
+	top: 14px;
+	left: 10px;
+}
+.moon::after {
+	width: 9px;
+	height: 9px;
+	top: 34px;
+	left: 30px;
+}
+
+/* The arc runs from just off the left screen edge to just off the right one, so
+   the disc slides into frame exactly at the edge instead of popping in. Height
+   follows low + sin(t*pi) * (peak - low); the low point sits at the hill
+   silhouette so the sun/moon clears the landscape right at the screen edge. */
+@keyframes sun-move {
+	0% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 1;
+	}
+	5% {
+		left: 6.8%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	10% {
+		left: 17.6%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	15% {
+		left: 28.4%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	20% {
+		left: 39.2%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	25% {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+	}
+	30% {
+		left: 60.8%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	35% {
+		left: 71.6%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	40% {
+		left: 82.4%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	45% {
+		left: 93.2%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		left: 104%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+}
+@keyframes moon-move {
+	0%,
+	49.9% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+	50% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 1;
+	}
+	55% {
+		left: 6.8%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	60% {
+		left: 17.6%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	65% {
+		left: 28.4%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	70% {
+		left: 39.2%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	75% {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+	}
+	80% {
+		left: 60.8%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	85% {
+		left: 71.6%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	90% {
+		left: 82.4%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	95% {
+		left: 93.2%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	99% {
+		opacity: 1;
+	}
+	100% {
+		left: 104%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+}
+
+.cloud {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.85);
+	border-radius: 40px;
+	animation: day-opacity 46s linear infinite;
+}
+.cloud::before,
+.cloud::after {
+	content: "";
+	position: absolute;
+	background: inherit;
+	border-radius: 50%;
+}
+.cloud-1 {
+	width: 90px;
+	height: 28px;
+	top: 14%;
+	animation-name: day-opacity, drift-1;
+	animation-duration: 46s, 55s;
+}
+.cloud-1::before {
+	width: 46px;
+	height: 46px;
+	top: -22px;
+	left: 8px;
+}
+.cloud-1::after {
+	width: 34px;
+	height: 34px;
+	top: -14px;
+	left: 46px;
+}
+.cloud-2 {
+	width: 70px;
+	height: 22px;
+	top: 24%;
+	animation-name: day-opacity, drift-2;
+	animation-duration: 46s, 70s;
+}
+.cloud-2::before {
+	width: 34px;
+	height: 34px;
+	top: -16px;
+	left: 6px;
+}
+.cloud-2::after {
+	width: 26px;
+	height: 26px;
+	top: -10px;
+	left: 34px;
+}
+
+@keyframes drift-1 {
+	0% {
+		transform: translateX(-15vw);
+	}
+	100% {
+		transform: translateX(115vw);
+	}
+}
+@keyframes drift-2 {
+	0% {
+		transform: translateX(-15vw);
+	}
+	100% {
+		transform: translateX(115vw);
+	}
+}
+
+.bird {
+	position: absolute;
+	width: 34px;
+	height: 16px;
+	animation: day-opacity 46s linear infinite;
+}
+.bird svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+	animation: flap 0.45s ease-in-out infinite alternate;
+	transform-origin: center;
+}
+.bird-1 {
+	top: 20%;
+	animation-name: day-opacity, fly-1;
+	animation-duration: 46s, 17s;
+}
+.bird-2 {
+	top: 12%;
+	animation-name: day-opacity, fly-2;
+	animation-duration: 46s, 21s;
+	animation-delay: 0s, -8s;
+}
+.bird-3 {
+	top: 27%;
+	animation-name: day-opacity, fly-3;
+	animation-duration: 46s, 15s;
+	animation-delay: 0s, -4s;
+}
+
+@keyframes fly-1 {
+	0% {
+		transform: translate(-10vw, 0);
+	}
+	25% {
+		transform: translate(15vw, -18px);
+	}
+	50% {
+		transform: translate(50vw, 8px);
+	}
+	75% {
+		transform: translate(85vw, -14px);
+	}
+	100% {
+		transform: translate(110vw, 0);
+	}
+}
+@keyframes fly-2 {
+	0% {
+		transform: translate(-10vw, 0);
+	}
+	30% {
+		transform: translate(20vw, 10px);
+	}
+	55% {
+		transform: translate(55vw, -16px);
+	}
+	80% {
+		transform: translate(90vw, 6px);
+	}
+	100% {
+		transform: translate(110vw, 0);
+	}
+}
+@keyframes fly-3 {
+	0% {
+		transform: translate(-10vw, 0);
+	}
+	20% {
+		transform: translate(18vw, -10px);
+	}
+	50% {
+		transform: translate(52vw, 14px);
+	}
+	78% {
+		transform: translate(88vw, -8px);
+	}
+	100% {
+		transform: translate(110vw, 0);
+	}
+}
+@keyframes flap {
+	0% {
+		transform: scaleY(1);
+	}
+	100% {
+		transform: scaleY(0.35);
+	}
+}
+
+.landscape {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 58vh;
+	min-height: 380px;
+	display: block;
+}
+
+.tint {
+	position: absolute;
+	inset: 0;
+	mix-blend-mode: multiply;
+	animation: tint-color 46s linear infinite;
+}
+@keyframes tint-color {
+	0% {
+		background-color: rgba(255, 170, 90, 0.35);
+	}
+	10% {
+		background-color: rgba(255, 255, 255, 0);
+	}
+	40% {
+		background-color: rgba(255, 255, 255, 0);
+	}
+	50% {
+		background-color: rgba(255, 140, 90, 0.35);
+	}
+	60% {
+		background-color: rgba(35, 30, 80, 0.5);
+	}
+	90% {
+		background-color: rgba(35, 30, 80, 0.5);
+	}
+	100% {
+		background-color: rgba(255, 170, 90, 0.35);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sky-day {
+		opacity: 1;
+		animation: none;
+	}
+	.sky-twilight,
+	.sky-night {
+		opacity: 0;
+		animation: none;
+	}
+	.sun {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+		animation: none;
+	}
+	.moon {
+		opacity: 0;
+		animation: none;
+	}
+	.tint {
+		animation: none;
+		background-color: rgba(255, 255, 255, 0);
+	}
+	.cloud,
+	.bird {
+		animation: none;
+		opacity: 1;
+	}
+	.cloud-1 {
+		transform: translateX(20vw);
+	}
+	.cloud-2 {
+		transform: translateX(55vw);
+	}
+	.bird-1 {
+		transform: translate(20vw, 0);
+	}
+	.bird-2 {
+		transform: translate(55vw, 0);
+	}
+	.bird-3 {
+		transform: translate(80vw, 0);
+	}
+	.bird svg {
+		animation: none;
+	}
+	.star {
+		animation: none;
+		opacity: 0.7;
 	}
 }

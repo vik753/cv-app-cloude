@@ -455,7 +455,7 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 
 function SectionHeading({ number, title, hint }: { number: string; title: string; hint: string }) {
 	return (
-		<div className='mb-6 flex items-start gap-4'>
+		<div className='section-heading-block mb-6 flex items-start gap-4'>
 			<span className='pt-1 font-mono text-[11px] tracking-[.08em] text-[#d36f48]'>{number}</span>
 			<div>
 				<h2 className='font-display text-xl font-semibold tracking-tight text-[#153b34]'>{title}</h2>
