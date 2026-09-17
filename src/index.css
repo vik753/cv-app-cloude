@@ -329,6 +329,11 @@
 .app-shell {
 	display: flex;
 	flex-direction: column;
+	/* .scene is fixed with z-index 0, so it paints above non-positioned content.
+	   Without an explicit stacking context here the shell only stayed on top by
+	   accident, via backdrop-filter — which the production minifier can strip. */
+	position: relative;
+	z-index: 1;
 	width: 100%;
 	height: 100vh;
 	margin: 0;
@@ -395,7 +400,6 @@
 .app-shell.scene-active .print-note {
 	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
 	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .app-shell.scene-active .preview-toolbar,
 .app-shell.scene-active .print-note {
@@ -414,31 +418,26 @@
 .app-shell.scene-active .form-column {
 	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
 	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .app-shell.scene-active .form-column input,
 .app-shell.scene-active .form-column select,
 .app-shell.scene-active .form-column textarea {
 	background: transparent !important;
 	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
 }
 .app-shell.scene-active .form-column [class*="bg-white/20"] {
 	background: transparent !important;
 	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
 }
 /* Skills/Education/Courses containers already sit on the glass paper behind them —
    keep just their border, no extra fill, so they don't read as a lighter patch. */
 .app-shell.scene-active .print-paper .bg-\[\#f8f7f1\] {
 	background: transparent !important;
 	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
 }
 .app-shell.scene-active .print-paper .bg-\[\#e8eee7\] {
 	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
 	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .app-shell.scene-active .header-download,
 .app-shell.scene-active .header-clear,
@@ -450,7 +449,6 @@
 .app-shell.scene-active .zoom-stepper {
 	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
 	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
 }
 .app-shell.scene-active .segmented button.active,
 .app-shell.scene-active .scene-toggle.active,
@@ -460,13 +458,11 @@
 .app-shell.scene-active .print-paper {
 	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
 	backdrop-filter: blur(var(--glass-blur));
-	-webkit-backdrop-filter: blur(var(--glass-blur));
 }
 @media print {
 	.print-paper {
 		background: var(--paper) !important;
 		backdrop-filter: none !important;
-		-webkit-backdrop-filter: none !important;
 	}
 }
 .app-header {
