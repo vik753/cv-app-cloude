@@ -1300,21 +1300,31 @@ textarea:focus-visible {
 }
 
 /* ============ Day/night background scene ============ */
-.scene {
+.scene,
+.scene-front {
 	position: fixed;
 	inset: 0;
-	z-index: 0;
 	overflow: hidden;
 	pointer-events: none;
-	/* The landscape SVG paints over the sun and moon, so the arc has to bottom out
-	   right at the hill silhouette — otherwise they stay buried behind the hills
-	   until well inland. At x=0 and x=100% the back hill sits at viewBox y=560,
-	   i.e. 340/900 of the sliced SVG above its bottom edge; the slice scale is
-	   max(100vw/1600, 58vh/900), capped by the landscape's own 58vh height. */
+	/* Where the hill silhouette sits. At x=0 and x=100% the back hill is at viewBox
+	   y=560, i.e. 340/900 of the sliced SVG above its bottom edge; the slice scale
+	   is max(100vw/1600, 58vh/900), capped by the landscape's own 58vh height.
+	   The sun and moon now ride the front layer, which the landscape no longer
+	   paints over, so the arc bottoms out just above the ridge: they skim the
+	   hilltops at rise and set instead of drifting down across the form. */
 	--horizon: min(max(21.25vw, 21.92vh), 58vh);
-	--arc-low: calc(var(--horizon) - 60px);
+	--arc-low: calc(var(--horizon) + 8px);
 	--arc-peak: calc(100vh - 140px);
 	--arc-rise: calc(var(--arc-peak) - var(--arc-low));
+}
+
+.scene {
+	z-index: 0;
+}
+/* Above the app shell (z-index 1) so the sky actors stay visible over the form.
+   Portalled menus and tooltips sit at z-index 50 and still win over this. */
+.scene-front {
+	z-index: 2;
 }
 
 .sky-layer {
@@ -1739,6 +1749,102 @@ textarea:focus-visible {
 	}
 }
 
+/* One comet per night. Position, angle, length and speed come in as inline
+   custom properties, so every pass is a different streak. */
+.comet {
+	position: absolute;
+	width: 118px;
+	height: 2px;
+	border-radius: 2px;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(203, 229, 255, 0.7) 62%, #ffffff 100%);
+	opacity: 0;
+	animation: comet-fall var(--comet-duration, 1.4s) ease-in forwards;
+}
+.comet::after {
+	content: "";
+	position: absolute;
+	right: -3px;
+	top: -3px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 0 12px 4px rgba(198, 224, 255, 0.85);
+}
+/* scaleX comes first, so it mirrors the finished streak: the head swaps to the
+   other end and the travel reads as down-and-left while the fall stays downward.
+   Flipping after the rotation instead would send the comet upwards. */
+@keyframes comet-fall {
+	0% {
+		opacity: 0;
+		transform: scaleX(var(--comet-flip, 1)) rotate(var(--comet-angle, 26deg)) translateX(-70px) scale(0.55);
+	}
+	18% {
+		opacity: 1;
+	}
+	78% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: scaleX(var(--comet-flip, 1)) rotate(var(--comet-angle, 26deg)) translateX(var(--comet-travel, 30vw))
+			scale(1);
+	}
+}
+
+/* The station crosses the other way round from the birds and clouds, and far slower. */
+.iss {
+	position: absolute;
+	top: 9%;
+	right: 0;
+	width: 132px;
+	height: 55px;
+	/* It no longer lives inside .sky-night, so it fades itself with the same
+	   keyframes. The drift is exactly two sky cycles, which keeps a fixed phase
+	   against the night window instead of drifting out of it on some nights. */
+	animation:
+		night-opacity 46s linear infinite,
+		iss-drift 92s linear infinite;
+}
+.iss svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+@keyframes iss-drift {
+	0% {
+		transform: translateX(16vw);
+	}
+	100% {
+		transform: translateX(-118vw);
+	}
+}
+
+/* One banner flight per day, mounted fresh so the quote is re-drawn each pass. */
+.plane-banner {
+	position: absolute;
+	top: 14%;
+	left: 0;
+	/* --banner-width grows with the length of the quote; the vw cap keeps a long
+	   one from running off a narrow screen */
+	width: min(var(--banner-width, 680px), 84vw);
+	animation: plane-fly 13s linear forwards;
+}
+.plane-banner svg {
+	width: 100%;
+	height: auto;
+	display: block;
+	overflow: visible;
+}
+@keyframes plane-fly {
+	0% {
+		transform: translateX(-102%);
+	}
+	100% {
+		transform: translateX(100vw);
+	}
+}
+
 .landscape {
 	position: absolute;
 	left: 0;
@@ -1830,5 +1936,10 @@ textarea:focus-visible {
 	.star {
 		animation: none;
 		opacity: 0.7;
+	}
+	/* the comet and the banner flight are never scheduled in this mode; the
+	   station is mounted for good, so it has to be parked by hand */
+	.iss {
+		display: none;
 	}
 }

@@ -29,6 +29,11 @@
 - Added icon-based skill autocomplete with filtering, mouse selection, and keyboard navigation.
 - Began the Resume Canvas split-desk redesign from the handoff: independent Blurple/Cream and light/dark themes, persisted theme controls, completion meter, zoom/page toolbar, new GitHub and LinkedIn fields, and education/courses below work experience.
 - Added Phosphor React icons and responsive themed shell styling for the redesign.
+- Replaced the river's dashed current markers with a caravel, a pirate ship trailing it, and a cannon whose ball splashes ahead of the caravel.
+- Added drifting ripple rows clipped to the river outline, plus bow waves and stern wakes on both ships.
+- Added three comets a night, each in its own band of sky and its own direction, an ISS crossing the night sky with blinking panel lights, and a daily biplane towing a banner with a random resume quote.
+- Sized the banner so long quotes stretch the cloth instead of shrinking the type below a readable size.
+- Moved the sun, moon, birds and all flybys into a fixed layer above the app shell so they stay visible over the form.
 
 ## Verification
 
@@ -41,6 +46,7 @@
 - `npm run lint` after handoff implementation
 - `npm run test` after handoff implementation
 - `npm run build` after handoff implementation
+- `npm run build`, `npm run test`, and `npx eslint` on the changed files after the scene work
 
 ## Next
 
