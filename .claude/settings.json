@@ -1,0 +1,24 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(git status:*)",
+			"Bash(git diff:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git checkout:*)",
+			"Bash(npm run:*)",
+			"Bash(pnpm run:*)",
+			"Read",
+			"Edit"
+		],
+		"deny": [
+			"Read(.env)",
+			"Read(.env.*)",
+			"Bash(cat .env:*)",
+			"Bash(rm -rf:*)",
+			"Bash(npm install:*)",
+			"Bash(pnpm add:*)"
+		],
+		"ask": ["Bash(git push:*)", "WebFetch"]
+	}
+}
