@@ -40,6 +40,8 @@ export interface Translation {
 	previewHide: string;
 	previewShow: string;
 	previewLabel: string;
+	minimize: string;
+	restore: string;
 	sceneHide: string;
 	sceneShow: string;
 	sceneOn: string;
@@ -137,6 +139,8 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Hide preview",
 		previewShow: "Show preview",
 		previewLabel: "Preview",
+		minimize: "Minimize",
+		restore: "Restore",
 		sceneHide: "Turn off animated background",
 		sceneShow: "Turn on animated background",
 		sceneOn: "On",
@@ -232,6 +236,8 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Сховати попередній перегляд",
 		previewShow: "Показати попередній перегляд",
 		previewLabel: "Прев'ю",
+		minimize: "Згорнути",
+		restore: "Розгорнути",
 		sceneHide: "Вимкнути анімований фон",
 		sceneShow: "Увімкнути анімований фон",
 		sceneOn: "Увімк",

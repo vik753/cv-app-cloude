@@ -1,3 +1,4 @@
+export { BrandLogo } from "@/components/BrandLogo";
 export { DayNightScene } from "@/components/DayNightScene";
 export { LanguageSwitcher } from "@/components/LanguageSwitcher";
 export { PaletteSwitcher } from "@/components/PaletteSwitcher";
