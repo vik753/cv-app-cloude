@@ -1,5 +1,6 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import { useDayNightCycle } from "@/hooks/useDayNightCycle";
+import { useSceneMusic } from "@/hooks/useSceneMusic";
 import {
 	BrandLogo,
 	DayNightScene,
@@ -35,6 +36,16 @@ export function App() {
 	const [previewEntering, setPreviewEntering] = useState(false);
 	const [sceneEnabled, setSceneEnabled] = useState(readSceneEnabled);
 	const [minimized, setMinimized] = useState(false);
+	/* the scene gets its tune while it has the whole screen */
+	const music = useSceneMusic();
+	const minimize = () => {
+		setMinimized(true);
+		music.fadeIn();
+	};
+	const restore = () => {
+		setMinimized(false);
+		music.fadeOut();
+	};
 	/* minimizing only makes sense with the scene behind the form and nothing beside it */
 	const canMinimize = sceneEnabled && !previewVisible;
 	const dayNightPhase = useDayNightCycle(sceneEnabled);
@@ -190,7 +201,7 @@ export function App() {
 											className='window-minimize'
 											type='button'
 											aria-label={t.minimize}
-											onClick={() => setMinimized(true)}
+											onClick={minimize}
 										>
 											<Minus size={9} weight='bold' />
 										</button>
@@ -236,7 +247,7 @@ export function App() {
 				</div>
 				{minimized ? (
 					<Tooltip label={t.restore}>
-						<button className='window-badge' type='button' aria-label={t.restore} onClick={() => setMinimized(false)}>
+						<button className='window-badge' type='button' aria-label={t.restore} onClick={restore}>
 							<BrandLogo />
 							<span className='window-restore'>
 								<CornersOut size={11} weight='bold' />
