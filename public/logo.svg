@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="40" viewBox="0 0 72 40" fill="none" role="img" aria-label="not boring CV">
+	<text x="36" y="9" fill="#68716c" font-family="DM Mono, monospace" font-size="10" letter-spacing="0.02em" text-anchor="middle">not boring</text>
+	<g transform="translate(8 13) scale(0.8)">
+		<g transform="rotate(-8 15 16)">
+			<rect x="5" y="3" width="20" height="26" rx="4" fill="#d36f48" />
+			<path d="M19 3h2a4 4 0 0 1 4 4v2h-2a4 4 0 0 1-4-4V3Z" fill="#eaf0e8" />
+			<path d="M9 14.5c1.5-2 3-2 4.5 0s3 2 4.5 0" stroke="#eaf0e8" stroke-width="1.8" stroke-linecap="round" />
+			<path d="M9 20.5h8M9 24h5" stroke="#eaf0e8" stroke-width="1.8" stroke-linecap="round" />
+		</g>
+		<circle cx="27.5" cy="5" r="2" fill="#153b34" />
+	</g>
+	<text x="33" y="36" fill="#17201d" font-family="Space Grotesk, sans-serif" font-size="20" font-weight="700" letter-spacing="0.04em">CV</text>
+</svg>

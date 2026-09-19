@@ -415,7 +415,7 @@
 /* glass: the whole form column is ONE frosted panel — everything inside it
    (hero, section headings, fields, the experience card) stays background-free
    so their borders don't stack into extra blurred layers on top of it. */
-.app-shell.scene-active .form-column {
+.app-shell.scene-active .form-card {
 	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
 	backdrop-filter: blur(var(--glass-blur));
 }
@@ -475,22 +475,24 @@
 	padding: 0 20px;
 	border-bottom: 1px solid var(--divider);
 }
-.app-brand {
+.header-start {
 	display: flex;
 	align-items: center;
-	gap: 9px;
-	font-size: 14px;
-	font-weight: 500;
+	min-width: 0;
 }
-.brand-mark {
-	display: grid;
-	width: 24px;
-	height: 24px;
-	place-items: center;
-	border-radius: 50%;
-	background: var(--tint);
-	color: var(--accent-text);
-	font-size: 11px;
+.app-brand {
+	flex-shrink: 0;
+	color: var(--text);
+}
+.header-start .autosave {
+	margin-inline: auto;
+	padding-inline: 12px;
+	white-space: nowrap;
+}
+.header-center {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 .header-actions {
 	display: flex;
@@ -771,9 +773,6 @@
 	opacity: 0.55;
 	transform: translateX(14px);
 }
-.app-body.preview-hidden .form-column {
-	border-right-color: transparent;
-}
 .app-body .print-preview {
 	min-width: 0;
 	opacity: 1;
@@ -794,8 +793,138 @@
 .form-column {
 	height: 100%;
 	overflow-y: auto;
+	padding: 24px 16px 16px;
+}
+/* ---- minimize to a badge ----
+   header + body live in .app-window, which shrinks into the bottom-right corner.
+   The shell itself stays put: it carries the theme tokens the badge needs. */
+.app-window {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-height: 0;
+	transform-origin: calc(100% - 70px) calc(100% - 34px);
+	transition:
+		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
+		opacity 360ms ease,
+		visibility 0s linear 0s;
+}
+.app-shell.minimized {
+	/* above the sky actors so nothing flies over the badge; the shell is transparent
+	   in scene mode, so the whole scene still shows through it */
+	z-index: 3;
+	pointer-events: none;
+}
+.app-shell.minimized .app-window {
+	transform: scale(0.06);
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
+		opacity 420ms ease 60ms,
+		visibility 0s linear 480ms;
+}
+.form-card {
+	position: relative;
+}
+.window-minimize,
+.window-restore {
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	background: #f5bf4f;
+	box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+	color: rgba(90, 55, 0, 0.8);
+}
+.window-minimize {
+	position: absolute;
+	top: 9px;
+	left: 9px;
+	z-index: 1;
+	width: 13px;
+	height: 13px;
+	padding: 0;
+	border: 0;
+	cursor: pointer;
+}
+/* like a desktop window: the glyph only shows once you reach for the button */
+.window-minimize svg {
+	opacity: 0;
+	transition: opacity 120ms ease;
+}
+.window-minimize:hover svg,
+.window-minimize:focus-visible svg {
+	opacity: 1;
+}
+.window-minimize:hover {
+	background: #f7c85f;
+}
+.window-badge {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 12px 8px 14px;
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 14px;
+	background: color-mix(in srgb, var(--card) 82%, transparent);
+	backdrop-filter: blur(8px);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
+		0 14px 34px -12px color-mix(in srgb, #000 40%, transparent);
+	color: var(--text);
+	pointer-events: auto;
+	cursor: pointer;
+	animation: badge-in 380ms cubic-bezier(0.32, 0.72, 0, 1) 260ms backwards;
+	transition:
+		transform 160ms ease,
+		box-shadow 160ms ease;
+}
+.window-badge:hover {
+	transform: translateY(-2px);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
+		0 18px 38px -12px color-mix(in srgb, #000 45%, transparent);
+}
+.window-restore {
+	width: 20px;
+	height: 20px;
+}
+@keyframes badge-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.85);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.app-window,
+	.app-shell.minimized .app-window {
+		transition: none;
+	}
+	.window-badge {
+		animation: none;
+	}
+}
+@media print {
+	.window-minimize,
+	.window-badge {
+		display: none !important;
+	}
+}
+.form-card {
 	padding: 26px 28px;
-	border-right: 1px solid var(--divider);
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 10px;
+	background: var(--card);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 8%, transparent),
+		0 14px 36px -14px color-mix(in srgb, var(--text) 22%, transparent);
 }
 .form-hero {
 	display: flex;
@@ -1026,7 +1155,7 @@
 		grid-template-columns: 1fr auto;
 		gap: 12px;
 	}
-	.header-download {
+	.header-center {
 		grid-column: 1 / -1;
 		grid-row: 2;
 		justify-self: start;
@@ -1056,7 +1185,6 @@
 		height: auto;
 		max-height: none;
 		overflow: visible;
-		border-right: 0;
 	}
 	.print-preview {
 		height: auto;
@@ -1075,7 +1203,7 @@
 	.palette-trigger {
 		display: none;
 	}
-	.form-column {
+	.form-card {
 		padding: 22px 16px;
 	}
 	.form-hero {
@@ -1883,6 +2011,627 @@ textarea:focus-visible {
 	}
 	100% {
 		background-color: rgba(255, 170, 90, 0.35);
+	}
+}
+
+/* ============ Seasons ============
+   One day and night is one season: summer, autumn, winter, spring. The scene carries
+   data-season, and everything below eases from one look to the next on its own. */
+
+/* --- meadows --- */
+.hill {
+	transition: fill 12s ease;
+}
+.scene[data-season="autumn"] .hill-back {
+	fill: #b4d38f;
+}
+.scene[data-season="autumn"] .hill-mid {
+	fill: #8fbd78;
+}
+.scene[data-season="autumn"] .hill-front {
+	fill: #6d9e5c;
+}
+.scene[data-season="winter"] .hill-back {
+	fill: #eef4f8;
+}
+.scene[data-season="winter"] .hill-mid {
+	fill: #e1eaf2;
+}
+.scene[data-season="winter"] .hill-front {
+	fill: #d5e1ec;
+}
+.scene[data-season="spring"] .hill-back {
+	fill: #a9dd9c;
+}
+.scene[data-season="spring"] .hill-mid {
+	fill: #7ccb8a;
+}
+.scene[data-season="spring"] .hill-front {
+	fill: #57a86f;
+}
+
+.meadow-leaf,
+.ground-leaf {
+	opacity: 0;
+	transition: opacity 6s ease;
+}
+.scene[data-season="autumn"] .meadow-leaf,
+.scene[data-season="autumn"] .ground-leaf {
+	opacity: 0.95;
+	transition: opacity 12s ease 3s;
+}
+
+/* summer meadows: grass tufts and wildflowers. The grass dries to straw in autumn,
+   goes under the snow in winter and comes back green after the thaw; the flowers
+   are summer only and bloom one by one when it arrives. */
+.grass {
+	transition:
+		stroke 10s ease,
+		opacity 6s ease;
+}
+.scene[data-season="autumn"] .grass {
+	stroke: #b9a652;
+}
+.scene[data-season="winter"] .grass {
+	opacity: 0;
+}
+.scene[data-season="spring"] .grass {
+	opacity: 0.85;
+	transition:
+		stroke 10s ease,
+		opacity 6s ease 10s;
+}
+.summer-flower {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	transition:
+		opacity 4s ease,
+		transform 4s ease;
+}
+.scene[data-season="summer"] .summer-flower {
+	transition-delay: var(--bloom-delay, 4s);
+}
+.scene:not([data-season="summer"]) .summer-flower {
+	opacity: 0;
+	transform: scale(0.2);
+}
+
+.snowdrop {
+	opacity: 0;
+	transform: scale(0);
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	transition:
+		opacity 3s ease,
+		transform 3s ease;
+}
+/* after the snow has melted */
+.scene[data-season="spring"] .snowdrop {
+	opacity: 1;
+	transform: scale(1);
+	transition-delay: var(--bloom-delay, 8s);
+}
+
+/* --- trees --- */
+.leaf {
+	transition:
+		fill 8s ease,
+		opacity 6s ease;
+}
+.scene[data-season="autumn"] .leaf-0 {
+	fill: var(--autumn-0);
+}
+.scene[data-season="autumn"] .leaf-1 {
+	fill: var(--autumn-1);
+}
+.scene[data-season="autumn"] .leaf-2 {
+	fill: var(--autumn-2);
+}
+/* bare through winter and spring; the pines keep their needles */
+.scene[data-season="winter"] .leaf,
+.scene[data-season="spring"] .leaf {
+	opacity: 0;
+}
+
+.fruit {
+	transition: opacity 5s ease;
+}
+.scene[data-season="autumn"] .fruit-cherry,
+.scene[data-season="winter"] .fruit-apple,
+.scene[data-season="winter"] .fruit-cherry,
+.scene[data-season="spring"] .fruit {
+	opacity: 0;
+}
+
+.snow-cap {
+	opacity: 0;
+	transition: opacity 9s ease;
+}
+/* the snow settles once it has been falling for a while */
+.scene[data-season="winter"] .snow-cap {
+	opacity: 1;
+	transition: opacity 10s ease 5s;
+}
+
+.falling-leaf {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: leaf-drop var(--fall-duration, 6s) ease-in var(--fall-delay, 0s) infinite both;
+}
+@keyframes leaf-drop {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) rotate(0deg);
+	}
+	10% {
+		opacity: 1;
+	}
+	50% {
+		transform: translate(calc(var(--fall-x) * 0.3 + 5px), calc(var(--fall-y) * 0.45)) rotate(170deg);
+	}
+	88% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(var(--fall-x), var(--fall-y)) rotate(330deg);
+	}
+}
+
+/* spring buds swell on bare twigs, one by one */
+.bud {
+	opacity: 0;
+	transform: scale(0);
+	transform-box: fill-box;
+	transform-origin: center;
+	transition:
+		opacity 3s ease,
+		transform 3s ease;
+}
+.scene[data-season="spring"] .bud {
+	opacity: 1;
+	transform: scale(1);
+	transition-delay: var(--bud-delay, 12s);
+}
+
+/* --- critters --- */
+.wolf-fur {
+	fill: #737a85;
+}
+/* the wolf's winter coat is paler and denser */
+.critters-winter .wolf-fur {
+	fill: #8b929c;
+}
+
+/* red fox: a rich, deep coat in winter; a faded, patchy one while it moults in
+   spring and wears it through summer (the tail and body thin out too, in JS) */
+.fox-fur,
+.fox-leg,
+.fox-leg-far {
+	transition: fill 10s ease;
+}
+.fox-fur {
+	fill: #c9793e;
+}
+.fox-leg {
+	fill: #4a3328;
+}
+.fox-leg-far {
+	fill: #36251d;
+}
+.critters-autumn .fox-fur {
+	fill: #d9692a;
+}
+.critters-winter .fox-fur {
+	fill: #e0561f;
+}
+.critters-winter .fox-leg {
+	fill: #2e1f19;
+}
+.critters-spring .fox-fur {
+	fill: #cf7a45;
+}
+
+/* mountain hare: grey-brown most of the year, white in winter, patchy between */
+.hare-fur,
+.hare-fur-dark {
+	transition:
+		fill 12s ease,
+		stroke 12s ease;
+}
+.hare-fur {
+	fill: #9a8a76;
+}
+.hare-fur-dark {
+	fill: #85765f;
+}
+.critters-autumn .hare-fur {
+	fill: #b9ae9f;
+}
+.critters-autumn .hare-fur-dark {
+	fill: #a79a88;
+}
+.critters-winter .hare-fur {
+	fill: #f4f6f8;
+}
+.critters-winter .hare-fur-dark {
+	fill: #e3e8ee;
+}
+.critters-spring .hare-fur {
+	fill: #a89a86;
+}
+/* the outline and the shadow fade in with the white coat */
+.hare-fur,
+.hare-fur-dark {
+	stroke: rgba(92, 108, 136, 0);
+	stroke-width: 0.7;
+	stroke-linejoin: round;
+	paint-order: stroke;
+}
+.hare-shadow {
+	fill: rgba(70, 84, 110, 0);
+	transition: fill 12s ease;
+}
+.critters-winter .hare-fur,
+.critters-winter .hare-fur-dark {
+	stroke: rgba(92, 108, 136, 0.85);
+}
+.critters-winter .hare-shadow {
+	fill: rgba(70, 84, 110, 0.28);
+}
+
+.fox-puff {
+	fill: #d6e6b8;
+}
+.fox-puff-autumn {
+	fill: #e0b347;
+}
+.fox-puff-winter {
+	fill: #fbfdff;
+}
+
+/* pressed into the snow: a shade of the snow's own blue, not a stamp */
+.tracks {
+	fill: #9fb1c6;
+}
+
+.hedgehog-zzz {
+	/* dark on purpose: it floats over snow */
+	fill: #3f4d6e;
+	font: 700 8px var(--font-mono);
+}
+.hedgehog-zzz text {
+	animation: zzz-float 3s ease-in-out infinite;
+}
+.hedgehog-zzz text:nth-child(2) {
+	animation-delay: 1s;
+}
+.hedgehog-zzz text:nth-child(3) {
+	animation-delay: 2s;
+}
+@keyframes zzz-float {
+	0%,
+	100% {
+		opacity: 0.2;
+		transform: translateY(1px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateY(-2px);
+	}
+}
+
+/* --- sky --- */
+.overcast {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity 8s ease;
+}
+.overcast-sky {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(#8994a2 0%, #b3bcc6 60%, #d2d7dc 100%);
+	animation: day-opacity 46s linear infinite;
+}
+.scene[data-season="autumn"] .overcast {
+	opacity: 0.5;
+}
+.scene[data-season="winter"] .overcast {
+	opacity: 0.7;
+}
+
+.storm {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transform: translateX(-40vw);
+	transition:
+		opacity 7s ease,
+		transform 14s ease;
+}
+.scene[data-season="autumn"] .storm,
+.scene[data-season="winter"] .storm {
+	opacity: 1;
+	transform: none;
+}
+/* spring: the heavy clouds roll away and only the light ones stay */
+.scene[data-season="spring"] .storm {
+	opacity: 0;
+	transform: translateX(60vw);
+}
+.storm-cloud {
+	position: absolute;
+	border-radius: 999px;
+	background-color: #8a939e;
+	box-shadow: inset 0 -10px 18px rgba(40, 46, 58, 0.25);
+	animation: storm-drift 40s ease-in-out infinite alternate;
+	transition: background-color 8s ease;
+}
+.storm-cloud::before,
+.storm-cloud::after {
+	content: "";
+	position: absolute;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: inherit;
+}
+.storm-cloud::before {
+	left: 12%;
+	bottom: 12%;
+	width: 42%;
+}
+.storm-cloud::after {
+	left: 48%;
+	bottom: 6%;
+	width: 32%;
+}
+.storm-cloud:nth-child(even) {
+	background-color: #9aa3ad;
+	animation-direction: alternate-reverse;
+}
+.scene[data-season="winter"] .storm-cloud {
+	background-color: #767f8b;
+}
+.scene[data-season="winter"] .storm-cloud:nth-child(even) {
+	background-color: #868f9a;
+}
+@keyframes storm-drift {
+	from {
+		transform: translateX(-3vw);
+	}
+	to {
+		transform: translateX(4vw);
+	}
+}
+
+.sun {
+	transition:
+		box-shadow 6s ease,
+		filter 6s ease;
+}
+.scene-front[data-season="autumn"] .sun,
+.scene-front[data-season="winter"] .sun {
+	filter: saturate(0.7) brightness(0.96);
+	box-shadow: 0 0 26px 6px rgba(255, 214, 160, 0.35);
+}
+.scene-front[data-season="spring"] .sun {
+	filter: saturate(1.15) brightness(1.08);
+	box-shadow:
+		0 0 60px 22px rgba(255, 196, 80, 0.7),
+		0 0 140px 60px rgba(255, 226, 130, 0.35);
+}
+
+/* --- rain (autumn): comes in showers --- */
+.rain {
+	position: absolute;
+	inset: 0 -12%;
+	transform: rotate(9deg);
+	opacity: 0;
+	animation: shower 23s ease-in-out 2s infinite both;
+}
+.rain-drop {
+	position: absolute;
+	top: 6vh;
+	left: var(--x);
+	width: 1.5px;
+	height: var(--len);
+	border-radius: 1px;
+	background: linear-gradient(rgba(215, 228, 245, 0), rgba(215, 228, 245, 0.85));
+	animation: rain-fall var(--dur) linear var(--delay) infinite;
+}
+@keyframes rain-fall {
+	0% {
+		opacity: 0;
+		transform: translateY(0);
+	}
+	8% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(96vh);
+	}
+}
+@keyframes shower {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	55% {
+		opacity: 1;
+	}
+	68% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+/* --- wind (autumn leaves, winter blizzard): comes in gusts --- */
+.gust,
+.blizzard {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	animation: gust-window 17s ease-in-out 5s infinite both;
+}
+.blizzard {
+	animation-duration: 19s;
+	animation-delay: 4s;
+}
+@keyframes gust-window {
+	0% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 0;
+	}
+	33% {
+		opacity: 1;
+	}
+	58% {
+		opacity: 1;
+	}
+	68% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+.wind-streak {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: var(--w);
+	height: 1.5px;
+	border-radius: 2px;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+	animation: wind-streak var(--dur) linear var(--delay) infinite;
+}
+@keyframes wind-streak {
+	0% {
+		opacity: 0;
+		transform: translateX(-30vw);
+	}
+	20% {
+		opacity: 1;
+	}
+	80% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(110vw);
+	}
+}
+.gust-leaf {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: 10px;
+	height: 6px;
+	border-radius: 0 100% 0 100%;
+	background: var(--color);
+	animation: leaf-blow var(--dur) linear var(--delay) infinite;
+}
+@keyframes leaf-blow {
+	0% {
+		transform: translate(-6vw, 0) rotate(0deg);
+	}
+	25% {
+		transform: translate(22vw, -5vh) rotate(200deg);
+	}
+	50% {
+		transform: translate(50vw, 2vh) rotate(410deg);
+	}
+	75% {
+		transform: translate(78vw, -4vh) rotate(600deg);
+	}
+	100% {
+		transform: translate(106vw, 1vh) rotate(800deg);
+	}
+}
+
+/* --- snow (winter) --- */
+.snowfall {
+	position: absolute;
+	inset: 0 -20%;
+	transform-origin: 50% 0;
+	animation: blizzard-lean 19s ease-in-out 4s infinite both;
+}
+/* the whole fall leans with the wind while the blizzard blows */
+@keyframes blizzard-lean {
+	0%,
+	25% {
+		transform: skewX(0deg);
+	}
+	35%,
+	58% {
+		transform: skewX(20deg);
+	}
+	70%,
+	100% {
+		transform: skewX(0deg);
+	}
+}
+.snowflake {
+	position: absolute;
+	top: 0;
+	left: var(--x);
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+	animation: snow-fall var(--dur) linear var(--delay) infinite both;
+}
+@keyframes snow-fall {
+	0% {
+		opacity: 0;
+		transform: translate(0, 5vh);
+	}
+	6% {
+		opacity: 0.95;
+	}
+	25% {
+		transform: translate(var(--sway), 28vh);
+	}
+	50% {
+		transform: translate(0, 52vh);
+	}
+	75% {
+		transform: translate(var(--sway), 76vh);
+	}
+	94% {
+		opacity: 0.95;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(0, 100vh);
+	}
+}
+.blizzard-flake {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	background: #fff;
+	animation: blizzard-dash var(--dur) linear var(--delay) infinite;
+}
+@keyframes blizzard-dash {
+	0% {
+		transform: translate(-8vw, 0);
+	}
+	100% {
+		transform: translate(108vw, var(--drop));
 	}
 }
 
