@@ -7,6 +7,8 @@ export const BACK_RIDGE = "M0,560 C200,480 400,520 600,500 C800,480 1000,520 120
 export const MID_RIDGE = "M0,650 C250,600 450,640 650,615 C900,590 1100,630 1350,605 C1500,590 1600,610 1600,650";
 export const FRONT_RIDGE = "M0,780 C200,740 400,770 650,750 C900,730 1150,770 1400,745 C1500,735 1600,750 1600,780";
 export const RIVER_TOP = "M0,700 C300,670 500,730 800,700 C1100,670 1300,730 1600,700";
+/* the whole water surface, banks included */
+export const RIVER_PATH = `${RIVER_TOP} L1600,760 C1300,790 1100,730 800,760 C500,790 300,730 0,760 Z`;
 
 export type Point = [number, number];
 type Segment = [Point, Point, Point, Point];
@@ -75,6 +77,9 @@ export const CHERRY_TREE = { x: 80, base: onFrontMeadow(80, 84), scale: 1.1 };
 export const OAK_TREE = { x: 1000, base: onFrontMeadow(1000, 90), scale: 1.1 };
 export const ROWAN_TREE = { x: 1525, base: onFrontMeadow(1525, 100), scale: 1.05 };
 
+/* the old stump in the middle of the lower meadow, where the wolf sits of a night */
+export const STUMP = { x: 656, base: onFrontMeadow(656, 96), scale: 1.2, height: 15 };
+
 export const LOWER_COVER = [
 	...LOWER_PINES.map((pine) => ({ x: pine.x, base: pine.base, reach: 22 * pine.scale })),
 	{ x: LOWER_BUSH.x, base: LOWER_BUSH.base, reach: 26 * LOWER_BUSH.scale },
@@ -82,3 +87,52 @@ export const LOWER_COVER = [
 	{ x: OAK_TREE.x, base: OAK_TREE.base, reach: 33 * OAK_TREE.scale },
 	{ x: ROWAN_TREE.x, base: ROWAN_TREE.base, reach: 21 * ROWAN_TREE.scale },
 ];
+
+/* the seat of the stump, in the same depth terms the critters walk in */
+export const STUMP_SEAT = STUMP.base - STUMP.height * STUMP.scale - frontRidgeAt(STUMP.x);
+
+/* The homestead at the right edge of the upper meadow, and its chimneys. The smoke
+   is drawn in the sky layer above the landscape rather than inside it, so it needs
+   these in scene coordinates. */
+/* The хати sit well up the slope so the yard in front of them is deep: the
+   householder walks between the walls and the fence, the dog runs on the near side
+   of it, and neither gets in the other's way. */
+export const HOMESTEAD = {
+	near: { x: 1298, base: onBackMeadow(1298) - 30, scale: 2.1 },
+	far: { x: 1470, base: onBackMeadow(1470) - 40, scale: 1.7 },
+	distant: { x: 1576, base: Math.round(backRidgeAt(1576) + 20), scale: 0.8 },
+};
+
+/* the fence along the foot of the yard, drawn between the two of them */
+export const FENCE = {
+	x: HOMESTEAD.near.x,
+	base: HOMESTEAD.near.base + 44,
+	scale: HOMESTEAD.near.scale,
+	from: -26,
+	to: 106,
+};
+
+/* the dog's kennel, out on the near side of the fence */
+export const KENNEL = { x: 1196, base: onBackMeadow(1196) + 20, scale: 1.45 };
+
+/* the middle хата is mirrored, so its chimney sits on the other side */
+export const CHIMNEYS = [
+	{ x: HOMESTEAD.near.x + 11.4 * HOMESTEAD.near.scale, y: HOMESTEAD.near.base - 44 * HOMESTEAD.near.scale, scale: HOMESTEAD.near.scale },
+	{ x: HOMESTEAD.far.x - 11.4 * HOMESTEAD.far.scale, y: HOMESTEAD.far.base - 44 * HOMESTEAD.far.scale, scale: HOMESTEAD.far.scale },
+	{ x: HOMESTEAD.distant.x + 11.4 * HOMESTEAD.distant.scale, y: HOMESTEAD.distant.base - 44 * HOMESTEAD.distant.scale, scale: HOMESTEAD.distant.scale },
+];
+
+/* Where a point of the landscape lands on the screen. The map is drawn with
+   `slice`: it fills the width, is anchored to the bottom of its strip, and the rest
+   of the tall viewBox is cropped off the top. */
+export const projectScene = (viewport: { width: number; height: number }) => {
+	const strip = Math.max(viewport.height * 0.58, 380);
+	const scale = Math.max(viewport.width / 1600, strip / 900);
+	return {
+		scale,
+		at: (x: number, y: number) => ({
+			left: (viewport.width - 1600 * scale) / 2 + x * scale,
+			top: viewport.height - (900 - y) * scale,
+		}),
+	};
+};

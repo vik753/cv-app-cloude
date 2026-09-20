@@ -2407,6 +2407,100 @@ textarea:focus-visible {
 	fill: #9fb1c6;
 }
 
+/* the wedge of storks crossing the autumn sky, and their wingbeats */
+.stork-wedge {
+	position: absolute;
+	top: 15%;
+	left: 0;
+	width: 0;
+	height: 0;
+	animation: wedge-cross 46s linear infinite;
+}
+@keyframes wedge-cross {
+	0%,
+	26% {
+		opacity: 0;
+		transform: translateX(-22vw);
+	}
+	28.5% {
+		opacity: 1;
+	}
+	41% {
+		opacity: 1;
+	}
+	44%,
+	100% {
+		opacity: 0;
+		transform: translateX(122vw);
+	}
+}
+.wedge-bird {
+	position: absolute;
+	width: 52px;
+	height: 26px;
+	overflow: visible;
+	animation: wedge-lift 2.6s ease-in-out infinite alternate;
+}
+@keyframes wedge-lift {
+	from {
+		transform: translateY(-2px);
+	}
+	to {
+		transform: translateY(3px);
+	}
+}
+.wedge-wing {
+	transform-box: view-box;
+	transform-origin: 0 0;
+	animation: wing-beat 0.62s ease-in-out infinite alternate;
+}
+@keyframes wing-beat {
+	from {
+		transform: rotate(-20deg);
+	}
+	to {
+		transform: rotate(18deg);
+	}
+}
+
+/* notes drifting up from the singing */
+.song-note {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: note-rise 4.2s ease-out var(--note-delay, 0s) infinite;
+}
+@keyframes note-rise {
+	0% {
+		opacity: 0;
+		transform: translate(0, 4px) scale(0.6) rotate(-8deg);
+	}
+	18% {
+		opacity: 0.85;
+	}
+	70% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(7px, -22px) scale(1.15) rotate(12deg);
+	}
+}
+
+/* the little z's that rise off anyone asleep */
+.sleep-zzz {
+	fill: #3f4d6e;
+	font: 700 7px var(--font-mono);
+}
+.sleep-zzz text {
+	animation: zzz-float 3s ease-in-out infinite;
+}
+.sleep-zzz text:nth-child(2) {
+	animation-delay: 1s;
+}
+.sleep-zzz text:nth-child(3) {
+	animation-delay: 2s;
+}
+
 .hedgehog-zzz {
 	/* dark on purpose: it floats over snow */
 	fill: #3f4d6e;
@@ -2430,6 +2524,483 @@ textarea:focus-visible {
 	50% {
 		opacity: 1;
 		transform: translateY(-2px);
+	}
+}
+
+/* --- the river --- */
+/* fish rise through the day; a snag drifts past at night */
+.river-day {
+	animation: day-opacity 46s linear infinite;
+}
+.river-night {
+	animation: night-opacity 46s linear infinite;
+}
+.fish-leap {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: fish-leap 12s linear var(--leap-delay, 0s) infinite;
+}
+/* A real leap is over in about a second: out fast, a short arc, and back in nose
+   first. The steps below sample a ballistic curve at equal times — even spacing
+   across, quick at the water, slower only at the very top. */
+@keyframes fish-leap {
+	0%,
+	88% {
+		opacity: 0;
+		transform: translate(0, 7px) rotate(-62deg);
+	}
+	88.3% {
+		opacity: 1;
+		transform: translate(1px, 2px) rotate(-58deg);
+	}
+	89% {
+		transform: translate(4px, -8px) rotate(-46deg);
+	}
+	89.7% {
+		transform: translate(7.5px, -16px) rotate(-33deg);
+	}
+	90.4% {
+		transform: translate(11px, -21.5px) rotate(-19deg);
+	}
+	91.1% {
+		transform: translate(14.5px, -24.5px) rotate(-5deg);
+	}
+	91.8% {
+		transform: translate(18px, -25px) rotate(9deg);
+	}
+	92.5% {
+		transform: translate(21.5px, -22.5px) rotate(23deg);
+	}
+	93.2% {
+		transform: translate(25px, -17.5px) rotate(36deg);
+	}
+	93.9% {
+		transform: translate(28px, -10px) rotate(48deg);
+	}
+	94.6% {
+		transform: translate(31px, 0) rotate(58deg);
+	}
+	95.2% {
+		opacity: 1;
+		transform: translate(33px, 7px) rotate(64deg);
+	}
+	95.6%,
+	100% {
+		opacity: 0;
+		transform: translate(33.5px, 9px) rotate(66deg);
+	}
+}
+.splash-out,
+.splash-in {
+	fill: none;
+	stroke: #eaf7ff;
+	stroke-width: 1.3;
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: splash-out 12s linear var(--leap-delay, 0s) infinite;
+}
+.splash-in {
+	animation-name: splash-in;
+}
+@keyframes splash-out {
+	0%,
+	88% {
+		opacity: 0;
+		transform: scale(0.25);
+	}
+	88.5% {
+		opacity: 0.9;
+		transform: scale(0.55);
+	}
+	92.5% {
+		opacity: 0;
+		transform: scale(1.5);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.5);
+	}
+}
+@keyframes splash-in {
+	0%,
+	95.2% {
+		opacity: 0;
+		transform: scale(0.25);
+	}
+	95.7% {
+		opacity: 0.95;
+		transform: scale(0.6);
+	}
+	99.6% {
+		opacity: 0;
+		transform: scale(1.9);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.9);
+	}
+}
+/* the spray thrown up where it goes back under */
+.splash-drops {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: splash-drops 12s linear var(--leap-delay, 0s) infinite;
+}
+@keyframes splash-drops {
+	0%,
+	95.3% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.5);
+	}
+	95.8% {
+		opacity: 0.9;
+		transform: translate(0, -3px) scale(1);
+	}
+	97.6% {
+		opacity: 0;
+		transform: translate(2px, -7px) scale(1.2);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(2px, -7px) scale(1.2);
+	}
+}
+.drift-log {
+	animation: drift-log 46s linear infinite;
+}
+@keyframes drift-log {
+	0%,
+	56% {
+		transform: translateX(-140px) rotate(-1deg);
+	}
+	94%,
+	100% {
+		transform: translateX(1760px) rotate(2deg);
+	}
+}
+
+/* winter: a lid of ice over the water, with the fish still moving underneath */
+.river-ice {
+	opacity: 0;
+	transition: opacity 12s ease;
+}
+.scene[data-season="winter"] .river-ice {
+	opacity: 1;
+}
+.river-ripples {
+	transition: opacity 10s ease;
+}
+.scene[data-season="winter"] .river-ripples {
+	opacity: 0.18;
+}
+.ice-fish {
+	opacity: 0.62;
+	animation: ice-swim var(--swim-duration, 40s) linear var(--swim-delay, 0s) infinite;
+}
+@keyframes ice-swim {
+	from {
+		transform: translateX(var(--swim-from, -140px));
+	}
+	to {
+		transform: translateX(var(--swim-to, 1740px));
+	}
+}
+
+/* pipe smoke: small, slow, and gone in a few puffs */
+.pipe-puff {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: pipe-puff 4.5s linear var(--puff-delay, 0s) infinite;
+}
+@keyframes pipe-puff {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.5);
+	}
+	12% {
+		opacity: 0.55;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(3px, -14px) scale(2.4);
+	}
+}
+
+/* the fir by the хата, dressed for winter: lights that glow day and night, and a
+   folk star at the top */
+.pine-lights,
+.pine-star {
+	opacity: 0;
+	transition: opacity 6s ease;
+}
+.scene[data-season="winter"] .pine-lights,
+.scene[data-season="winter"] .pine-star {
+	opacity: 1;
+}
+.pine-light {
+	animation: bulb-twinkle 2.4s ease-in-out var(--bulb-delay, 0s) infinite alternate;
+}
+@keyframes bulb-twinkle {
+	from {
+		opacity: 0.45;
+	}
+	to {
+		opacity: 1;
+	}
+}
+.star-glow {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: star-pulse 3.2s ease-in-out infinite alternate;
+}
+@keyframes star-pulse {
+	from {
+		opacity: 0.26;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 0.6;
+		transform: scale(1.14);
+	}
+}
+
+/* --- the homestead --- */
+/* The stove is lit once the cold comes. The smoke is a sky layer above the
+   landscape, not part of it: inside the map there is barely any air above the
+   roofs on a short window, and a rising column ran straight into the crop. */
+.chimney-smoke {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 6s ease;
+}
+.scene[data-season="autumn"] .chimney-smoke,
+.scene[data-season="winter"] .chimney-smoke {
+	opacity: 1;
+}
+.smoke-column {
+	position: absolute;
+}
+.smoke-puff {
+	position: absolute;
+	width: var(--puff-size, 8px);
+	height: var(--puff-size, 8px);
+	border-radius: 50%;
+	background: #e8ecf2;
+	animation: smoke-rise 13s linear var(--puff-delay, 0s) infinite;
+}
+/* climbs, spreads, and is gone before the top of the sky */
+@keyframes smoke-rise {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.4);
+	}
+	10% {
+		opacity: 0.5;
+	}
+	45% {
+		opacity: 0.34;
+	}
+	72% {
+		opacity: 0.12;
+	}
+	85% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(calc(var(--puff-rise, 150px) * -0.17), calc(var(--puff-rise, 150px) * -1)) scale(3.2);
+	}
+}
+
+/* a candle in the window, but only after dark */
+.window-night {
+	opacity: 0;
+	animation: night-opacity 46s linear infinite;
+}
+/* A candle never burns steady. The flame dances fastest, the light in the window
+   swells more slowly, and the glow around it breathes slower still — three loops of
+   lengths that don't divide into each other, so the flicker never repeats visibly. */
+.candle-glow {
+	animation: candle-burn 3.7s linear infinite;
+}
+.candle-halo,
+.candle-spill {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: candle-breathe 2.6s ease-in-out infinite;
+}
+.candle-spill {
+	transform-origin: 50% 0;
+	animation-duration: 3.1s;
+}
+/* The pool of light on the grass: it lightens what it falls on. One candle throws
+   both this and the light in the window, so it takes its brightness from the very
+   same loop; only its shape wavers on a rhythm of its own. */
+.candle-pool {
+	mix-blend-mode: screen;
+	transform-box: fill-box;
+	transform-origin: 50% 0;
+	animation:
+		candle-burn-deep 3.7s linear infinite,
+		candle-pool-waver 2.9s ease-in-out infinite;
+}
+@keyframes candle-pool-waver {
+	0% {
+		transform: scale(1, 1);
+	}
+	16% {
+		transform: scale(1.05, 1.11) translateX(0.4px);
+	}
+	33% {
+		transform: scale(0.96, 0.92) translateX(-0.3px);
+	}
+	49% {
+		transform: scale(1.03, 1.06) translateX(0.2px);
+	}
+	64% {
+		transform: scale(0.98, 0.95) translateX(-0.4px);
+	}
+	81% {
+		transform: scale(1.04, 1.08) translateX(0.3px);
+	}
+	100% {
+		transform: scale(1, 1);
+	}
+}
+.candle-flame {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: candle-dance 0.9s ease-in-out infinite;
+}
+/* the flame's own uneven burn: what the window, the halo, the spill down the wall
+   and the pool on the grass all take their brightness from */
+@keyframes candle-burn {
+	0% {
+		opacity: 0.85;
+	}
+	9% {
+		opacity: 1;
+	}
+	18% {
+		opacity: 0.5;
+	}
+	27% {
+		opacity: 0.95;
+	}
+	35% {
+		opacity: 0.42;
+	}
+	44% {
+		opacity: 0.9;
+	}
+	57% {
+		opacity: 0.6;
+	}
+	66% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0.48;
+	}
+	87% {
+		opacity: 0.92;
+	}
+	100% {
+		opacity: 0.85;
+	}
+}
+
+/* The pool thrown out onto the grass is the faintest thing the candle does, so it
+   takes the guttering hardest: it all but dies away and flares back. */
+@keyframes candle-burn-deep {
+	0% {
+		opacity: 0.8;
+	}
+	9% {
+		opacity: 1;
+	}
+	18% {
+		opacity: 0.16;
+	}
+	27% {
+		opacity: 0.92;
+	}
+	35% {
+		opacity: 0.1;
+	}
+	44% {
+		opacity: 0.85;
+	}
+	52% {
+		opacity: 0.3;
+	}
+	66% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0.14;
+	}
+	87% {
+		opacity: 0.9;
+	}
+	100% {
+		opacity: 0.8;
+	}
+}
+@keyframes candle-breathe {
+	0% {
+		opacity: 0.85;
+		transform: scale(1);
+	}
+	13% {
+		opacity: 1;
+		transform: scale(1.08);
+	}
+	29% {
+		opacity: 0.7;
+		transform: scale(0.95);
+	}
+	46% {
+		opacity: 0.95;
+		transform: scale(1.04);
+	}
+	61% {
+		opacity: 0.78;
+		transform: scale(0.98);
+	}
+	78% {
+		opacity: 1;
+		transform: scale(1.07);
+	}
+	90% {
+		opacity: 0.74;
+		transform: scale(0.96);
+	}
+	100% {
+		opacity: 0.85;
+		transform: scale(1);
+	}
+}
+@keyframes candle-dance {
+	0% {
+		transform: translateX(0) scaleY(1);
+	}
+	22% {
+		transform: translateX(0.18px) scaleY(1.14);
+	}
+	48% {
+		transform: translateX(-0.14px) scaleY(0.88);
+	}
+	71% {
+		transform: translateX(0.1px) scaleY(1.07);
+	}
+	100% {
+		transform: translateX(0) scaleY(0.96);
 	}
 }
 
@@ -2796,6 +3367,33 @@ textarea:focus-visible {
 	.star {
 		animation: none;
 		opacity: 0.7;
+	}
+	.fish-leap,
+	.splash-out,
+	.splash-in,
+	.splash-drops,
+	.drift-log,
+	.ice-fish,
+	.river-day,
+	.river-night,
+	.smoke-puff,
+	.pipe-puff,
+	.pine-light,
+	.star-glow,
+	.song-note,
+	.wedge-bird,
+	.wedge-wing,
+	.stork-wedge,
+	.candle-flame,
+	.candle-glow,
+	.candle-halo,
+	.candle-spill,
+	.candle-pool {
+		animation: none;
+	}
+	.window-night {
+		animation: none;
+		opacity: 0;
 	}
 	/* the comet and the banner flight are never scheduled in this mode; the
 	   station is mounted for good, so it has to be parked by hand */

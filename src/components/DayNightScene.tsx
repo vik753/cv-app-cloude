@@ -1,9 +1,13 @@
 import { LowerCritters, UpperCritters } from "@/components/SceneCritters";
 import { BackMeadow, FrontMeadow, MidMeadow, UpperBush } from "@/components/SceneFlora";
+import { IceChildren } from "@/components/SceneChildren";
+import { RiverLife } from "@/components/SceneRiver";
+import { SceneSmoke } from "@/components/SceneSmoke";
+import { StorkWedge } from "@/components/SceneStorks";
 import { GroundWeather, SkyWeather } from "@/components/SceneWeather";
 import { nextSeason, type Season } from "@/hooks/useDayNightCycle";
 import type { Language } from "@/services/copy";
-import { RIVER_TOP } from "@/services/landscape";
+import { RIVER_PATH } from "@/services/landscape";
 import { quotes, type Quote } from "@/services/quotes";
 import { useEffect, useMemo, useState } from "react";
 
@@ -326,7 +330,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 					<defs>
 						{/* keeps the ripples strictly inside the water, whatever the banks do */}
 						<clipPath id='river-clip'>
-							<path d={`${RIVER_TOP} L1600,760 C1300,790 1100,730 800,760 C500,790 300,730 0,760 Z`} />
+							<path d={RIVER_PATH} />
 						</clipPath>
 						{/* one seamless 400-unit tile of ripples, repeated along each current row */}
 						<g id='wave-tile' fill='none' stroke='#e9f6ff' strokeWidth={2.6} strokeLinecap='round'>
@@ -346,13 +350,10 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 					<MidMeadow />
 
 					{/* river */}
-					<path
-						d={`${RIVER_TOP} L1600,760 C1300,790 1100,730 800,760 C500,790 300,730 0,760 Z`}
-						fill='#5fb0dd'
-					/>
+					<path d={RIVER_PATH} fill='#5fb0dd' />
 	
 					{/* drifting ripples: four rows at different depth, scale and speed */}
-					<g clipPath='url(#river-clip)'>
+					<g className='river-ripples' clipPath='url(#river-clip)'>
 						<g transform='translate(0,712) scale(0.75)' opacity={0.3}>
 							<g>
 								<animateTransform
@@ -427,288 +428,17 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 						</g>
 					</g>
 	
-					{/* caravel sailing along the river */}
-					<path
-						id='river-course'
-						d='M-350,726 C130,716 610,736 1090,726 C1400,720 1700,732 1950,726'
-						fill='none'
-						stroke='none'
-					/>
-					{/* pirate ship chasing the caravel */}
-					<g>
-						<animateMotion dur='42s' begin='-34.34s' repeatCount='indefinite' rotate='auto'>
-							<mpath href='#river-course' />
-						</animateMotion>
-	
-						{/* cannon ball flying towards the caravel */}
-						<g>
-							<animateMotion
-								dur='9s'
-								repeatCount='indefinite'
-								calcMode='linear'
-								keyPoints='0;1;1'
-								keyTimes='0;0.24;1'
-								path='M64,-18 C200,-100 390,-86 505,12'
-							/>
-							<circle r={5.5} fill='#2b2620'>
-								<animate
-									attributeName='opacity'
-									dur='9s'
-									repeatCount='indefinite'
-									values='0;1;1;0;0'
-									keyTimes='0;0.01;0.23;0.245;1'
-								/>
-							</circle>
-						</g>
-	
-						{/* splash in front of the caravel */}
-						<g transform='translate(505,14)'>
-							<animateTransform
-								attributeName='transform'
-								type='scale'
-								dur='9s'
-								repeatCount='indefinite'
-								additive='sum'
-								values='0.2;0.2;1.1;1.35;1.35'
-								keyTimes='0;0.24;0.29;0.44;1'
-							/>
-							<animateTransform
-								attributeName='transform'
-								type='translate'
-								dur='9s'
-								repeatCount='indefinite'
-								additive='sum'
-								values='0,0;0,0;-30,0;-60,0'
-								keyTimes='0;0.24;0.34;1'
-							/>
-							<g opacity={0}>
-								<animate
-									attributeName='opacity'
-									dur='9s'
-									repeatCount='indefinite'
-									values='0;0;0.95;0.7;0;0'
-									keyTimes='0;0.24;0.29;0.4;0.46;1'
-								/>
-								<path d='M-16,2 Q0,-34 16,2 Z' fill='#eaf7ff' />
-								<path d='M-26,2 Q-18,-16 -8,2 Z' fill='#d7f0ff' />
-								<path d='M8,2 Q18,-18 26,2 Z' fill='#d7f0ff' />
-								<circle cx={-24} cy={-20} r={3.5} fill='#eaf7ff' />
-								<circle cx={0} cy={-38} r={4} fill='#eaf7ff' />
-								<circle cx={22} cy={-24} r={3.5} fill='#eaf7ff' />
-								<ellipse cx={0} cy={4} rx={30} ry={5} fill='none' stroke='#eaf7ff' strokeWidth={2.5} />
-							</g>
-						</g>
-	
-						<g>
-							<animateTransform
-								attributeName='transform'
-								type='rotate'
-								values='2.5;-2.5;2.5'
-								dur='5.2s'
-								repeatCount='indefinite'
-								additive='sum'
-							/>
-							{/* bow wave */}
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;26,4'
-									dur='1.9s'
-									repeatCount='indefinite'
-								/>
-								<path d='M52,6 c10,-6 22,-5 32,4' fill='none' stroke='#f2fbff' strokeWidth={3.4} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.9;0' dur='1.9s' repeatCount='indefinite' />
-								</path>
-							</g>
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;26,4'
-									dur='1.9s'
-									begin='-0.95s'
-									repeatCount='indefinite'
-								/>
-								<path d='M52,6 c10,-6 22,-5 32,4' fill='none' stroke='#f2fbff' strokeWidth={3.4} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.9;0' dur='1.9s' begin='-0.95s' repeatCount='indefinite' />
-								</path>
-							</g>
-							{/* stern wake */}
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;-34,3'
-									dur='2.6s'
-									repeatCount='indefinite'
-								/>
-								<path d='M-62,6 c-10,-4 -20,-3 -28,4' fill='none' stroke='#eaf7ff' strokeWidth={3} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.7;0' dur='2.6s' repeatCount='indefinite' />
-								</path>
-							</g>
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;-34,3'
-									dur='2.6s'
-									begin='-1.3s'
-									repeatCount='indefinite'
-								/>
-								<path d='M-62,6 c-10,-4 -20,-3 -28,4' fill='none' stroke='#eaf7ff' strokeWidth={3} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.7;0' dur='2.6s' begin='-1.3s' repeatCount='indefinite' />
-								</path>
-							</g>
-							{/* hull */}
-							<path d='M-58,0 C-54,16 -40,26 -24,26 L26,26 C42,26 54,14 58,0 Z' fill='#3b3027' />
-							<path d='M-58,0 C-55,6 -52,9 -48,10 L54,10 C56,7 57,3 58,0 Z' fill='#5a4736' />
-							{/* aftcastle */}
-							<path d='M-58,0 L-58,-20 L-30,-20 L-30,0 Z' fill='#2f2720' />
-							{/* bowsprit */}
-							<path d='M52,-6 L80,-20' stroke='#2f2720' strokeWidth={3.5} strokeLinecap='round' />
-							{/* masts */}
-							<path d='M2,-2 L2,-92' stroke='#4a3a2c' strokeWidth={4.5} strokeLinecap='round' />
-							<path d='M-20,-8 L-20,-64' stroke='#4a3a2c' strokeWidth={4} strokeLinecap='round' />
-							{/* black sails */}
-							<path d='M2,-86 C34,-64 30,-30 2,-22 Z' fill='#1f1c1a' />
-							<path d='M-20,-60 C0,-46 -2,-22 -20,-18 Z' fill='#262320' />
-							{/* jolly roger */}
-							<g>
-								<path d='M2,-92 L34,-86 L2,-78 Z' fill='#141312' />
-								<circle cx={13} cy={-86} r={3.4} fill='#f2efe6' />
-								<path d='M9,-81 L18,-81' stroke='#f2efe6' strokeWidth={1.6} strokeLinecap='round' />
-								<path d='M9.5,-83.5 L16.5,-88.5 M9.5,-88.5 L16.5,-83.5' stroke='#f2efe6' strokeWidth={1.4} strokeLinecap='round' />
-							</g>
-							{/* bow cannon */}
-							<g>
-								<path d='M36,-10 L62,-20' stroke='#1f1c1a' strokeWidth={9} strokeLinecap='round' />
-								<circle cx={36} cy={-10} r={5.5} fill='#332e28' />
-								<circle cx={30} cy={-2} r={3} fill='#4a3a2c' />
-								{/* muzzle flash */}
-								<g opacity={0}>
-									<animate
-										attributeName='opacity'
-										dur='9s'
-										repeatCount='indefinite'
-										values='1;1;0;0'
-										keyTimes='0;0.012;0.05;1'
-									/>
-									<path d='M62,-20 L84,-30 L78,-18 L90,-16 L66,-13 Z' fill='#ffd27a' />
-									<circle cx={68} cy={-21} r={6} fill='#fff1c2' />
-								</g>
-							</g>
-							{/* helm */}
-							<g stroke='#6b4a33' strokeWidth={2} fill='none'>
-								<circle cx={-46} cy={-28} r={7} />
-								<path d='M-53,-28 L-39,-28 M-46,-35 L-46,-21 M-51,-33 L-41,-23 M-41,-33 L-51,-23' />
-							</g>
-							{/* one-legged captain at the helm */}
-							<g>
-								<path d='M-36,-20 L-36,-30' stroke='#2b2620' strokeWidth={3} strokeLinecap='round' />
-								<path d='M-29,-20 L-30,-30' stroke='#8a5a33' strokeWidth={2.6} strokeLinecap='round' />
-								<path d='M-38,-30 L-27,-30 L-29,-44 L-36,-44 Z' fill='#5b2f3a' />
-								<path d='M-36,-41 L-45,-32' stroke='#5b2f3a' strokeWidth={3} strokeLinecap='round' />
-								<circle cx={-32.5} cy={-47} r={3.4} fill='#e8b98f' />
-								<path d='M-34,-44.5 Q-32.5,-41.5 -31,-44.5' fill='#d9d3c8' />
-								<path d='M-40,-49 Q-32.5,-57 -25,-49 Z' fill='#17161a' />
-								<path d='M-41,-48.5 L-24,-48.5' stroke='#17161a' strokeWidth={2.2} strokeLinecap='round' />
-								{/* parrot on the shoulder */}
-								<ellipse cx={-25.5} cy={-45} rx={3.6} ry={2.6} fill='#d6594a' />
-								<circle cx={-23} cy={-47.5} r={2} fill='#d6594a' />
-								<path d='M-21.5,-47.5 L-19,-46.5 L-21.5,-45.8 Z' fill='#f2b134' />
-								<path d='M-28.5,-44.5 L-33,-42 L-28,-42.5 Z' fill='#4f9e6e' />
-							</g>
-						</g>
-					</g>
-	
-					<g>
-						<animateMotion dur='42s' repeatCount='indefinite' rotate='auto'>
-							<mpath href='#river-course' />
-						</animateMotion>
-						<g>
-							<animateTransform
-								attributeName='transform'
-								type='rotate'
-								values='-2.5;2.5;-2.5'
-								dur='4.5s'
-								repeatCount='indefinite'
-								additive='sum'
-							/>
-							{/* bow wave */}
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;24,4'
-									dur='1.7s'
-									repeatCount='indefinite'
-								/>
-								<path d='M44,5 c9,-5 20,-4 28,4' fill='none' stroke='#f2fbff' strokeWidth={3.2} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.9;0' dur='1.7s' repeatCount='indefinite' />
-								</path>
-							</g>
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;24,4'
-									dur='1.7s'
-									begin='-0.85s'
-									repeatCount='indefinite'
-								/>
-								<path d='M44,5 c9,-5 20,-4 28,4' fill='none' stroke='#f2fbff' strokeWidth={3.2} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.9;0' dur='1.7s' begin='-0.85s' repeatCount='indefinite' />
-								</path>
-							</g>
-							{/* stern wake */}
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;-30,3'
-									dur='2.4s'
-									repeatCount='indefinite'
-								/>
-								<path d='M-50,5 c-9,-4 -18,-3 -25,4' fill='none' stroke='#eaf7ff' strokeWidth={2.8} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.7;0' dur='2.4s' repeatCount='indefinite' />
-								</path>
-							</g>
-							<g>
-								<animateTransform
-									attributeName='transform'
-									type='translate'
-									values='0,0;-30,3'
-									dur='2.4s'
-									begin='-1.2s'
-									repeatCount='indefinite'
-								/>
-								<path d='M-50,5 c-9,-4 -18,-3 -25,4' fill='none' stroke='#eaf7ff' strokeWidth={2.8} strokeLinecap='round'>
-									<animate attributeName='opacity' values='0.7;0' dur='2.4s' begin='-1.2s' repeatCount='indefinite' />
-								</path>
-							</g>
-							{/* hull */}
-							<path d='M-46,0 C-42,14 -30,22 -16,22 L20,22 C34,22 44,12 48,0 Z' fill='#8a5a33' />
-							<path d='M-46,0 C-42,6 -40,8 -36,9 L44,9 C46,6 47,3 48,0 Z' fill='#a97445' />
-							{/* aftcastle */}
-							<path d='M-46,0 L-46,-14 L-26,-14 L-26,0 Z' fill='#7a4d2b' />
-							{/* bowsprit */}
-							<path d='M42,-4 L66,-16' stroke='#7a4d2b' strokeWidth={3} strokeLinecap='round' />
-							{/* masts */}
-							<path d='M4,0 L4,-74' stroke='#6b4a33' strokeWidth={4} strokeLinecap='round' />
-							<path d='M-22,-6 L-22,-52' stroke='#6b4a33' strokeWidth={3.5} strokeLinecap='round' />
-							{/* lateen sails */}
-							<path d='M4,-70 C32,-50 28,-22 4,-16 Z' fill='#f7f1e3' />
-							<path d='M-22,-50 C-4,-36 -6,-16 -22,-12 Z' fill='#efe7d6' />
-							{/* pennant */}
-							<path d='M4,-74 L26,-68 L4,-62 Z' fill='#d6594a' />
-						</g>
-					</g>
-	
+					<RiverLife season={season} />
+					{/* skating, once the river is hard enough to bear them */}
+					{season === "winter" ? <IceChildren /> : null}
+
 					<FrontMeadow season={season} behindTrees={<LowerCritters season={season} layer='back' />} />
 					<LowerCritters season={season} layer='front' />
 				</svg>
 
+				<SceneSmoke />
+				{/* the wedge going south, which the pair falls in with */}
+				{season === "autumn" ? <StorkWedge /> : null}
 				<GroundWeather season={season} />
 	
 				<div className='tint' />

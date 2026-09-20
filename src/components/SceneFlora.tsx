@@ -10,6 +10,7 @@ import {
 	MID_RIDGE,
 	OAK_TREE,
 	ROWAN_TREE,
+	STUMP,
 	UPPER_BUSH,
 	backRidgeAt,
 	frontRidgeAt,
@@ -19,6 +20,8 @@ import {
 	riverTopAt,
 	type Point,
 } from "@/services/landscape";
+import { StorkTree } from "@/components/SceneStorks";
+import { Village } from "@/components/SceneVillage";
 import { seededRandom } from "@/services/seededRandom";
 import type { CSSProperties, ReactNode } from "react";
 
@@ -401,14 +404,73 @@ interface PineProps {
 	base: number;
 	scale: number;
 	color: string;
+	/* strung with lights and topped with a star once winter comes */
+	festive?: boolean;
 }
 
-function Pine({ x, base, scale, color }: PineProps) {
+/* a folk eight-pointed star, the kind carried at Christmas */
+const STAR = Array.from({ length: 16 }, (_, i) => {
+	const radius = i % 2 ? 2.9 : 7.4;
+	const angle = (i / 16) * Math.PI * 2 - Math.PI / 2;
+	return `${(Math.cos(angle) * radius).toFixed(1)},${(Math.sin(angle) * radius).toFixed(1)}`;
+}).join(" ");
+
+/* bulbs draped along both tiers */
+const BULBS: [number, number, string][] = [
+	[-15, 11, "#ffd54a"],
+	[-8, 4.5, "#e8544a"],
+	[0, 10, "#4aa9e0"],
+	[8, 4, "#6fd07a"],
+	[15, 10.5, "#ffd54a"],
+	[-13, 27, "#e8544a"],
+	[-6.5, 21, "#ffd54a"],
+	[0, 26.5, "#6fd07a"],
+	[6.5, 20.5, "#4aa9e0"],
+	[13, 26.5, "#e8544a"],
+];
+
+function Pine({ x, base, scale, color, festive = false }: PineProps) {
 	return (
 		<g transform={`translate(${x} ${base}) scale(${scale}) translate(0 -46)`}>
 			<rect x={-4} y={30} width={8} height={16} fill='#6b4a33' />
 			<polygon points='0,-32 22,18 -22,18' fill={color} />
 			<polygon points='0,-10 18,32 -18,32' fill={color} />
+			{festive ? (
+				<>
+					<g className='pine-lights'>
+						<path
+							d='M-15,11 Q-11,5 -8,4.5 Q-4,8 0,10 Q4,6 8,4 Q12,7 15,10.5'
+							stroke='#5c6b52'
+							strokeWidth={0.7}
+							fill='none'
+						/>
+						<path
+							d='M-13,27 Q-10,21 -6.5,21 Q-3,25 0,26.5 Q3,22 6.5,20.5 Q10,24 13,26.5'
+							stroke='#5c6b52'
+							strokeWidth={0.7}
+							fill='none'
+						/>
+						{BULBS.map(([bx, by, tone], index) => (
+							<circle
+								key={index}
+								className='pine-light'
+								cx={bx}
+								cy={by}
+								r={1.7}
+								fill={tone}
+								style={{ "--bulb-delay": `${(index * 0.31).toFixed(2)}s` } as CSSProperties}
+							/>
+						))}
+					</g>
+					<g className='pine-star' transform='translate(0 -37)'>
+						<circle className='star-glow' r={11} fill='#ffd54a' opacity={0.35} />
+						<polygon points={STAR} fill='#ffd54a' />
+						<polygon points={STAR} fill='none' stroke='#e0a92a' strokeWidth={0.5} />
+						<circle r={2} fill='#fff3c4' />
+						<circle r={0.9} fill='#e0a92a' />
+					</g>
+				</>
+			) : null}
 			<g className='snow-cap' fill='#fbfdff'>
 				<polygon points='0,-32 9.5,-10.5 4,-13 0,-9.5 -4,-13 -9.5,-10.5' />
 				<polygon points='0,-10 8.4,9.6 3.6,7.2 0,10 -3.6,7.2 -8.4,9.6' />
@@ -664,9 +726,14 @@ export function BackMeadow({ season }: MeadowProps) {
 			<Pine x={264} base={529} scale={0.8} color='#5aa473' />
 			<Pine x={684} base={581} scale={0.9} color='#5aa473' />
 			<Pine x={864} base={525} scale={0.8} color='#5aa473' />
-			<Pine x={1232} base={566} scale={0.85} color='#5aa473' />
 			<Tree kind='apple' {...APPLE_TREE} tone='far' season={season} seed={101} />
 			<Tree kind='birch' {...BIRCH_TREE} tone='far' season={season} seed={202} />
+			<Village />
+			{/* the dead tree between the хати, with its nest */}
+			<StorkTree season={season} />
+			{/* nearer than the хата, so it stands in front of it — and in winter it is
+			    the one the household dresses up */}
+			<Pine x={1232} base={566} scale={0.85} color='#5aa473' festive />
 			<Tree kind='maple' x={1525} base={onBackMeadow(1525)} scale={0.9} tone='far' season={season} seed={303} />
 		</>
 	);
@@ -701,6 +768,16 @@ export function FrontMeadow({ season, behindTrees }: FrontMeadowProps) {
 			{LOWER_PINES.map((pine) => (
 				<Pine key={pine.x} {...pine} color='#3d8459' />
 			))}
+			{/* a weathered stump, rings and all */}
+			<g transform={`translate(${STUMP.x} ${STUMP.base}) scale(${STUMP.scale})`}>
+				<path d='M-9.5,0 C-10.5,-6 -10,-12 -9,-14.6 L9,-14.6 C10,-12 10.5,-6 9.5,0 C4,1.6 -4,1.6 -9.5,0 Z' fill='#7a5a3c' />
+				<path d='M-9,-14.6 C-9.6,-11 -9.2,-5 -8.4,-0.6 C-6.6,0 -4.6,0.4 -2.6,0.6 C-3.6,-4.4 -4,-9.6 -3.6,-14.6 Z' fill='#6a4c31' />
+				<ellipse cx={0} cy={-14.8} rx={9.2} ry={3.4} fill='#c4a271' />
+				<ellipse cx={0} cy={-14.8} rx={6} ry={2.2} fill='none' stroke='#a8875a' strokeWidth={0.7} />
+				<ellipse cx={0} cy={-14.8} rx={3} ry={1.1} fill='none' stroke='#a8875a' strokeWidth={0.6} />
+				<path d='M-11.6,0.4 C-10.4,-2.4 -9.8,-3.6 -9.4,-4.6 C-8.6,-2.6 -8.4,-1 -8.6,0.6 Z' fill='#6a4c31' />
+				<path d='M11.6,0.6 C10.4,-2 9.8,-3.4 9.4,-4.4 C8.6,-2.4 8.4,-0.8 8.6,0.8 Z' fill='#6a4c31' />
+			</g>
 			<Tree kind='bush' {...LOWER_BUSH} tone='near' season={season} seed={808} />
 			<Tree kind='cherry' {...CHERRY_TREE} tone='near' season={season} seed={404} />
 			<Tree kind='oak' {...OAK_TREE} tone='near' season={season} seed={505} />
