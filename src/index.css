@@ -859,6 +859,66 @@
 .window-minimize:hover {
 	background: #f7c85f;
 }
+/* The scene's music comes from YouTube's own embedded player. Their terms require
+   it to stay visible and at least 200x200, so it sits as a small card above the
+   badge rather than playing out of sight. */
+.scene-music {
+	position: fixed;
+	right: 20px;
+	bottom: 86px;
+	overflow: hidden;
+	width: 268px;
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 14px;
+	background: #000;
+	box-shadow: 0 16px 36px -14px color-mix(in srgb, #000 55%, transparent);
+	pointer-events: auto;
+	/* slides in and out from the edge: YouTube's terms forbid altering the player
+	   itself, so it never fades — only the card travels */
+	animation: music-in 400ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+}
+.scene-music.leaving {
+	animation: music-out 420ms ease forwards;
+	pointer-events: none;
+}
+@keyframes music-in {
+	from {
+		transform: translateX(320px);
+	}
+	to {
+		transform: none;
+	}
+}
+.scene-music-player,
+.scene-music iframe {
+	display: block;
+	width: 268px;
+	height: 201px;
+	border: 0;
+}
+@keyframes music-out {
+	to {
+		transform: translateX(320px);
+	}
+}
+@media (max-width: 560px) {
+	.scene-music {
+		right: 12px;
+		bottom: 78px;
+		width: 220px;
+	}
+	.scene-music-player,
+	.scene-music iframe {
+		width: 220px;
+		height: 201px;
+	}
+}
+@media print {
+	.scene-music {
+		display: none !important;
+	}
+}
+
 .window-badge {
 	position: fixed;
 	right: 20px;
