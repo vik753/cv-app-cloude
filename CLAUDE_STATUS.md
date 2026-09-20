@@ -47,7 +47,7 @@
 - Winter tracks in the snow: wolf (paired prints), fox (single line + pounce crater), hare (Y-shaped hop marks); the white winter hare gets a soft blue-grey outline and a shadow so it reads against snow; revealed as each animal walks and gone at the spring thaw.
 - Summer meadows: grass tufts and wildflowers (daisies, poppies, cornflowers, buttercups) planted on the shared jittered grid (`plantGrid`); grass dries to straw in autumn, hides under snow in winter, returns green after the spring thaw; flowers bloom one by one each summer.
 - Moved landscape geometry (ridges, ground lines, tree/bush placements) to `src/services/landscape.ts`.
-- Scene music: minimizing the form fades in a looping tune (Web Audio gain, volume 0.22, 2.5s fade-in), restoring fades it out (1.8s) and pauses (`useSceneMusic`). Needs an audio file at `public/music/scene-theme.mp3` (URL built from `import.meta.env.BASE_URL`, since the app is served under `/cv-app-cloude/`) (not in the repo; the "Жил-был пёс" soundtrack is copyrighted, so the owner must supply it); without it the scene stays silent.
+- Scene music: minimizing the form opens a small YouTube player card above the badge (official IFrame API, video CDqSj6eOEGY) and fades it in to volume 22; restoring fades it out and unmounts it (`SceneMusic.tsx`). Streaming through YouTube's player keeps no copyrighted audio in the repo and credits the artist; their terms require the player to stay visible and at least 200x200, so it is not hidden.
 - Known gap: on portrait/narrow viewports the landscape is cropped at the sides, so the edge trees can fall outside the view.
 - Moved the sun, moon, birds and all flybys into a fixed layer above the app shell so they stay visible over the form.
 

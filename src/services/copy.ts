@@ -42,6 +42,7 @@ export interface Translation {
 	previewLabel: string;
 	minimize: string;
 	restore: string;
+	music: string;
 	sceneHide: string;
 	sceneShow: string;
 	sceneOn: string;
@@ -141,6 +142,7 @@ export const translations: Record<Language, Translation> = {
 		previewLabel: "Preview",
 		minimize: "Minimize",
 		restore: "Restore",
+		music: "Scene music",
 		sceneHide: "Turn off animated background",
 		sceneShow: "Turn on animated background",
 		sceneOn: "On",
@@ -238,6 +240,7 @@ export const translations: Record<Language, Translation> = {
 		previewLabel: "Прев'ю",
 		minimize: "Згорнути",
 		restore: "Розгорнути",
+		music: "Музика сцени",
 		sceneHide: "Вимкнути анімований фон",
 		sceneShow: "Увімкнути анімований фон",
 		sceneOn: "Увімк",
