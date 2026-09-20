@@ -48,6 +48,7 @@
 - Summer meadows: grass tufts and wildflowers (daisies, poppies, cornflowers, buttercups) planted on the shared jittered grid (`plantGrid`); grass dries to straw in autumn, hides under snow in winter, returns green after the spring thaw; flowers bloom one by one each summer.
 - Moved landscape geometry (ridges, ground lines, tree/bush placements) to `src/services/landscape.ts`.
 - Scene music: minimizing the form opens a small YouTube player card above the badge (official IFrame API, video CDqSj6eOEGY) and fades it in to volume 22; restoring fades it out and unmounts it (`SceneMusic.tsx`). Streaming through YouTube's player keeps no copyrighted audio in the repo and credits the artist; their terms require the player to stay visible and at least 200x200, so it is not hidden.
+- Added a minimal footer: author (Ihor Korenets, vik753@gmail.com, 2026) on the left, music credit on the right (track, performer, played via YouTube, rights reserved). Track data lives in `src/services/music.ts` so the player and the credit stay in sync. Hidden when printing.
 - Known gap: on portrait/narrow viewports the landscape is cropped at the sides, so the edge trees can fall outside the view.
 - Moved the sun, moon, birds and all flybys into a fixed layer above the app shell so they stay visible over the form.
 

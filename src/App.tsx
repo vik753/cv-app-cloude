@@ -1,5 +1,6 @@
 import { Tooltip } from "@/components/ui/tooltip";
 import { useDayNightCycle } from "@/hooks/useDayNightCycle";
+import { AppFooter } from "@/components/AppFooter";
 import { SceneMusic } from "@/components/SceneMusic";
 import {
 	BrandLogo,
@@ -234,6 +235,7 @@ export function App() {
 						</section>
 						<ResumePreview resume={resume} t={t} language={language} />
 					</div>
+					<AppFooter t={t} />
 				</div>
 				{/* the scene gets its tune, from YouTube, while it has the whole screen */}
 				<SceneMusic playing={minimized} label={t.music} />

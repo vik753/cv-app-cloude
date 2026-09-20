@@ -43,6 +43,8 @@ export interface Translation {
 	minimize: string;
 	restore: string;
 	music: string;
+	musicCredit: string;
+	musicSource: string;
 	sceneHide: string;
 	sceneShow: string;
 	sceneOn: string;
@@ -143,6 +145,8 @@ export const translations: Record<Language, Translation> = {
 		minimize: "Minimize",
 		restore: "Restore",
 		music: "Scene music",
+		musicCredit: "Music:",
+		musicSource: "Played via the YouTube player. All rights belong to their owners.",
 		sceneHide: "Turn off animated background",
 		sceneShow: "Turn on animated background",
 		sceneOn: "On",
@@ -241,6 +245,8 @@ export const translations: Record<Language, Translation> = {
 		minimize: "Згорнути",
 		restore: "Розгорнути",
 		music: "Музика сцени",
+		musicCredit: "Музика:",
+		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
 		sceneHide: "Вимкнути анімований фон",
 		sceneShow: "Увімкнути анімований фон",
 		sceneOn: "Увімк",
