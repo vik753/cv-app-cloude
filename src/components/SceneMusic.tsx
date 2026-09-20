@@ -1,3 +1,4 @@
+import { MUSIC } from "@/services/music";
 import { useEffect, useRef, useState } from "react";
 
 /* The tune that plays while the form is minimized and the scene has the stage.
@@ -5,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
    own: nothing copyrighted lives in this repo and the plays count for the artist.
    YouTube's terms require that player to stay visible and at least 200x200, so it
    appears as a small card above the badge instead of playing invisibly. */
-const VIDEO_ID = "CDqSj6eOEGY";
+const VIDEO_ID = MUSIC.videoId;
 
 /* quiet enough to sit under whatever else is going on, loud enough to follow */
 const VOLUME = 22;
