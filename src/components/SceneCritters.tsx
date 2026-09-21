@@ -13,6 +13,7 @@ import {
 	type Point,
 } from "@/services/landscape";
 import { SnowChildren, Snowman, YardChildren } from "@/components/SceneChildren";
+import { FieldFolk } from "@/components/SceneFieldFolk";
 import { Revellers } from "@/components/SceneRevellers";
 import { HomesteadFence } from "@/components/SceneVillage";
 import type { Season } from "@/hooks/useDayNightCycle";
@@ -1304,6 +1305,9 @@ interface CritterProps {
 export function UpperCritters({ season }: CritterProps) {
 	return (
 		<g className={`critters critters-${season}`}>
+			{/* up at the field, in front of it: the margin they work from is nearer
+			    than anything growing on the plot */}
+			<FieldFolk season={season} />
 			{season === "winter" ? <Tracks prints={HARE_PRINTS} /> : null}
 			<Hare />
 			<Hedgehog season={season} />
@@ -1315,8 +1319,10 @@ export function UpperCritters({ season }: CritterProps) {
 			{/* in the warm seasons the children play out here; in winter they are on the river */}
 			{season === "winter" ? (
 				<>
-					<SnowChildren />
+					{/* the snowman first: they play round it all afternoon, and always on
+					    the near side of it */}
 					<Snowman />
+					<SnowChildren />
 				</>
 			) : (
 				<YardChildren season={season} />

@@ -1,3 +1,4 @@
+import { WheatField } from "@/components/SceneField";
 import type { Season } from "@/hooks/useDayNightCycle";
 import {
 	APPLE_TREE,
@@ -728,6 +729,8 @@ export function BackMeadow({ season }: MeadowProps) {
 			<Pine x={864} base={525} scale={0.8} color='#5aa473' />
 			<Tree kind='apple' {...APPLE_TREE} tone='far' season={season} seed={101} />
 			<Tree kind='birch' {...BIRCH_TREE} tone='far' season={season} seed={202} />
+			{/* the household's plot, up at the top of the slope and left of the хати */}
+			<WheatField season={season} />
 			<Village />
 			{/* the dead tree between the хати, with its nest */}
 			<StorkTree season={season} />

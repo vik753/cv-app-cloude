@@ -2129,6 +2129,49 @@ textarea:focus-visible {
    One day and night is one season: summer, autumn, winter, spring. The scene carries
    data-season, and everything below eases from one look to the next on its own. */
 
+/* --- the wheat field --- */
+
+/* the soil eases from fresh-turned in spring to stubble in autumn to snow */
+.field-soil {
+	transition: fill 12s ease;
+}
+
+/* The crop carries its own height and colour as custom properties, set once a
+   frame while it grows and ripens. The flat ground of it comes in with the shoots,
+   so bare soil shows between them while they are still short. */
+.wheat-field {
+	--grow: 1;
+	--field-cover: 1;
+}
+.field-base {
+	opacity: var(--field-cover, 1);
+}
+
+/* Every clump leans on its own delay, so the field moves across in waves rather
+   than all at once, and stands as tall as the crop has grown. The growth goes in
+   the keyframes too: a CSS transform replaces the whole transform, so it has to
+   carry both. */
+.wheat-tuft,
+.field-grown {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+}
+.wheat-tuft {
+	animation: wheat-sway 4.2s ease-in-out infinite;
+}
+.field-grown {
+	transform: scaleY(var(--grow, 1));
+}
+@keyframes wheat-sway {
+	0%,
+	100% {
+		transform: scaleY(var(--grow, 1)) rotate(-4deg);
+	}
+	50% {
+		transform: scaleY(var(--grow, 1)) rotate(4deg);
+	}
+}
+
 /* --- meadows --- */
 .hill {
 	transition: fill 12s ease;
@@ -3318,6 +3361,9 @@ textarea:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.wheat-tuft {
+		animation: none;
+	}
 	.sky-day {
 		opacity: 1;
 		animation: none;
