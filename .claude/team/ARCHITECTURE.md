@@ -39,6 +39,17 @@ the same thing, it moves down a layer, into `entities` or `shared`.
 `index.ts` exports only what the outside needs. Everything else is the slice's own
 business and can change freely. That is the entire point of the exercise.
 
+**The public API sits at the unit of encapsulation, not at a fixed depth.** For
+`widgets`, `features` and `entities` that unit is the **slice**, so the barrels are
+`widgets/scene/index.ts` and `entities/resume/index.ts` — never `widgets/index.ts` or
+`entities/index.ts`. A layer-wide barrel would drag every slice in the layer through one
+file and defeat the code splitting we need in stage 4.
+
+`shared` is the exception, because it has segments rather than slices: its entry points
+are `@/shared/ui`, `@/shared/lib` and `@/shared/i18n`, with no `shared/index.ts` above
+them. Do not copy that shape upward by analogy — it is a consequence of `shared` having
+no slices, not a pattern.
+
 ## Target tree
 
 ```
@@ -53,7 +64,7 @@ src/
     scene/             the whole day/night scene (~4500 lines today)
       ui/              SceneCritters, SceneFlora, SceneField, ...
       model/           routes, timings, useSceneClock, useDayNightCycle
-      lib/             seededRandom, landscape, catmull/lerp
+      lib/             landscape, catmull/lerp
       assets/svg/      inline SVG geometry lifted out of the components
       types.ts index.ts
     app-header/
@@ -66,13 +77,24 @@ src/
     scene-toggle/
   entities/
     resume/            schema, store, types, initial data
+      ui/              SkillIcon
   shared/
-    ui/                tooltip, BrandLogo, SkillIcon
-    lib/               shared utilities and hooks
+    ui/                tooltip, BrandLogo
+    lib/               seededRandom, other pure utilities
     i18n/              copy.ts, useLanguage
     config/            constants
     types/
 ```
+
+`SkillIcon` sits in `entities/resume`, not in `shared/ui`, and the reason is worth
+stating because it is the trap this whole layer rule exists to catch. It takes a skill
+_name_ and resolves it to an icon URL itself. That resolution is knowledge about
+résumés, and `shared` is by definition the layer that has none. Putting it in `shared`
+would mean `shared` importing from `entities` — upward through the layers — the moment
+`skillIcons.ts` lands in its proper slice.
+
+The general test: a component is not `shared` because it is small or reused. It is
+`shared` because it would still make sense in a completely different product.
 
 ## File size limits
 
