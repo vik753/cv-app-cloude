@@ -141,6 +141,15 @@ and any v1 draft without an email was discarded whole. Fixed, and guarded by a t
 asserting `resumeSchema.safeParse(initialResume)` succeeds. Tighten a field here and you
 must check it against `initialResume`, or you reintroduce the same class of data loss.
 
+**The palette and mode are stored twice, and one copy is dead.** `resumeStore` has no
+`partialize`, so `persist` sweeps the whole state — including `palette` and `mode` — into
+`resume-canvas-draft-v2`, while `readPalette`/`readMode` seed them from their own keys and
+`App.tsx` writes those keys by hand. But `merge` lets the persisted blob win, so the
+standalone keys are written by three places and effectively read by none. Harmless today
+because every writer agrees. It stops being harmless the moment someone adds `partialize`
+to tidy the duplication: `readPalette` becomes load-bearing again and the read order
+starts to matter. Fix both halves together or neither.
+
 **Printing is the export.** Anything under `@media print` is load-bearing product
 behaviour. Verify printing after touching layout.
 

@@ -31,6 +31,7 @@ the same thing, it moves down a layer, into `entities` or `shared`.
   ui/          components
   model/       state, store, business logic, slice hooks
   lib/         pure utilities of the slice
+  config/      inert data tables the slice reads, with no logic and no state
   assets/      svg geometry, images
   types.ts     slice types
   index.ts     PUBLIC API — the only entry point from outside
