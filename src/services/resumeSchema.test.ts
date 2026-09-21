@@ -1,4 +1,4 @@
-import { resumeSchema } from "@/services/resumeSchema";
+import { experienceSchema, languageLevels, languageSchema, resumeSchema } from "@/services/resumeSchema";
 import { describe, expect, it } from "vitest";
 
 const validResume = {
@@ -31,6 +31,51 @@ describe("resumeSchema", () => {
 	it("rejects an invalid language level", () => {
 		expect(
 			resumeSchema.safeParse({ ...validResume, languages: [{ id: 1, language: "English", level: "Z9" }] }).success,
+		).toBe(false);
+	});
+
+	it("rejects a resume missing a required field entirely", () => {
+		const withoutPhone = Object.fromEntries(Object.entries(validResume).filter(([key]) => key !== "phone"));
+		expect(resumeSchema.safeParse(withoutPhone).success).toBe(false);
+	});
+
+	it("accepts an empty string for free-text fields that carry no format constraint", () => {
+		expect(resumeSchema.safeParse({ ...validResume, education: "", certificates: "", website: "" }).success).toBe(true);
+	});
+
+	it("accepts an empty skills, languages and experience list", () => {
+		expect(resumeSchema.safeParse({ ...validResume, skills: [], languages: [], experience: [] }).success).toBe(true);
+	});
+
+	it("rejects an empty email, since an empty string is not a valid address", () => {
+		/* documents a real interaction: initialResume's own default email is "", so
+		   any full-schema validation of a still-empty draft fails on this field alone
+		   - see resumeStore.test.ts for where that bites the legacy draft migration */
+		expect(resumeSchema.safeParse({ ...validResume, email: "" }).success).toBe(false);
+	});
+});
+
+describe("languageSchema", () => {
+	it.each(languageLevels)("accepts the %s level", (level) => {
+		expect(languageSchema.safeParse({ id: 1, language: "English", level }).success).toBe(true);
+	});
+
+	it("rejects a level outside the CEFR + Native set", () => {
+		expect(languageSchema.safeParse({ id: 1, language: "English", level: "D1" }).success).toBe(false);
+	});
+});
+
+describe("experienceSchema", () => {
+	it("accepts a fully filled entry", () => {
+		expect(
+			experienceSchema.safeParse({ id: 1, company: "Acme", role: "Dev", period: "2024", description: "Built it." })
+				.success,
+		).toBe(true);
+	});
+
+	it("rejects an entry with a non-numeric id", () => {
+		expect(
+			experienceSchema.safeParse({ id: "1", company: "Acme", role: "Dev", period: "2024", description: "" }).success,
 		).toBe(false);
 	});
 });

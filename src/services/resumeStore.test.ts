@@ -1,0 +1,166 @@
+import { initialResume } from "@/services/initialResume";
+import type { Resume } from "@/services/resumeSchema";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+/* The store is a module-level singleton created once at import time (it reads
+   localStorage synchronously and hydrates zustand's `persist` on module init).
+   Most tests reuse the same imported instance and just reset its state; the tests
+   that care about *initialisation* (migration, defaults) reset the module registry
+   and re-import so the module-level read-from-localStorage code runs again. */
+
+const freshResume = (overrides: Partial<Resume> = {}): Resume => ({ ...initialResume, ...overrides });
+
+/* the shape zustand's `persist` middleware wraps the store's state in on disk */
+interface PersistedEnvelope {
+	state: { resume: Resume };
+}
+
+const readPersistedEnvelope = (raw: string): PersistedEnvelope => JSON.parse(raw) as PersistedEnvelope;
+
+describe("resumeStore actions", () => {
+	beforeEach(() => {
+		localStorage.clear();
+		vi.resetModules();
+	});
+
+	it("updateField updates a single top-level field and leaves the rest untouched", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().updateField("name", "Alex Smith");
+		useResumeStore.getState().updateField("role", "Frontend Developer");
+		expect(useResumeStore.getState().resume.name).toBe("Alex Smith");
+		expect(useResumeStore.getState().resume.role).toBe("Frontend Developer");
+	});
+
+	it("updateExperience updates only the matching entry by id", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.setState({
+			resume: freshResume({
+				experience: [
+					{ id: 1, company: "A", role: "Dev", period: "2020", description: "" },
+					{ id: 2, company: "B", role: "Lead", period: "2022", description: "" },
+				],
+			}),
+		});
+		useResumeStore.getState().updateExperience(2, "company", "Renamed Co");
+		const { experience } = useResumeStore.getState().resume;
+		expect(experience.find((item) => item.id === 2)?.company).toBe("Renamed Co");
+		expect(experience.find((item) => item.id === 1)?.company).toBe("A");
+	});
+
+	it("updateResume applies an arbitrary functional update to the whole resume", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().updateResume((current) => ({ ...current, skills: [...current.skills, "React"] }));
+		useResumeStore.getState().updateResume((current) => ({ ...current, skills: [...current.skills, "TypeScript"] }));
+		expect(useResumeStore.getState().resume.skills).toEqual(["React", "TypeScript"]);
+	});
+
+	it("reset restores the resume to the initial, empty draft", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().updateField("name", "Someone");
+		useResumeStore.getState().reset();
+		expect(useResumeStore.getState().resume).toEqual(initialResume);
+	});
+
+	it("reset does not touch palette or mode, only the draft", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().setPalette("slate");
+		useResumeStore.getState().setMode("dark");
+		useResumeStore.getState().reset();
+		expect(useResumeStore.getState().palette).toBe("slate");
+		expect(useResumeStore.getState().mode).toBe("dark");
+	});
+
+	it("setPalette and setMode update their own piece of state independently", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().setPalette("blurple");
+		expect(useResumeStore.getState().palette).toBe("blurple");
+		useResumeStore.getState().setMode("dark");
+		expect(useResumeStore.getState().mode).toBe("dark");
+		expect(useResumeStore.getState().palette).toBe("blurple");
+	});
+});
+
+describe("resumeStore persistence contract", () => {
+	beforeEach(() => {
+		localStorage.clear();
+		vi.resetModules();
+	});
+
+	it("persists the draft under the resume-canvas-draft-v2 key so real users' saves are not silently dropped", async () => {
+		const { useResumeStore } = await import("@/services/resumeStore");
+		useResumeStore.getState().updateField("name", "Persisted Name");
+		const raw = localStorage.getItem("resume-canvas-draft-v2");
+		expect(raw).not.toBeNull();
+		expect(readPersistedEnvelope(raw!).state.resume.name).toBe("Persisted Name");
+	});
+
+	it("restores a previously persisted draft on a fresh module load", async () => {
+		localStorage.setItem(
+			"resume-canvas-draft-v2",
+			JSON.stringify({ state: { resume: { ...initialResume, name: "Reloaded" }, palette: "cream", mode: "light" } }),
+		);
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().resume.name).toBe("Reloaded");
+	});
+
+	it("migrates a legacy resume-canvas-draft-v1 draft when there is no v2 draft yet", async () => {
+		localStorage.setItem(
+			"resume-canvas-draft-v1",
+			JSON.stringify({ name: "Legacy User", email: "legacy@example.com", role: "Old Role" }),
+		);
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().resume.name).toBe("Legacy User");
+		expect(useResumeStore.getState().resume.role).toBe("Old Role");
+	});
+
+	/* BUG (reported to the team lead, not fixed here): readLegacyDraft merges the
+	   saved v1 draft over `initialResume` and validates the merged object with
+	   `resumeSchema`, which requires `email` to be a syntactically valid address.
+	   `initialResume.email` is "". Any legacy draft that does not itself carry a
+	   valid email - the normal case for a resume still being filled in - fails
+	   `safeParse` and the *entire* draft, not just the email, is silently replaced
+	   by a blank resume. This is exactly the drafts this migration path exists to
+	   protect. Documented here as current behaviour; see the report for repro. */
+	it("legacy migration silently discards an otherwise-valid draft that has no email yet", async () => {
+		localStorage.setItem(
+			"resume-canvas-draft-v1",
+			JSON.stringify({ name: "Legacy User", skills: ["React", "TypeScript"] }),
+		);
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().resume).toEqual(initialResume);
+	});
+
+	it("reads the palette from its own legacy key when no draft has been persisted yet", async () => {
+		localStorage.setItem("resume-canvas-palette", "slate");
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().palette).toBe("slate");
+	});
+
+	it("falls back to the cream palette for an unrecognised or missing saved value", async () => {
+		localStorage.setItem("resume-canvas-palette", "not-a-real-palette");
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().palette).toBe("cream");
+	});
+
+	it("reads a saved mode from its own legacy key when no draft has been persisted yet", async () => {
+		localStorage.setItem("resume-canvas-mode", "dark");
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().mode).toBe("dark");
+	});
+
+	it("falls back to the system color scheme when no mode is saved anywhere", async () => {
+		const matchMediaSpy = vi.spyOn(window, "matchMedia").mockReturnValue({
+			matches: true,
+			media: "(prefers-color-scheme: dark)",
+			onchange: null,
+			addListener: () => {},
+			removeListener: () => {},
+			addEventListener: () => {},
+			removeEventListener: () => {},
+			dispatchEvent: () => false,
+		});
+		const { useResumeStore } = await import("@/services/resumeStore");
+		expect(useResumeStore.getState().mode).toBe("dark");
+		matchMediaSpy.mockRestore();
+	});
+});
