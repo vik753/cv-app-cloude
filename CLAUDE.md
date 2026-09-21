@@ -71,22 +71,20 @@ and `skillicons.dev` (skill icons). Both are optional to the app working.
 
 ## 🏗 Architecture
 
-### Current
-
-Mid-migration. `src/shared/` (ui, lib, i18n) and `src/app/styles/` exist; the rest is
-still flat under `src/components/`, `src/hooks/` and `src/services/`, with a root
-`src/index.ts` barrel that will be retired in the last wave.
-
-### Target — Feature-Sliced Design
+Feature-Sliced Design, migration complete:
 
 ```
-app / pages / widgets / features / entities / shared
+app        App.tsx, providers, styles/
+pages      builder/
+widgets    scene/, app-footer/
+features   resume-form/, resume-preview/, palette-switch/, language-switch/
+entities   resume/
+shared     ui/, lib/, i18n/, config/
 ```
 
-A refactor to FSD is in progress. **Full spec, layer rules and the migration plan:
-[`.claude/team/ARCHITECTURE.md`](.claude/team/ARCHITECTURE.md).** Read it before moving
-any file. While the migration runs, both shapes exist — check which wave has landed
-before assuming a path.
+Imports go downward only. A slice is reached through its `index.ts`, never by path into
+its internals. **Layer rules, segment rules and the reasoning:
+[`.claude/team/ARCHITECTURE.md`](.claude/team/ARCHITECTURE.md).**
 
 ### Conventions
 

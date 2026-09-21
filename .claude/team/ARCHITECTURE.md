@@ -1,7 +1,14 @@
 # Target Architecture: Feature-Sliced Design
 
-The current structure is flat (`components/`, `hooks/`, `services/`) and does not match
-what `CLAUDE.md` declares. The goal of this refactor is real FSD.
+The migration is complete. Every file in `src/` belongs to a layer; `components/`,
+`hooks/` and `services/` are gone, and so is the root barrel. This document is now the
+standard new work is held to, not a plan.
+
+One departure from the tree below is worth knowing about. The builder's toolbar lives
+inside `pages/builder`, not as a `widgets/app-header` slice, because every one of its
+buttons drives state the page or the store owns: as a widget it would be a thirteen-prop
+pass-through whose public API documents nothing. A widget earns its slice by being
+self-contained. That is the test to apply before adding one.
 
 ## Layers
 
@@ -68,7 +75,6 @@ src/
       lib/             landscape, catmull/lerp
       assets/svg/      inline SVG geometry lifted out of the components
       types.ts index.ts
-    app-header/
     app-footer/
   features/
     resume-form/
