@@ -1,7 +1,7 @@
 import { ResumePreview } from "@/features/resume-preview";
 import { translations } from "@/shared/i18n";
-import { initialResume } from "@/entities/resume/model/initialResume";
-import type { Resume } from "@/entities/resume/model/resumeSchema";
+import { initialResume } from "@/entities/resume";
+import type { Resume } from "@/entities/resume";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

@@ -1,7 +1,7 @@
 import { ResumeForm } from "@/features/resume-form";
 import { translations } from "@/shared/i18n";
-import { initialResume } from "@/entities/resume/model/initialResume";
-import type { ExperienceField, Resume, ResumeField } from "@/entities/resume/model/resumeSchema";
+import { initialResume } from "@/entities/resume";
+import type { ExperienceField, Resume, ResumeField } from "@/entities/resume";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

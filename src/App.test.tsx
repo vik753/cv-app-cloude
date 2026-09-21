@@ -1,5 +1,5 @@
 import { App } from "@/App";
-import { useResumeStore } from "@/entities/resume/model/resumeStore";
+import { useResumeStore } from "@/entities/resume";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
