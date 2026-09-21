@@ -1,6 +1,6 @@
-import type { Season } from "@/hooks/useDayNightCycle";
-import { onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/hooks/useSceneClock";
-import { HOMESTEAD, upperGround } from "@/services/landscape";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import { onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/widgets/scene/model/useSceneClock";
+import { HOMESTEAD, upperGround } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 
 /* Two neighbours making their way from one хата to the other of an evening, arm in

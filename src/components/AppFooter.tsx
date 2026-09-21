@@ -1,4 +1,4 @@
-import { MUSIC } from "@/services/music";
+import { MUSIC } from "@/shared/config";
 import type { Translation } from "@/shared/i18n";
 
 const AUTHOR = "Ihor Korenets";

@@ -1,6 +1,16 @@
-import type { Season } from "@/hooks/useDayNightCycle";
-import { ease, lerp, onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/hooks/useSceneClock";
-import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt, upperGround } from "@/services/landscape";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import {
+	ease,
+	lerp,
+	onRoute,
+	presence,
+	set,
+	show,
+	TAU,
+	useCycleFrame,
+	type Waypoint,
+} from "@/widgets/scene/model/useSceneClock";
+import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt, upperGround } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 
 /* The folk who work the plot. The two women's year is the field's: they come out in

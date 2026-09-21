@@ -12,7 +12,7 @@ import {
 	projectScene,
 	RIVER_PATH,
 	RIVER_TOP,
-} from "@/services/landscape";
+} from "@/widgets/scene/lib/landscape";
 import { describe, expect, it } from "vitest";
 
 describe("landscape ridges", () => {

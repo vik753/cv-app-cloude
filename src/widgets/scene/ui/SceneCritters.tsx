@@ -11,13 +11,23 @@ import {
 	lowerGround,
 	upperGround,
 	type Point,
-} from "@/services/landscape";
-import { SnowChildren, Snowman, YardChildren } from "@/components/SceneChildren";
-import { FieldFolk } from "@/components/SceneFieldFolk";
-import { Revellers } from "@/components/SceneRevellers";
-import { HomesteadFence } from "@/components/SceneVillage";
-import type { Season } from "@/hooks/useDayNightCycle";
-import { ease, lerp, onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/hooks/useSceneClock";
+} from "@/widgets/scene/lib/landscape";
+import { SnowChildren, Snowman, YardChildren } from "@/widgets/scene/ui/SceneChildren";
+import { FieldFolk } from "@/widgets/scene/ui/SceneFieldFolk";
+import { Revellers } from "@/widgets/scene/ui/SceneRevellers";
+import { HomesteadFence } from "@/widgets/scene/ui/SceneVillage";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import {
+	ease,
+	lerp,
+	onRoute,
+	presence,
+	set,
+	show,
+	TAU,
+	useCycleFrame,
+	type Waypoint,
+} from "@/widgets/scene/model/useSceneClock";
 import { useRef, type Ref, type RefObject } from "react";
 
 /* The critters are choreographed against the day: 0 is dawn, 0.1–0.4 full day,

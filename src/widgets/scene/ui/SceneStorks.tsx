@@ -1,6 +1,6 @@
-import type { Season } from "@/hooks/useDayNightCycle";
-import { set, show, TAU, useCycleFrame } from "@/hooks/useSceneClock";
-import { HOMESTEAD } from "@/services/landscape";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import { set, show, TAU, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { HOMESTEAD } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 
 /* A dead tree stands between the хати with a stork nest on its crown. The pair come

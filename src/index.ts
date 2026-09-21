@@ -1,5 +1,5 @@
 export { BrandLogo } from "@/shared/ui";
-export { DayNightScene } from "@/components/DayNightScene";
+export { DayNightScene } from "@/widgets/scene";
 export { LanguageSwitcher } from "@/components/LanguageSwitcher";
 export { PaletteSwitcher } from "@/components/PaletteSwitcher";
 export { ResumeForm } from "@/components/ResumeForm";

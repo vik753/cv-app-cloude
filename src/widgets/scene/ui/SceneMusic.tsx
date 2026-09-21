@@ -1,4 +1,4 @@
-import { MUSIC } from "@/services/music";
+import { MUSIC } from "@/shared/config";
 import { useEffect, useRef, useState } from "react";
 
 /* The tune that plays while the form is minimized and the scene has the stage.

@@ -1,4 +1,4 @@
-import { FENCE, HOMESTEAD } from "@/services/landscape";
+import { FENCE, HOMESTEAD } from "@/widgets/scene/lib/landscape";
 
 /* Two small whitewashed хати at the right edge of the upper meadow, in the everyday
    village style: thick thatch with a dark combed eave, a small dark window with a

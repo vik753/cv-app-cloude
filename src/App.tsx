@@ -1,7 +1,6 @@
 import { Tooltip } from "@/shared/ui";
-import { useDayNightCycle } from "@/hooks/useDayNightCycle";
+import { SceneMusic, useDayNightCycle } from "@/widgets/scene";
 import { AppFooter } from "@/components/AppFooter";
-import { SceneMusic } from "@/components/SceneMusic";
 import {
 	BrandLogo,
 	DayNightScene,

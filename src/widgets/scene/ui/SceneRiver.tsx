@@ -1,5 +1,5 @@
-import type { Season } from "@/hooks/useDayNightCycle";
-import { RIVER_PATH } from "@/services/landscape";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import { RIVER_PATH } from "@/widgets/scene/lib/landscape";
 import type { CSSProperties } from "react";
 
 /* What happens in the water: fish breaking the surface through the day, a piece of

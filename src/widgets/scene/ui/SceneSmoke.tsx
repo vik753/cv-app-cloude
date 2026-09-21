@@ -1,4 +1,4 @@
-import { CHIMNEYS, projectScene } from "@/services/landscape";
+import { CHIMNEYS, projectScene } from "@/widgets/scene/lib/landscape";
 import { useEffect, useState, type CSSProperties } from "react";
 
 /* Chimney smoke, drawn in the sky layer rather than inside the landscape.

@@ -1,4 +1,4 @@
-import type { Season } from "@/hooks/useDayNightCycle";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
 import { seededRandom } from "@/shared/lib";
 import type { CSSProperties } from "react";
 

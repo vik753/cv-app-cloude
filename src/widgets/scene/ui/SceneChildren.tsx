@@ -1,6 +1,6 @@
-import type { Season } from "@/hooks/useDayNightCycle";
-import { onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/hooks/useSceneClock";
-import { riverTopAt, upperGround } from "@/services/landscape";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import { onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/widgets/scene/model/useSceneClock";
+import { riverTopAt, upperGround } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 
 /* The household's three children. In the warm half of the year they tear about the

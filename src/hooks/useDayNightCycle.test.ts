@@ -1,4 +1,4 @@
-import { nextSeason, type Season } from "@/hooks/useDayNightCycle";
+import { nextSeason, type Season } from "@/widgets/scene/model/useDayNightCycle";
 import { describe, expect, it } from "vitest";
 
 describe("nextSeason", () => {

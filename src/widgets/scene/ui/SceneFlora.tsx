@@ -1,5 +1,5 @@
-import { WheatField } from "@/components/SceneField";
-import type { Season } from "@/hooks/useDayNightCycle";
+import { WheatField } from "@/widgets/scene/ui/SceneField";
+import type { Season } from "@/widgets/scene/model/useDayNightCycle";
 import {
 	APPLE_TREE,
 	BACK_RIDGE,
@@ -20,9 +20,9 @@ import {
 	onBackRidge,
 	riverTopAt,
 	type Point,
-} from "@/services/landscape";
-import { StorkTree } from "@/components/SceneStorks";
-import { Village } from "@/components/SceneVillage";
+} from "@/widgets/scene/lib/landscape";
+import { StorkTree } from "@/widgets/scene/ui/SceneStorks";
+import { Village } from "@/widgets/scene/ui/SceneVillage";
 import { seededRandom } from "@/shared/lib";
 import type { CSSProperties, ReactNode } from "react";
 

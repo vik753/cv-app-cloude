@@ -1,14 +1,14 @@
-import { LowerCritters, UpperCritters } from "@/components/SceneCritters";
-import { BackMeadow, FrontMeadow, MidMeadow, UpperBush } from "@/components/SceneFlora";
-import { IceChildren } from "@/components/SceneChildren";
-import { RiverLife } from "@/components/SceneRiver";
-import { SceneSmoke } from "@/components/SceneSmoke";
-import { StorkWedge } from "@/components/SceneStorks";
-import { GroundWeather, SkyWeather } from "@/components/SceneWeather";
-import { nextSeason, type Season } from "@/hooks/useDayNightCycle";
+import { LowerCritters, UpperCritters } from "@/widgets/scene/ui/SceneCritters";
+import { BackMeadow, FrontMeadow, MidMeadow, UpperBush } from "@/widgets/scene/ui/SceneFlora";
+import { IceChildren } from "@/widgets/scene/ui/SceneChildren";
+import { RiverLife } from "@/widgets/scene/ui/SceneRiver";
+import { SceneSmoke } from "@/widgets/scene/ui/SceneSmoke";
+import { StorkWedge } from "@/widgets/scene/ui/SceneStorks";
+import { GroundWeather, SkyWeather } from "@/widgets/scene/ui/SceneWeather";
+import { nextSeason, type Season } from "@/widgets/scene/model/useDayNightCycle";
 import type { Language } from "@/shared/i18n";
-import { RIVER_PATH } from "@/services/landscape";
-import { quotes, type Quote } from "@/services/quotes";
+import { RIVER_PATH } from "@/widgets/scene/lib/landscape";
+import { quotes, type Quote } from "@/shared/config";
 import { useEffect, useMemo, useState } from "react";
 
 interface Star {
