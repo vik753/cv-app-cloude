@@ -1,4 +1,4 @@
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LanguageSwitcher } from "@/features/language-switch";
 import { translations } from "@/shared/i18n";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";

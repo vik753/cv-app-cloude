@@ -1,4 +1,4 @@
-import { ResumeForm } from "@/components/ResumeForm";
+import { ResumeForm } from "@/features/resume-form";
 import { translations } from "@/shared/i18n";
 import { initialResume } from "@/entities/resume/model/initialResume";
 import type { ExperienceField, Resume, ResumeField } from "@/entities/resume/model/resumeSchema";

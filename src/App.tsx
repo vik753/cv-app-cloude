@@ -1,17 +1,12 @@
-import { Tooltip } from "@/shared/ui";
-import { SceneMusic, useDayNightCycle } from "@/widgets/scene";
-import { AppFooter } from "@/components/AppFooter";
-import {
-	BrandLogo,
-	DayNightScene,
-	LanguageSwitcher,
-	PaletteSwitcher,
-	ResumeForm,
-	ResumePreview,
-	translations,
-	useLanguage,
-	useResumeStore,
-} from "@/index";
+import { BrandLogo, Tooltip } from "@/shared/ui";
+import { translations, useLanguage } from "@/shared/i18n";
+import { useResumeStore } from "@/entities/resume";
+import { LanguageSwitcher } from "@/features/language-switch";
+import { PaletteSwitcher } from "@/features/palette-switch";
+import { ResumeForm } from "@/features/resume-form";
+import { ResumePreview } from "@/features/resume-preview";
+import { DayNightScene, SceneMusic, useDayNightCycle } from "@/widgets/scene";
+import { AppFooter } from "@/widgets/app-footer";
 import { CornersOut, DownloadSimple, Eye, EyeSlash, Minus, Moon, Mountains, Sun, Trash } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 

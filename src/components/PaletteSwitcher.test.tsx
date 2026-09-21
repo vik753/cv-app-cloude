@@ -1,4 +1,4 @@
-import { PaletteSwitcher } from "@/components/PaletteSwitcher";
+import { PaletteSwitcher } from "@/features/palette-switch";
 import { translations } from "@/shared/i18n";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";

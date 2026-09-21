@@ -1,4 +1,4 @@
-import { ResumePreview } from "@/components/ResumePreview";
+import { ResumePreview } from "@/features/resume-preview";
 import { translations } from "@/shared/i18n";
 import { initialResume } from "@/entities/resume/model/initialResume";
 import type { Resume } from "@/entities/resume/model/resumeSchema";
