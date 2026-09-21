@@ -1,5 +1,5 @@
 import { PaletteSwitcher } from "@/components/PaletteSwitcher";
-import { translations } from "@/services/copy";
+import { translations } from "@/shared/i18n";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

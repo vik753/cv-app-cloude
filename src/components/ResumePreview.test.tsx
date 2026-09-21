@@ -1,5 +1,5 @@
 import { ResumePreview } from "@/components/ResumePreview";
-import { translations } from "@/services/copy";
+import { translations } from "@/shared/i18n";
 import { initialResume } from "@/services/initialResume";
 import type { Resume } from "@/services/resumeSchema";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";

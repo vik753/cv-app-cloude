@@ -1,5 +1,5 @@
-import { Tooltip } from "@/components/ui/tooltip";
-import type { Language, Translation } from "@/services/copy";
+import { Tooltip } from "@/shared/ui";
+import type { Language, Translation } from "@/shared/i18n";
 
 interface LanguageSwitcherProps {
 	language: Language;

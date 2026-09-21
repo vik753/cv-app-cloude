@@ -1,5 +1,5 @@
 import { MUSIC } from "@/services/music";
-import type { Translation } from "@/services/copy";
+import type { Translation } from "@/shared/i18n";
 
 const AUTHOR = "Ihor Korenets";
 const EMAIL = "vik753@gmail.com";

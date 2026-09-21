@@ -1,12 +1,11 @@
-export { BrandLogo } from "@/components/BrandLogo";
+export { BrandLogo } from "@/shared/ui";
 export { DayNightScene } from "@/components/DayNightScene";
 export { LanguageSwitcher } from "@/components/LanguageSwitcher";
 export { PaletteSwitcher } from "@/components/PaletteSwitcher";
 export { ResumeForm } from "@/components/ResumeForm";
 export { ResumePreview } from "@/components/ResumePreview";
-export { useLanguage } from "@/hooks/useLanguage";
-export { translations } from "@/services/copy";
-export type { Language, Translation } from "@/services/copy";
+export { translations, useLanguage } from "@/shared/i18n";
+export type { Language, Translation } from "@/shared/i18n";
 export { resumeSchema } from "@/services/resumeSchema";
 export type { Experience, ExperienceField, Resume, ResumeField } from "@/services/resumeSchema";
 export { useResumeStore } from "@/services/resumeStore";

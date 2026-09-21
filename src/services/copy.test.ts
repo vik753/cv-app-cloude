@@ -1,4 +1,4 @@
-import { translations, type Translation } from "@/services/copy";
+import { translations, type Translation } from "@/shared/i18n";
 import { describe, expect, it } from "vitest";
 
 describe("i18n dictionaries", () => {

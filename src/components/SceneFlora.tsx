@@ -23,7 +23,7 @@ import {
 } from "@/services/landscape";
 import { StorkTree } from "@/components/SceneStorks";
 import { Village } from "@/components/SceneVillage";
-import { seededRandom } from "@/services/seededRandom";
+import { seededRandom } from "@/shared/lib";
 import type { CSSProperties, ReactNode } from "react";
 
 const between = (random: () => number, min: number, max: number) => min + random() * (max - min);

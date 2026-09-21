@@ -1,5 +1,5 @@
 import type { Season } from "@/hooks/useDayNightCycle";
-import { seededRandom } from "@/services/seededRandom";
+import { seededRandom } from "@/shared/lib";
 import type { CSSProperties } from "react";
 
 const particles = <T,>(seed: number, count: number, make: (random: () => number) => T): T[] => {

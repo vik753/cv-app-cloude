@@ -1,6 +1,6 @@
 import { SkillIcon } from "@/components/SkillIcon";
-import { Tooltip } from "@/components/ui/tooltip";
-import type { Translation } from "@/services/copy";
+import { Tooltip } from "@/shared/ui";
+import type { Translation } from "@/shared/i18n";
 import { createEmptyExperience } from "@/services/initialResume";
 import { languageSuggestions } from "@/services/languageSuggestions";
 import {

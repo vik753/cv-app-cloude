@@ -6,7 +6,7 @@ import { SceneSmoke } from "@/components/SceneSmoke";
 import { StorkWedge } from "@/components/SceneStorks";
 import { GroundWeather, SkyWeather } from "@/components/SceneWeather";
 import { nextSeason, type Season } from "@/hooks/useDayNightCycle";
-import type { Language } from "@/services/copy";
+import type { Language } from "@/shared/i18n";
 import { RIVER_PATH } from "@/services/landscape";
 import { quotes, type Quote } from "@/services/quotes";
 import { useEffect, useMemo, useState } from "react";

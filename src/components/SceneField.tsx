@@ -1,7 +1,7 @@
 import type { Season } from "@/hooks/useDayNightCycle";
 import { lerp, show, useCycleFrame } from "@/hooks/useSceneClock";
 import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt } from "@/services/landscape";
-import { seededRandom } from "@/services/seededRandom";
+import { seededRandom } from "@/shared/lib";
 import { useRef } from "react";
 
 /* The household's plot of wheat at the top of the slope.

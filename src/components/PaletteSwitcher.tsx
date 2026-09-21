@@ -1,5 +1,5 @@
-import { Tooltip } from "@/components/ui/tooltip";
-import type { Translation } from "@/services/copy";
+import { Tooltip } from "@/shared/ui";
+import type { Translation } from "@/shared/i18n";
 import type { Palette } from "@/services/resumeStore";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CaretDown, Check, Palette as PaletteIcon } from "@phosphor-icons/react";

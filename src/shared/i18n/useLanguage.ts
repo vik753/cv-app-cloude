@@ -1,4 +1,4 @@
-import { translations, type Language } from "@/services/copy";
+import { translations, type Language } from "@/shared/i18n/copy";
 import { useEffect, useState } from "react";
 
 const languageStorageKey = "resume-canvas-language";

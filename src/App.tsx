@@ -1,4 +1,4 @@
-import { Tooltip } from "@/components/ui/tooltip";
+import { Tooltip } from "@/shared/ui";
 import { useDayNightCycle } from "@/hooks/useDayNightCycle";
 import { AppFooter } from "@/components/AppFooter";
 import { SceneMusic } from "@/components/SceneMusic";

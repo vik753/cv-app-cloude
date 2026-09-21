@@ -1,4 +1,4 @@
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/shared/ui";
 import { render, type RenderOptions } from "@testing-library/react";
 import type { ReactElement } from "react";
 

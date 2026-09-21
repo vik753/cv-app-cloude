@@ -1,4 +1,4 @@
-import { seededRandom } from "@/services/seededRandom";
+import { seededRandom } from "@/shared/lib";
 import { describe, expect, it } from "vitest";
 
 describe("seededRandom", () => {
