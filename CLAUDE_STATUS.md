@@ -177,3 +177,199 @@ Backlog, unrelated to performance:
 - `entities/resume` exports `Palette` but not `Mode`, so the header spells the union out.
 - `main.tsx`, `App.test.tsx`, `setupTests.ts` and `test-utils/` sit outside every layer,
   so the boundary lint does not cover them.
+
+## 2026-09-21 (evening) — stage 4 premise disproved, and the entry-flow redesign
+
+**Nothing in this session is committed.** Everything below is in the working tree.
+Two independent bodies of work, cleanly separable by path:
+infrastructure (`.gitignore`, `.lintstagedrc.json`, `package.json`, `package-lock.json`,
+`scripts/`) and the redesign (`src/**`). They must become two commits, not one.
+
+### Performance 35 never existed
+
+The owner re-measured with his own Lighthouse and saved both reports (now in
+`artifacts/performance/`, gitignored). Same methodology in all three runs — desktop,
+simulated throttling, CPU multiplier 1, DevTools panel:
+
+|             | dev server | our `preview` | deployed site |
+| ----------- | ---------- | ------------- | ------------- |
+| Performance | 33         | 93            | **96**        |
+| LCP         | 22.3 s     | —             | 0.9 s         |
+| TBT         | 540 ms     | 80 ms         | 0 ms          |
+| Transferred | 42.7 MB    | 287 KiB       | 322 KiB       |
+
+The original 35 was `localhost:5173` — the dev server, serving 79 unbundled `/src/`
+modules plus `/@vite/client` — with 150 of the run's 266 requests coming from a Grazie
+browser extension. Lighthouse's own `runWarnings` said so in both of the owner's reports.
+The deployed site scores **96 / 91 / 100 / 91** with extensions still loaded.
+
+Consequence: the stage's goal ("35 → 85") was never a real target. The owner decided to
+narrow stage 4 to the one thing that is genuinely expensive — the scene's sustained cost
+on the main thread — and to accept it on engineering metrics rather than the Lighthouse
+score. `React.lazy`, `manualChunks` and the CI bundle budget were **dropped**: at 322 KiB,
+TBT 0 and TTI 1.1 s they fix nothing that is broken. The only audit not green is
+`mainthread-work-breakdown` (2.9 s), of which under a third is scripting; the rest is
+Style & Layout, Rendering and "Other" — the scene animating. Even that figure is inflated
+by the extension's 150 requests.
+
+### The measurement rig
+
+`lighthouse` added as a devDependency (owner-approved), plus `chrome-launcher`
+(owner-approved, declared explicitly rather than relying on npm hoisting it out of
+lighthouse's tree). `npm run lighthouse` builds, serves the production build through
+`vite preview` on the real base path, and writes a JSON report plus a readable summary
+into `artifacts/performance/`. `npm run lighthouse -- --desktop` is a reference-only pass.
+Not wired into the commit gate or CI: a full run takes minutes.
+
+Two findings worth keeping:
+
+**Simulated throttling cannot see this app's problem.** Same build, same mobile profile,
+only `throttlingMethod` differing: `simulate` → Performance 92, TBT 80 ms; `devtools`
+(real CPU throttling) → 52 and 5,060 ms. `simulate` estimates CPU cost from the network
+waterfall, which is a reasonable model for a page whose cost is loading and a useless one
+for a page whose cost is an animation that never stops. Acceptance runs therefore use
+`devtools`; the `simulate` run is kept only as a regression guard for Accessibility, Best
+Practices and SEO. Do not "fix" the rig back to the friendlier number — the summary header
+explains this to whoever reads it next.
+
+**Lighthouse sometimes cannot compute TBT for this app at all**, failing with
+`NO_TTI_CPU_IDLE_PERIOD`: it waits for the main thread to go quiet and never gets it.
+That is not a broken rig. It is the clearest statement of the problem we have.
+
+**TBT is too noisy to accept on.** Three runs gave median 5,504 ms with a spread of
+2,656 ms — 48% of the value, wider than any improvement we could honestly claim. Stable
+by comparison: long-task count (median 20, **spread 0**), main-thread time (3%), bootup
+(7%). Acceptance should lead with long-task count and main-thread time; TBT is reported
+second. Printing the spread, not just the median, is what exposed this.
+
+**The baseline has NOT been taken.** The numbers above were captured on a loaded machine
+(load average 11) while two orphaned `vite preview` processes were running, and before the
+rig could prove it was measuring its own build. Treat them as provisional. The real
+baseline must be taken against the redesigned app, on a quiet machine.
+
+Reviewed twice, thoroughly. Round one: four blockers, including a rig that could measure
+a _stale foreign server_'s older `dist/` and report it as valid data. Round two: two
+regressions introduced by the fixes — every raw bundle size printed as `NaN`, and a SIGINT
+handler that called `process.exit` in the first listener, which stopped chrome-launcher's
+own listener from ever running and so leaked a detached headless Chrome animating the
+scene forever, on the machine whose wall-clock numbers are the acceptance metric. All
+fixed and each fix proved by execution.
+
+The server-identity fix is worth understanding before touching it: `waitForServer` polls
+**this build's own content-hashed asset path**, parsed from `vite build`'s stdout, not the
+bare page. A stale `dist/` cannot produce today's hash, so the check holds regardless of
+timing. A pure liveness check was demonstrably foolable here.
+
+**Open: the rig has not had its third review round.** The fixes exist; no reviewer has
+signed them off. That is the first thing to do next session.
+
+### The entry flow redesign (owner's request)
+
+Three states replace "form with the scene running behind it forever":
+
+1. **Welcome** — first visit only. The scene mounted but frozen on its first frame, one
+   centred button, no music. The pause is load-bearing, not decorative: browsers refuse
+   audio before a user gesture, and the click on this button _is_ that gesture, which is
+   what lets the music start with the animation instead of silently failing.
+2. **Scene** — animation and music running, a button top-left, the YouTube player moved to
+   the top-right. The form is unmounted, not hidden.
+3. **Form** — the scene unmounted entirely, clock and all. A labelled control in the header
+   returns to state 2. The top-left button then reads "Continue" instead of
+   "Start building your CV".
+
+Returning visitors skip the welcome: it appears only when the draft still equals
+`initialResume`. The persist key alone proves nothing — the store writes it on first
+render. `resume-canvas-scene` keeps its old meaning, so anyone who switched the background
+off opens in the form and stays there.
+
+Dark mode no longer follows the sky (there is no sky in state 3). It follows
+`prefers-color-scheme`, with the header switch overriding for the session.
+
+**The paused scene costs nothing, and this was measured**: 17 `requestAnimationFrame`
+calls in total on the welcome screen and 0 over the next three seconds, against ~2,040 per
+two seconds once running. Each of the sixteen loops poses its figure once and stops — not
+"never runs", which would leave the figures in the neutral positions React mounts them in
+and show a jumble instead of a dawn.
+
+Something the task brief missed and frontend-dev caught: **parts of the scene are SMIL**
+(river ripples, the banner cloth, birds, the station's lights). `animation-play-state`
+cannot reach SMIL, so the pause also calls `pauseAnimations()` on each `<svg>` root.
+Without it the welcome frame would be half alive.
+
+The `.sky-day` contract was verified in a browser rather than reasoned about: while paused
+the selector still returns the animation, `currentTime` holds, and it advances again on
+resume.
+
+`ui-styles` landed the visual half: `app/styles/entry.css` (the three entry buttons, the
+welcome layer, the ornament), `app/styles/scene/paused.css` (the freeze), and the music
+card moved to the top right. CSS only; no markup was touched. Cost: +4.64 kB raw,
++1.00 kB gzip.
+
+The freeze was proved, not assumed: two screenshots seven seconds apart on the welcome
+screen differ by **0 of 1,296,000 pixels** with the rule, and by 95% without it. The
+`!important` on `animation-play-state` is deliberate and explained in the file — every
+scene animation uses the `animation` shorthand, which resets play-state to `running`, and
+some are seasonal selectors with higher specificity than any pause selector, so a longhand
+rule would lose whatever the import order.
+
+The ornament is a masked ring rather than `border-image`, because only that lets the
+shimmer be clipped to the stitches instead of sweeping over them — one effect, not two.
+The motif is a 24×24 tile composed here on a 4-unit stitch grid, 90°-symmetric so one
+asset serves all four sides. Colours are literals in every palette and mode. The buttons
+carry their own linen surface, so the ornament never depends on the sky: verified at dawn,
+noon, dusk and night, where the unstyled button had been literally invisible. Label
+contrast 14.37:1; the ornament is pseudo-element content, so no screen reader announces
+it; the shimmer is `display: none` under reduced motion.
+
+**The scene itself is unchanged**, measured rather than eyeballed: 0.147–0.491% of pixels
+differ across the four phases, against 0.054–0.140% between two runs of the _same_ code —
+i.e. the residual is rAF-posed figures landing a frame apart, not styling.
+
+### Open decisions for the owner
+
+- **The frosted-glass look over the scene is now unreachable.** The form only ever renders
+  with the scene off, so `.app-shell.scene-active` is dead. This follows directly from
+  "the animation turns off completely"; getting it back needs a different definition of
+  state 3.
+- **Existing users have junk in `resume-canvas-mode`.** The old code wrote it from the sky
+  phase on every load, so the stored value records what the sky happened to be doing, not
+  a preference. With the sky gone, that arbitrary value is what the form opens on.
+
+### Outstanding work
+
+- Third review round on the rig, then commit it as its own commit.
+- Six tests in `src/App.test.tsx` assert controls the redesign removed (the mountains
+  toggle, the minimise dot, the badge). They are red on purpose and belong to
+  `qa-engineer`; three need only a click-through-the-new-states fix, three assert removed
+  behaviour. Nobody may edit a test to make a build pass.
+- Dead CSS inventory exists; deletion is a **separate commit** from the new styling.
+- New tests for the three states and for first-visit versus returning.
+- `PERMISSIONS.md`'s zone table assigns no owner to `scripts/**` or `.gitignore`.
+- Housekeeping done: two orphaned `vite preview` processes (this repo and
+  `/private/tmp/cv-app-before-lazy`) were killing measurement accuracy and were killed.
+
+### Two `ui-styles` calls left for the owner to accept or overrule
+
+1. **The music card got `z-index: 3`.** The top right is where the sun, moon and birds fly
+   on `.scene-front` (z-index 2), so without it the sun painted over the player. Side
+   effect: the card's 420ms slide-out now crosses the form header instead of the footer.
+2. **On screens ≤560px the top-left button moves to the bottom left.** The player is 220px
+   of a 390px screen and now owns the top right; keeping both up top made the card cover
+   half the button. The alternative is a ~134px button with a three-line label.
+
+### One thing to check before the dead-CSS deletion
+
+**All six remaining `backdrop-filter` declarations in the project live inside the dead
+blocks** (five in the `.app-shell.scene-active` glass block, one on `.window-badge`).
+Deleting them leaves the codebase with zero `backdrop-filter`, which makes the performance
+paragraph in `CLAUDE.md` — "10 `backdrop-filter` … on large, always-visible surfaces
+composited over the moving scene" — describe a code path that can no longer occur. That
+paragraph needs rewriting in the same commit. The two live `filter` declarations in
+`weather.css` are unaffected. Separately, `.glass-alpha-slider` was already dead at HEAD
+and is not a casualty of this redesign.
+
+The shimmer is a permanent repaint on the form screen, which previously had none: CDP
+measured `TaskDuration` 0.146s over 5s against 0.003s without it (0.248s vs 0.000s on the
+welcome screen). `LayoutDuration` is zero throughout — it paints, it never lays out. The
+owner asked for the shimmer on all three buttons, so it was not second-guessed; making it
+composited would need a real child element, i.e. markup.
