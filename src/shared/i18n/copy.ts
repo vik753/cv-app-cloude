@@ -40,15 +40,13 @@ export interface Translation {
 	previewHide: string;
 	previewShow: string;
 	previewLabel: string;
-	minimize: string;
-	restore: string;
 	music: string;
 	musicCredit: string;
 	musicSource: string;
-	sceneHide: string;
-	sceneShow: string;
-	sceneOn: string;
-	sceneOff: string;
+	welcomeStart: string;
+	sceneStart: string;
+	sceneContinue: string;
+	sceneBack: string;
 	addSkill: string;
 	languages: string;
 	languageLabel: string;
@@ -142,15 +140,13 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Hide preview",
 		previewShow: "Show preview",
 		previewLabel: "Preview",
-		minimize: "Minimize",
-		restore: "Restore",
 		music: "Scene music",
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
-		sceneHide: "Turn off animated background",
-		sceneShow: "Turn on animated background",
-		sceneOn: "On",
-		sceneOff: "Off",
+		welcomeStart: "Welcome to the not boring CV. Click to begin.",
+		sceneStart: "Start building your CV",
+		sceneContinue: "Continue",
+		sceneBack: "Back to the scene",
 		addSkill: "Add a skill",
 		languages: "Languages",
 		languageLabel: "Language",
@@ -242,15 +238,13 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Сховати попередній перегляд",
 		previewShow: "Показати попередній перегляд",
 		previewLabel: "Прев'ю",
-		minimize: "Згорнути",
-		restore: "Розгорнути",
 		music: "Музика сцени",
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
-		sceneHide: "Вимкнути анімований фон",
-		sceneShow: "Увімкнути анімований фон",
-		sceneOn: "Увімк",
-		sceneOff: "Вимк",
+		welcomeStart: "Ласкаво просимо до не нудного CV. Натисніть, щоб почати.",
+		sceneStart: "Почати створювати CV",
+		sceneContinue: "Продовжити",
+		sceneBack: "Повернутися до сцени",
 		addSkill: "Додати навичку",
 		languages: "Мови",
 		languageLabel: "Мова",

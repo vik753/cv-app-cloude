@@ -1,5 +1,5 @@
 import { App } from "@/app";
-import { useResumeStore } from "@/entities/resume";
+import { initialResume, useResumeStore } from "@/entities/resume";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -8,37 +8,61 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 /* A high-level smoke test: App wires together the store, the scene, the form and
    the preview. This does not re-check any of their own behaviour (covered in their
    own test files); it only checks that the wiring itself does not fall over when a
-   user flips the switches every session touches. */
+   user walks the three entry states every session passes through. */
 describe("App", () => {
 	let printSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
 		localStorage.clear();
-		useResumeStore.setState({ palette: "cream", mode: "light" });
+		/* an empty draft and no stored preference is precisely a first-time visitor */
+		useResumeStore.setState({ resume: initialResume, palette: "cream", mode: "light" });
 		printSpy = vi.spyOn(window, "print").mockImplementation(() => {});
 	});
 
-	it("renders the builder shell", () => {
+	/* welcome → scene → form, the walk a first-time visitor makes before the form exists */
+	const enterForm = async (user: ReturnType<typeof userEvent.setup>) => {
+		await user.click(screen.getByRole("button", { name: /welcome to the not boring cv/i }));
+		await user.click(screen.getByRole("button", { name: /start building your cv/i }));
+	};
+
+	it("opens on the welcome screen for a first-time visitor", () => {
 		render(<App />);
+		expect(screen.getByRole("button", { name: /welcome to the not boring cv/i })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /download pdf/i })).not.toBeInTheDocument();
+	});
+
+	it("walks from the welcome screen through the scene into the form", async () => {
+		const user = userEvent.setup();
+		render(<App />);
+		await user.click(screen.getByRole("button", { name: /welcome to the not boring cv/i }));
+		/* the scene now has the screen to itself: the form is unmounted, not hidden */
+		expect(screen.getByRole("button", { name: /start building your cv/i })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /download pdf/i })).not.toBeInTheDocument();
+		await user.click(screen.getByRole("button", { name: /start building your cv/i }));
 		expect(screen.getByRole("button", { name: /download pdf/i })).toBeInTheDocument();
 		expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
 	});
 
-	it("toggles the scene on and off", async () => {
+	it("offers to continue rather than to start once the form has been seen", async () => {
 		const user = userEvent.setup();
 		render(<App />);
-		const sceneToggle = screen.getByRole("button", { name: /turn off animated background/i });
-		expect(sceneToggle).toHaveAttribute("aria-pressed", "true");
-		await user.click(sceneToggle);
-		expect(screen.getByRole("button", { name: /turn on animated background/i })).toHaveAttribute(
-			"aria-pressed",
-			"false",
-		);
+		await enterForm(user);
+		await user.click(screen.getByRole("button", { name: /back to the scene/i }));
+		expect(screen.getByRole("button", { name: /^continue$/i })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /start building your cv/i })).not.toBeInTheDocument();
+	});
+
+	it("opens straight in the form for someone whose draft is already saved", () => {
+		useResumeStore.setState({ resume: { ...initialResume, name: "Ada Lovelace" } });
+		render(<App />);
+		expect(screen.getByRole("button", { name: /download pdf/i })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /welcome to the not boring cv/i })).not.toBeInTheDocument();
 	});
 
 	it("shows and hides the live preview", async () => {
 		const user = userEvent.setup();
 		render(<App />);
+		await enterForm(user);
 		/* the preview stays mounted (its CSS handles hiding it); the toggle button's
 		   own state is the accessible signal of whether it is currently shown */
 		const toggle = screen.getByRole("button", { name: /show preview/i });
@@ -49,28 +73,19 @@ describe("App", () => {
 		expect(screen.getByRole("button", { name: /show preview/i })).toHaveAttribute("aria-expanded", "false");
 	});
 
-	it("minimizes the window and can be restored again", async () => {
-		const user = userEvent.setup();
-		render(<App />);
-		await user.click(screen.getByRole("button", { name: /minimize/i }));
-		const restoreButton = await screen.findByRole("button", { name: /restore/i });
-		expect(restoreButton).toBeInTheDocument();
-		await user.click(restoreButton);
-		expect(screen.queryByRole("button", { name: /restore/i })).not.toBeInTheDocument();
-	});
-
 	it("prints the resume through window.print when Download is clicked", async () => {
 		const user = userEvent.setup();
 		render(<App />);
+		await enterForm(user);
 		await user.click(screen.getByRole("button", { name: /download pdf/i }));
 		expect(printSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it("switches between light and dark mode once the scene is off", async () => {
+	it("switches between light and dark mode", async () => {
 		const user = userEvent.setup();
 		render(<App />);
-		/* the light/dark buttons are disabled while the animated scene drives mode itself */
-		await user.click(screen.getByRole("button", { name: /turn off animated background/i }));
+		await enterForm(user);
+		/* the sky no longer drives the mode, so the switch is live at all times */
 		const darkButton = screen.getByRole("button", { name: "Dark" });
 		expect(darkButton).toBeEnabled();
 		await user.click(darkButton);

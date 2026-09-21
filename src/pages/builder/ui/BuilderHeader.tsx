@@ -13,8 +13,7 @@ interface BuilderHeaderProps {
 	notice: string;
 	previewVisible: boolean;
 	onTogglePreview: () => void;
-	sceneEnabled: boolean;
-	onToggleScene: () => void;
+	onBackToScene: () => void;
 	mode: Mode;
 	onModeChange: (mode: Mode) => void;
 	palette: Palette;
@@ -25,15 +24,15 @@ interface BuilderHeaderProps {
 }
 
 /* The toolbar across the top of the page: brand and autosave notice, the print and
-   preview controls, and the switches for scene, mode, palette and language. It owns no
-   state of its own — everything it changes belongs to the page or to the store. */
+   preview controls, the way back out to the scene, and the switches for mode, palette
+   and language. It owns no state of its own — everything it changes belongs to the
+   page or to the store. */
 export function BuilderHeader({
 	t,
 	notice,
 	previewVisible,
 	onTogglePreview,
-	sceneEnabled,
-	onToggleScene,
+	onBackToScene,
 	mode,
 	onModeChange,
 	palette,
@@ -70,25 +69,19 @@ export function BuilderHeader({
 				</Tooltip>
 			</div>
 			<div className='header-actions'>
-				<Tooltip label={sceneEnabled ? t.sceneHide : t.sceneShow}>
-					<button
-						className={`scene-toggle${sceneEnabled ? " active" : ""}`}
-						type='button'
-						aria-pressed={sceneEnabled}
-						aria-label={sceneEnabled ? t.sceneHide : t.sceneShow}
-						onClick={onToggleScene}
-					>
-						<Mountains size={16} weight={sceneEnabled ? "fill" : "regular"} />
-						<span className='scene-toggle-state'>{sceneEnabled ? t.sceneOn : t.sceneOff}</span>
-					</button>
-				</Tooltip>
+				{/* the one control for one piece of state: leaving the form is the same act
+				    as turning the animated background back on, so it is a single labelled
+				    button rather than a switch beside it */}
+				<button className='scene-return' type='button' onClick={onBackToScene}>
+					<Mountains size={16} weight='fill' />
+					<span className='scene-return-label'>{t.sceneBack}</span>
+				</button>
 				<div className='segmented' aria-label={t.mode}>
 					<Tooltip label={t.dark}>
 						<button
 							className={mode === "dark" ? "active" : ""}
 							type='button'
 							aria-label={t.dark}
-							disabled={sceneEnabled}
 							onClick={() => onModeChange("dark")}
 						>
 							<Moon size={15} />
@@ -99,7 +92,6 @@ export function BuilderHeader({
 							className={mode === "light" ? "active" : ""}
 							type='button'
 							aria-label={t.light}
-							disabled={sceneEnabled}
 							onClick={() => onModeChange("light")}
 						>
 							<Sun size={15} />

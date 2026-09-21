@@ -1,0 +1,22 @@
+/* The scene held on its first frame, as the welcome screen shows it.
+
+   DayNightScene marks both of its layers with data-paused while the welcome screen
+   is up. Only the CSS animations are stopped here: the ripples on the river, the
+   banner cloth and the station's lights are SMIL, which animation-play-state does
+   not reach, and the component stops those on each SVG root itself.
+
+   The !important is load-bearing, not habit. Every animation in this folder is
+   declared with the `animation` shorthand, which resets animation-play-state to
+   `running`, and several of those declarations are seasonal — `.scene[data-season]
+   .pine-lights` and its neighbours outrank any selector that can be built from the
+   pause marker alone. Without it the sky, the clouds and the sun would keep moving
+   while every figure stood still, which is the exact bug this rule exists to stop.
+   Nothing else in the project sets animation-play-state, so there is no competing
+   !important for it to fight. */
+
+.scene[data-paused="true"],
+.scene[data-paused="true"] *,
+.scene-front[data-paused="true"],
+.scene-front[data-paused="true"] * {
+	animation-play-state: paused !important;
+}

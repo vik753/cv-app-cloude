@@ -584,8 +584,12 @@
    badge rather than playing out of sight. */
 .scene-music {
 	position: fixed;
+	top: 20px;
 	right: 20px;
-	bottom: 86px;
+	/* the sun, the moon and the birds ride .scene-front at z-index 2, and the card
+	   now sits where they fly; it joins the entry flow's own layer so they pass
+	   behind it rather than across the player */
+	z-index: 3;
 	overflow: hidden;
 	width: 268px;
 	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
@@ -623,8 +627,8 @@
 }
 @media (max-width: 560px) {
 	.scene-music {
+		top: 12px;
 		right: 12px;
-		bottom: 78px;
 		width: 220px;
 	}
 	.scene-music-player,
