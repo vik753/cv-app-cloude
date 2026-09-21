@@ -9,15 +9,27 @@ import { defineConfig, globalIgnores } from "eslint/config";
 export default defineConfig([
 	globalIgnores(["dist"]),
 	{
+		/* plain config/tooling scripts (eslint.config.js today) — run in Node, not the page, and are not part of a TS project */
+		files: ["**/*.{js,mjs}"],
+		extends: [js.configs.recommended],
+		languageOptions: {
+			globals: globals.node,
+		},
+	},
+	{
 		files: ["**/*.{ts,tsx}"],
 		extends: [
 			js.configs.recommended,
-			tseslint.configs.recommended,
+			...tseslint.configs.recommendedTypeChecked,
 			reactHooks.configs.flat.recommended,
 			reactRefresh.configs.vite,
 		],
 		languageOptions: {
 			globals: globals.browser,
+			parserOptions: {
+				projectService: true,
+				tsconfigRootDir: import.meta.dirname,
+			},
 		},
 		rules: {
 			"@typescript-eslint/no-explicit-any": "error",
