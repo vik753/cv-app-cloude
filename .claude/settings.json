@@ -11,15 +11,8 @@
 			"Read",
 			"Edit"
 		],
-		"deny": [
-			"Read(.env)",
-			"Read(.env.*)",
-			"Bash(cat .env:*)",
-			"Bash(rm -rf:*)",
-			"Bash(npm install:*)",
-			"Bash(pnpm add:*)"
-		],
-		"ask": ["Bash(git push:*)", "WebFetch"]
+		"deny": ["Read(.env)", "Read(.env.*)", "Bash(cat .env:*)", "Bash(rm -rf:*)", "Bash(pnpm add:*)"],
+		"ask": ["Bash(git push:*)", "WebFetch", "Bash(npm install:*)"]
 	},
 	"hooks": {
 		"PostToolUse": [

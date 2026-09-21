@@ -1,0 +1,28 @@
+/* Reset, base elements and the printed page box. Everything here is inside
+   @layer base (or is @page), so it stays below every unlayered rule. */
+
+@layer base {
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		margin: 0;
+		min-width: 320px;
+		background: #f2f1eb;
+		color: #17201d;
+		font-family: var(--font-sans);
+	}
+	button,
+	input,
+	textarea {
+		font: inherit;
+	}
+	button {
+		cursor: pointer;
+	}
+}
+
+@page {
+	size: A4;
+	margin: 0;
+}

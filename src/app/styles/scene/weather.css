@@ -1,0 +1,314 @@
+/* Weather: overcast and storm cloud, the seasonal sun, rain, wind and snow. */
+
+/* --- sky --- */
+.overcast {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity 8s ease;
+}
+.overcast-sky {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(#8994a2 0%, #b3bcc6 60%, #d2d7dc 100%);
+	animation: day-opacity 46s linear infinite;
+}
+.scene[data-season="autumn"] .overcast {
+	opacity: 0.5;
+}
+.scene[data-season="winter"] .overcast {
+	opacity: 0.7;
+}
+
+.storm {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transform: translateX(-40vw);
+	transition:
+		opacity 7s ease,
+		transform 14s ease;
+}
+.scene[data-season="autumn"] .storm,
+.scene[data-season="winter"] .storm {
+	opacity: 1;
+	transform: none;
+}
+/* spring: the heavy clouds roll away and only the light ones stay */
+.scene[data-season="spring"] .storm {
+	opacity: 0;
+	transform: translateX(60vw);
+}
+.storm-cloud {
+	position: absolute;
+	border-radius: 999px;
+	background-color: #8a939e;
+	box-shadow: inset 0 -10px 18px rgba(40, 46, 58, 0.25);
+	animation: storm-drift 40s ease-in-out infinite alternate;
+	transition: background-color 8s ease;
+}
+.storm-cloud::before,
+.storm-cloud::after {
+	content: "";
+	position: absolute;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: inherit;
+}
+.storm-cloud::before {
+	left: 12%;
+	bottom: 12%;
+	width: 42%;
+}
+.storm-cloud::after {
+	left: 48%;
+	bottom: 6%;
+	width: 32%;
+}
+.storm-cloud:nth-child(even) {
+	background-color: #9aa3ad;
+	animation-direction: alternate-reverse;
+}
+.scene[data-season="winter"] .storm-cloud {
+	background-color: #767f8b;
+}
+.scene[data-season="winter"] .storm-cloud:nth-child(even) {
+	background-color: #868f9a;
+}
+@keyframes storm-drift {
+	from {
+		transform: translateX(-3vw);
+	}
+	to {
+		transform: translateX(4vw);
+	}
+}
+
+.sun {
+	transition:
+		box-shadow 6s ease,
+		filter 6s ease;
+}
+.scene-front[data-season="autumn"] .sun,
+.scene-front[data-season="winter"] .sun {
+	filter: saturate(0.7) brightness(0.96);
+	box-shadow: 0 0 26px 6px rgba(255, 214, 160, 0.35);
+}
+.scene-front[data-season="spring"] .sun {
+	filter: saturate(1.15) brightness(1.08);
+	box-shadow:
+		0 0 60px 22px rgba(255, 196, 80, 0.7),
+		0 0 140px 60px rgba(255, 226, 130, 0.35);
+}
+
+/* --- rain (autumn): comes in showers --- */
+.rain {
+	position: absolute;
+	inset: 0 -12%;
+	transform: rotate(9deg);
+	opacity: 0;
+	animation: shower 23s ease-in-out 2s infinite both;
+}
+.rain-drop {
+	position: absolute;
+	top: 6vh;
+	left: var(--x);
+	width: 1.5px;
+	height: var(--len);
+	border-radius: 1px;
+	background: linear-gradient(rgba(215, 228, 245, 0), rgba(215, 228, 245, 0.85));
+	animation: rain-fall var(--dur) linear var(--delay) infinite;
+}
+@keyframes rain-fall {
+	0% {
+		opacity: 0;
+		transform: translateY(0);
+	}
+	8% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(96vh);
+	}
+}
+@keyframes shower {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	55% {
+		opacity: 1;
+	}
+	68% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+/* --- wind (autumn leaves, winter blizzard): comes in gusts --- */
+.gust,
+.blizzard {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	animation: gust-window 17s ease-in-out 5s infinite both;
+}
+.blizzard {
+	animation-duration: 19s;
+	animation-delay: 4s;
+}
+@keyframes gust-window {
+	0% {
+		opacity: 0;
+	}
+	25% {
+		opacity: 0;
+	}
+	33% {
+		opacity: 1;
+	}
+	58% {
+		opacity: 1;
+	}
+	68% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+.wind-streak {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: var(--w);
+	height: 1.5px;
+	border-radius: 2px;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+	animation: wind-streak var(--dur) linear var(--delay) infinite;
+}
+@keyframes wind-streak {
+	0% {
+		opacity: 0;
+		transform: translateX(-30vw);
+	}
+	20% {
+		opacity: 1;
+	}
+	80% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(110vw);
+	}
+}
+.gust-leaf {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: 10px;
+	height: 6px;
+	border-radius: 0 100% 0 100%;
+	background: var(--color);
+	animation: leaf-blow var(--dur) linear var(--delay) infinite;
+}
+@keyframes leaf-blow {
+	0% {
+		transform: translate(-6vw, 0) rotate(0deg);
+	}
+	25% {
+		transform: translate(22vw, -5vh) rotate(200deg);
+	}
+	50% {
+		transform: translate(50vw, 2vh) rotate(410deg);
+	}
+	75% {
+		transform: translate(78vw, -4vh) rotate(600deg);
+	}
+	100% {
+		transform: translate(106vw, 1vh) rotate(800deg);
+	}
+}
+
+/* --- snow (winter) --- */
+.snowfall {
+	position: absolute;
+	inset: 0 -20%;
+	transform-origin: 50% 0;
+	animation: blizzard-lean 19s ease-in-out 4s infinite both;
+}
+/* the whole fall leans with the wind while the blizzard blows */
+@keyframes blizzard-lean {
+	0%,
+	25% {
+		transform: skewX(0deg);
+	}
+	35%,
+	58% {
+		transform: skewX(20deg);
+	}
+	70%,
+	100% {
+		transform: skewX(0deg);
+	}
+}
+.snowflake {
+	position: absolute;
+	top: 0;
+	left: var(--x);
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+	animation: snow-fall var(--dur) linear var(--delay) infinite both;
+}
+@keyframes snow-fall {
+	0% {
+		opacity: 0;
+		transform: translate(0, 5vh);
+	}
+	6% {
+		opacity: 0.95;
+	}
+	25% {
+		transform: translate(var(--sway), 28vh);
+	}
+	50% {
+		transform: translate(0, 52vh);
+	}
+	75% {
+		transform: translate(var(--sway), 76vh);
+	}
+	94% {
+		opacity: 0.95;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(0, 100vh);
+	}
+}
+.blizzard-flake {
+	position: absolute;
+	left: 0;
+	top: var(--top);
+	width: var(--size);
+	height: var(--size);
+	border-radius: 50%;
+	background: #fff;
+	animation: blizzard-dash var(--dur) linear var(--delay) infinite;
+}
+@keyframes blizzard-dash {
+	0% {
+		transform: translate(-8vw, 0);
+	}
+	100% {
+		transform: translate(108vw, var(--drop));
+	}
+}

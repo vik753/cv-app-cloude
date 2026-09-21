@@ -83,8 +83,97 @@
 - `npm run build`, `npx eslint` on the changed files and `npm run test` after the field work; all four seasons of the field, the women and the harvest checked in the running app with Playwright screenshots, including the figures enlarged out of the live DOM
 - `npm run build`, `npx eslint src/` and `npm run test` after the growth, ragged edges, headland and mower work; the crop checked at several points of the spring, summer and autumn days, and the scythe stroke sampled across its cycle out of the live DOM
 
-## Next
+## 2026-09-21 — Agent team, quality gate, and the full FSD migration
 
-- Add stronger persistence migration/version handling for existing drafts.
-- Add component and interaction tests for language switching, draft reset, skills, experience, and photo upload.
-- Replace browser print export with a dedicated A4 PDF renderer when PDF layout control is required.
+A team of five agents now lives in `.claude/agents/`, with their shared conventions,
+target architecture and permission levels in `.claude/team/`. Each owns a zone of the
+tree and must ask before leaving it; the reviewer has no write access at all.
+
+**Quality gate.** Prettier, ESLint and Vitest were missing or unenforced, so nothing
+stopped broken code from landing. husky and lint-staged now run Prettier and ESLint on
+staged files, then `tsc` and the full suite. Any error or warning refuses the commit;
+the whole sequence takes about four seconds. ESLint runs type-aware rules, and `any`
+and `@ts-ignore` are errors. A `ci.yml` runs typecheck, lint, test and build on pull
+requests and pushes to `dev` and `main`. Node is pinned to 24 through `.nvmrc`, which
+both workflows read.
+
+**Tests.** 117 across 14 files, from 5. Written before the refactor and deliberately
+against behaviour rather than structure, so they would survive files changing path —
+which is what made the migration verifiable. Coverage is 99% on the entity's model and
+81% on the scene's hooks. The scene itself is covered at contract level only: it is
+driven by rAF against a CSS animation and cannot be asserted stably.
+
+**Five real defects, found by the new tooling rather than by looking:**
+
+1. A legacy draft without an email was discarded whole on migration. `resumeSchema`
+   demanded a valid address while `initialResume` shipped an empty one, so the app's
+   own blank state failed its own schema. Guarded now by a test asserting it parses.
+2. React Hook Form's validation promise was dropped, surfacing rejections with no
+   context.
+3. `String(reader.result)` could have written `"[object ArrayBuffer]"` into a user's
+   saved photo.
+4. The preview's quote could change mid-session: `useMemo` is a cache, not a guarantee.
+5. Four autocomplete suggestions could not resolve their own icon.
+
+**FSD migration, complete.** `src/` has no file outside a layer. `components/`, `hooks/`
+and `services/` are gone, and so is the root barrel.
+
+|                      | before         | after                        |
+| -------------------- | -------------- | ---------------------------- |
+| `SceneCritters.tsx`  | 1487           | 65                           |
+| `SceneFlora.tsx`     | 859            | 110                          |
+| `SceneFieldFolk.tsx` | 733            | 53                           |
+| `SceneChildren.tsx`  | 581            | 84                           |
+| `App.tsx`            | 254            | 39 + a page slice            |
+| `index.css`          | 3449, one file | 18 files under `app/styles/` |
+
+Every wave was proved rather than assumed. Moves by rename detection at 100% similarity;
+splits by multiset comparison — source lines, then numeric literals in the minified
+bundle, then string literals parsed out with the TypeScript compiler. 9087 string
+literals either side of the last wave, zero difference. All 117 tests passed through
+every wave.
+
+The layer rules are now enforced by the linter, generated from a layer order and a slice
+list so the thirteen blocks cannot drift apart. Every rule was proved to fire against a
+real violation before it landed.
+
+**Two undocumented contracts found and written into `CLAUDE.md`:** `.sky-day`, which the
+scene clock reads by selector, and `birch-gnaw`, where the hare writes opacity into an
+element `SceneFlora` renders. Neither is guarded by the compiler, a test or the linter.
+
+## Next — stage 4, performance
+
+Lighthouse is 35 for performance against 95 / 100 / 91 for the rest. Target is 85+
+without losing any of the other three and without the scene looking different.
+
+- Measure a baseline in a clean Chrome profile first. The owner's original run was
+  distorted by extensions.
+- Build a capture harness for the scene at dawn, day, dusk and night **before** touching
+  any CSS. There are no automated visual tests by deliberate decision, so removing an
+  effect can only be checked by eye, and the comparison has to exist beforehand.
+- `React.lazy` around the scene. It is now a widget with a three-export public API, so
+  this is one boundary rather than a tangle of imports.
+- `manualChunks` for vendor, scene and icons, paired between frontend-dev and devops —
+  chunk boundaries follow the import graph, not the config.
+- CSS, in cost order: `backdrop-filter` and `blur` on large always-visible surfaces
+  composited over the moving scene; `box-shadow` on the transform-scaled `.print-paper`;
+  the paint-triggering `fill` transitions on the season eases, which are authored
+  character and need the owner rather than a perf argument.
+- One rAF loop instead of one per component, paused when the tab is hidden.
+- A bundle budget in CI once the numbers settle.
+
+Backlog, unrelated to performance:
+
+- `resumeStore` does two jobs: the draft and the appearance preferences. The standalone
+  palette and mode keys are written by three places and effectively read by none,
+  because `persist` has no `partialize` and `merge` lets the blob win. Fix both halves
+  together or neither.
+- `reader.onerror` is unhandled, so a failed photo read is silent. No size guard either,
+  and a large base64 photo can exceed the `localStorage` quota.
+- The builder page's `h1` copy is inline with a language ternary rather than in the i18n
+  dictionaries.
+- `computeCompletion` is résumé knowledge sitting in `pages/builder/lib`.
+- `src/assets/hero.png` is referenced by nothing.
+- `entities/resume` exports `Palette` but not `Mode`, so the header spells the union out.
+- `main.tsx`, `App.test.tsx`, `setupTests.ts` and `test-utils/` sit outside every layer,
+  so the boundary lint does not cover them.

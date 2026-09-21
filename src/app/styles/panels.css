@@ -1,0 +1,316 @@
+/* The two working surfaces — the form card and the preview paper — plus the
+   palette theming applied to their markup, and the narrow breakpoints. */
+
+.form-card {
+	padding: 26px 28px;
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 10px;
+	background: var(--card);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 8%, transparent),
+		0 14px 36px -14px color-mix(in srgb, var(--text) 22%, transparent);
+}
+.form-hero {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 24px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid var(--divider);
+}
+.form-hero h1 {
+	margin: 0;
+	font-size: 34px;
+	font-weight: 500;
+	line-height: 1.05;
+	letter-spacing: -0.03em;
+}
+.form-hero em {
+	color: var(--accent-text);
+	font-style: normal;
+}
+.completion {
+	min-width: 120px;
+	text-align: right;
+	color: var(--muted);
+	font: 11px var(--font-mono);
+}
+.completion strong {
+	display: block;
+	color: var(--text);
+	font: 500 22px var(--font-display);
+}
+.completion i {
+	display: block;
+	height: 3px;
+	margin-top: 8px;
+	border-radius: 2px;
+	background: var(--divider);
+}
+.completion b {
+	display: block;
+	height: 100%;
+	border-radius: 2px;
+	background: var(--accent);
+}
+.preview-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 14px;
+}
+.preview-kicker {
+	color: var(--accent-text);
+	font: 11px var(--font-mono);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.preview-page {
+	display: block;
+	margin-top: 3px;
+	color: var(--label);
+	font-size: 12px;
+	font-weight: 400;
+}
+.zoom-stepper {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 4px 8px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	color: var(--label);
+	font-size: 12px;
+}
+.zoom-stepper button {
+	display: grid;
+	place-items: center;
+	border: 0;
+	background: transparent;
+	color: inherit;
+}
+.zoom-stepper button:disabled {
+	opacity: 0.45;
+}
+.print-preview {
+	height: 100%;
+	overflow-y: auto;
+	background: var(--panel) !important;
+	color: var(--text);
+}
+.print-paper {
+	min-height: 690px;
+	width: 100%;
+	padding: 26px 28px;
+	border-radius: 6px;
+	background: var(--paper) !important;
+	color: var(--paper-ink) !important;
+	box-shadow: 0 18px 44px color-mix(in srgb, #000 20%, transparent);
+	transform-origin: top center;
+}
+.paper-stage {
+	width: 100%;
+	max-width: 100%;
+	overflow: visible;
+	padding: 8px 40px 24px;
+}
+.resume-bottom-summary {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-column input,
+.form-column textarea,
+.form-column select {
+	border-color: var(--input-border) !important;
+	background: var(--ground) !important;
+	color: var(--text) !important;
+}
+.form-column input:-webkit-autofill,
+.form-column input:-webkit-autofill:hover,
+.form-column input:-webkit-autofill:focus,
+.form-column input:autofill {
+	border-color: var(--input-border) !important;
+	-webkit-text-fill-color: var(--text) !important;
+	box-shadow: 0 0 0 1000px var(--ground) inset !important;
+	caret-color: var(--text);
+}
+.form-column label {
+	color: var(--label);
+}
+.form-column > div > section {
+	border-color: var(--divider);
+}
+.form-column button {
+	color: var(--on-tint);
+}
+.form-column button.chip-remove {
+	color: var(--chip-x);
+}
+.form-column button.chip-remove:hover {
+	color: var(--accent-text);
+}
+.form-column button[class*="bg-[#eaf0e8]"] {
+	border-color: var(--chip-border);
+	background: var(--tint);
+	color: var(--on-tint);
+}
+.form-column h2,
+.form-column [class*="text-[#153b34]"],
+.form-column [class*="text-[#30423b]"],
+.form-column [class*="text-[#2d4b40]"],
+.form-column [class*="text-[#477668]"] {
+	color: var(--text) !important;
+}
+.form-column [class*="text-[#849089]"],
+.form-column [class*="text-[#66716b]"],
+.form-column [class*="text-[#98a19a]"] {
+	color: var(--muted) !important;
+}
+.form-column [class*="border-[#ccd8ce]"],
+.form-column [class*="border-[#d5d8d0]"],
+.form-column [class*="border-[#d0d4cb]"] {
+	border-color: var(--input-border) !important;
+}
+.form-column [class*="bg-[#eaf0e8]"],
+.form-column [class*="bg-[#e8eee7]"] {
+	background: var(--tint) !important;
+}
+.form-column [class*="bg-white/20"] {
+	background: var(--card) !important;
+}
+.form-column [class*="bg-[#fbfaf5]"] {
+	background: var(--card) !important;
+}
+.form-column [class*="text-[#bb684d]"] {
+	color: var(--accent-text) !important;
+}
+.print-paper .text-\[\#153b34\],
+.print-paper .text-\[\#263832\],
+.print-paper .text-\[\#2c4139\] {
+	color: var(--paper-ink) !important;
+}
+.print-paper .text-\[\#66736b\],
+.print-paper .text-\[\#758079\],
+.print-paper .text-\[\#738078\] {
+	color: var(--paper-muted) !important;
+}
+.print-paper .border-\[\#deded5\],
+.print-paper .border-\[\#e2e2da\] {
+	border-color: var(--paper-border) !important;
+}
+.print-paper .bg-\[\#f8f7f1\] {
+	background: color-mix(in srgb, var(--paper) 92%, var(--paper-border)) !important;
+}
+.print-paper .bg-\[\#e8eee7\] {
+	background: var(--paper-chip) !important;
+	color: var(--paper-chip-ink) !important;
+}
+.print-paper .border-t-\[\#d36f48\],
+.print-paper .border-\[\#d36f48\] {
+	border-color: var(--accent) !important;
+}
+
+/* Slate palette: no background fills anywhere in the resume, on screen or printed — outline only. */
+.app-shell[data-palette="slate"] .resume-summary-block {
+	background: transparent !important;
+}
+.app-shell[data-palette="slate"] .resume-skill-chip {
+	border: 1px solid var(--paper-border);
+}
+.app-shell[data-palette="slate"] .resume-lang-chip {
+	border: 1px solid var(--lang-chip-border);
+}
+.app-shell[data-palette="slate"] .resume-avatar {
+	background: transparent !important;
+	border: 1px solid var(--paper-border);
+}
+.app-shell[data-palette="slate"] .resume-avatar span {
+	color: var(--accent-text) !important;
+}
+
+@media (max-width: 900px) {
+	.app-shell {
+		height: auto;
+		margin: 0;
+		min-height: 100vh;
+		border-radius: 0;
+	}
+	.app-header {
+		grid-template-columns: 1fr auto;
+		gap: 12px;
+	}
+	.header-center {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		justify-self: start;
+	}
+	.header-actions {
+		grid-column: 2;
+		grid-row: 1;
+		gap: 8px;
+	}
+	.autosave {
+		display: none;
+	}
+	.app-body {
+		grid-template-columns: 1fr;
+		grid-template-rows: none;
+		align-items: start;
+		flex: none;
+		overflow: visible;
+	}
+	.app-body.preview-hidden {
+		grid-template-columns: minmax(0, 1fr) 0px;
+	}
+	.app-body.preview-hidden .form-column {
+		max-width: 1100px;
+	}
+	.form-column {
+		height: auto;
+		max-height: none;
+		overflow: visible;
+	}
+	.print-preview {
+		height: auto;
+		overflow: visible;
+		border-top: 1px solid var(--divider);
+	}
+}
+@media (max-width: 560px) {
+	.app-header {
+		padding: 12px 16px;
+	}
+	.header-actions {
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+	.palette-trigger {
+		display: none;
+	}
+	.form-card {
+		padding: 22px 16px;
+	}
+	.form-hero {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+	.completion {
+		align-self: stretch;
+		text-align: left;
+	}
+	.completion i {
+		width: 100%;
+	}
+	.form-hero h1 {
+		font-size: 30px;
+	}
+	.print-preview {
+		padding: 20px 16px !important;
+	}
+	.print-paper {
+		padding: 22px 18px;
+	}
+	.resume-bottom-summary {
+		grid-template-columns: 1fr;
+	}
+}

@@ -1,0 +1,297 @@
+/* The homestead: pipe smoke, the lit fir, the chimney and the candle in the
+   window with its several layers of unsteady light. */
+
+/* pipe smoke: small, slow, and gone in a few puffs */
+.pipe-puff {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: pipe-puff 4.5s linear var(--puff-delay, 0s) infinite;
+}
+@keyframes pipe-puff {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.5);
+	}
+	12% {
+		opacity: 0.55;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(3px, -14px) scale(2.4);
+	}
+}
+
+/* the fir by the хата, dressed for winter: lights that glow day and night, and a
+   folk star at the top */
+.pine-lights,
+.pine-star {
+	opacity: 0;
+	transition: opacity 6s ease;
+}
+.scene[data-season="winter"] .pine-lights,
+.scene[data-season="winter"] .pine-star {
+	opacity: 1;
+}
+.pine-light {
+	animation: bulb-twinkle 2.4s ease-in-out var(--bulb-delay, 0s) infinite alternate;
+}
+@keyframes bulb-twinkle {
+	from {
+		opacity: 0.45;
+	}
+	to {
+		opacity: 1;
+	}
+}
+.star-glow {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: star-pulse 3.2s ease-in-out infinite alternate;
+}
+@keyframes star-pulse {
+	from {
+		opacity: 0.26;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 0.6;
+		transform: scale(1.14);
+	}
+}
+
+/* --- the homestead --- */
+/* The stove is lit once the cold comes. The smoke is a sky layer above the
+   landscape, not part of it: inside the map there is barely any air above the
+   roofs on a short window, and a rising column ran straight into the crop. */
+.chimney-smoke {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 6s ease;
+}
+.scene[data-season="autumn"] .chimney-smoke,
+.scene[data-season="winter"] .chimney-smoke {
+	opacity: 1;
+}
+.smoke-column {
+	position: absolute;
+}
+.smoke-puff {
+	position: absolute;
+	width: var(--puff-size, 8px);
+	height: var(--puff-size, 8px);
+	border-radius: 50%;
+	background: #e8ecf2;
+	animation: smoke-rise 13s linear var(--puff-delay, 0s) infinite;
+}
+/* climbs, spreads, and is gone before the top of the sky */
+@keyframes smoke-rise {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.4);
+	}
+	10% {
+		opacity: 0.5;
+	}
+	45% {
+		opacity: 0.34;
+	}
+	72% {
+		opacity: 0.12;
+	}
+	85% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(calc(var(--puff-rise, 150px) * -0.17), calc(var(--puff-rise, 150px) * -1)) scale(3.2);
+	}
+}
+
+/* a candle in the window, but only after dark */
+.window-night {
+	opacity: 0;
+	animation: night-opacity 46s linear infinite;
+}
+/* A candle never burns steady. The flame dances fastest, the light in the window
+   swells more slowly, and the glow around it breathes slower still — three loops of
+   lengths that don't divide into each other, so the flicker never repeats visibly. */
+.candle-glow {
+	animation: candle-burn 3.7s linear infinite;
+}
+.candle-halo,
+.candle-spill {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: candle-breathe 2.6s ease-in-out infinite;
+}
+.candle-spill {
+	transform-origin: 50% 0;
+	animation-duration: 3.1s;
+}
+/* The pool of light on the grass: it lightens what it falls on. One candle throws
+   both this and the light in the window, so it takes its brightness from the very
+   same loop; only its shape wavers on a rhythm of its own. */
+.candle-pool {
+	mix-blend-mode: screen;
+	transform-box: fill-box;
+	transform-origin: 50% 0;
+	animation:
+		candle-burn-deep 3.7s linear infinite,
+		candle-pool-waver 2.9s ease-in-out infinite;
+}
+@keyframes candle-pool-waver {
+	0% {
+		transform: scale(1, 1);
+	}
+	16% {
+		transform: scale(1.05, 1.11) translateX(0.4px);
+	}
+	33% {
+		transform: scale(0.96, 0.92) translateX(-0.3px);
+	}
+	49% {
+		transform: scale(1.03, 1.06) translateX(0.2px);
+	}
+	64% {
+		transform: scale(0.98, 0.95) translateX(-0.4px);
+	}
+	81% {
+		transform: scale(1.04, 1.08) translateX(0.3px);
+	}
+	100% {
+		transform: scale(1, 1);
+	}
+}
+.candle-flame {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: candle-dance 0.9s ease-in-out infinite;
+}
+/* the flame's own uneven burn: what the window, the halo, the spill down the wall
+   and the pool on the grass all take their brightness from */
+@keyframes candle-burn {
+	0% {
+		opacity: 0.85;
+	}
+	9% {
+		opacity: 1;
+	}
+	18% {
+		opacity: 0.5;
+	}
+	27% {
+		opacity: 0.95;
+	}
+	35% {
+		opacity: 0.42;
+	}
+	44% {
+		opacity: 0.9;
+	}
+	57% {
+		opacity: 0.6;
+	}
+	66% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0.48;
+	}
+	87% {
+		opacity: 0.92;
+	}
+	100% {
+		opacity: 0.85;
+	}
+}
+
+/* The pool thrown out onto the grass is the faintest thing the candle does, so it
+   takes the guttering hardest: it all but dies away and flares back. */
+@keyframes candle-burn-deep {
+	0% {
+		opacity: 0.8;
+	}
+	9% {
+		opacity: 1;
+	}
+	18% {
+		opacity: 0.16;
+	}
+	27% {
+		opacity: 0.92;
+	}
+	35% {
+		opacity: 0.1;
+	}
+	44% {
+		opacity: 0.85;
+	}
+	52% {
+		opacity: 0.3;
+	}
+	66% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 0.14;
+	}
+	87% {
+		opacity: 0.9;
+	}
+	100% {
+		opacity: 0.8;
+	}
+}
+@keyframes candle-breathe {
+	0% {
+		opacity: 0.85;
+		transform: scale(1);
+	}
+	13% {
+		opacity: 1;
+		transform: scale(1.08);
+	}
+	29% {
+		opacity: 0.7;
+		transform: scale(0.95);
+	}
+	46% {
+		opacity: 0.95;
+		transform: scale(1.04);
+	}
+	61% {
+		opacity: 0.78;
+		transform: scale(0.98);
+	}
+	78% {
+		opacity: 1;
+		transform: scale(1.07);
+	}
+	90% {
+		opacity: 0.74;
+		transform: scale(0.96);
+	}
+	100% {
+		opacity: 0.85;
+		transform: scale(1);
+	}
+}
+@keyframes candle-dance {
+	0% {
+		transform: translateX(0) scaleY(1);
+	}
+	22% {
+		transform: translateX(0.18px) scaleY(1.14);
+	}
+	48% {
+		transform: translateX(-0.14px) scaleY(0.88);
+	}
+	71% {
+		transform: translateX(0.1px) scaleY(1.07);
+	}
+	100% {
+		transform: translateX(0) scaleY(0.96);
+	}
+}

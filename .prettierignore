@@ -1,0 +1,8 @@
+dist
+node_modules
+package-lock.json
+
+# npm rewrites this with its own 2-space formatting whenever it touches the file
+# (npm install <pkg>, npm version, ...); letting Prettier own it too means the two
+# would fight forever, reformatting it back and forth on every commit that touches it.
+package.json

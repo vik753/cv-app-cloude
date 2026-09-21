@@ -1,0 +1,38 @@
+/* The resume document blocks shared by the on-screen preview and the print. */
+
+.resume-summary {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px;
+}
+
+.resume-summary-skills {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0;
+}
+
+.resume-experience-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	column-gap: 28px;
+	row-gap: 0;
+}
+
+.resume-section-heading {
+	grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+	.resume-summary {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.resume-summary-skills {
+		grid-column: 1 / -1;
+	}
+
+	.resume-experience-grid {
+		grid-template-columns: 1fr;
+	}
+}

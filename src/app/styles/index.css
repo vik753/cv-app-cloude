@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import "tailwindcss";
+
+/* The order below IS the cascade order: it reproduces the original top-to-bottom
+   order of index.css, so equal-specificity rules keep winning exactly as before.
+   Reordering these lines silently reorders the design — no test guards it.
+
+   Two blocks do not sit where they were written, and both are provably
+   position-independent:
+   - base.css was written mid-file. Its contents are @layer base (cascade layers
+     always lose to unlayered rules, wherever they appear) and the only @page rule
+     in the project, so hoisting it changes nothing.
+   - print.css collects the four @media print blocks that were scattered through
+     the file. Every declaration they contain is either !important with no
+     competing !important elsewhere, or targets a selector nothing after it
+     touches, so pulling them to the end changes no winner.
+
+   Do not sort this list, and do not move an @import to group it with a file it
+   reads well beside. As it stands no two files set the same property on the same
+   element, so today a swap would happen to be survivable — but that is a fact
+   about the current rules, not a guarantee. The next declaration anyone adds can
+   make any pair of these files order-dependent, and nothing in the project would
+   report it: no test reads a computed style, and tsc and eslint do not see CSS.
+   The order below is the one the design was authored in. Leave it. */
+
+@import "./tokens.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./panels.css";
+@import "./ui.css";
+@import "./resume.css";
+
+@import "./scene/stage.css";
+@import "./scene/sky.css";
+@import "./scene/air.css";
+@import "./scene/landscape.css";
+@import "./scene/flora.css";
+@import "./scene/critters.css";
+@import "./scene/river.css";
+@import "./scene/homestead.css";
+@import "./scene/weather.css";
+@import "./scene/reduced-motion.css";
+
+@import "./print.css";

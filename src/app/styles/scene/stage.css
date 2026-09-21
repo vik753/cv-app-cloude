@@ -1,0 +1,30 @@
+/* The two fixed stacking contexts the scene draws into, and the horizon
+   geometry every actor positions against. */
+
+/* ============ Day/night background scene ============ */
+.scene,
+.scene-front {
+	position: fixed;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+	/* Where the hill silhouette sits. At x=0 and x=100% the back hill is at viewBox
+	   y=560, i.e. 340/900 of the sliced SVG above its bottom edge; the slice scale
+	   is max(100vw/1600, 58vh/900), capped by the landscape's own 58vh height.
+	   The sun and moon now ride the front layer, which the landscape no longer
+	   paints over, so the arc bottoms out just above the ridge: they skim the
+	   hilltops at rise and set instead of drifting down across the form. */
+	--horizon: min(max(21.25vw, 21.92vh), 58vh);
+	--arc-low: calc(var(--horizon) + 8px);
+	--arc-peak: calc(100vh - 140px);
+	--arc-rise: calc(var(--arc-peak) - var(--arc-low));
+}
+
+.scene {
+	z-index: 0;
+}
+/* Above the app shell (z-index 1) so the sky actors stay visible over the form.
+   Portalled menus and tooltips sit at z-index 50 and still win over this. */
+.scene-front {
+	z-index: 2;
+}

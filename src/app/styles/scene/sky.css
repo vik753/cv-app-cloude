@@ -1,0 +1,264 @@
+/* Sky layers, the day/twilight/night crossfade, stars, and the sun and moon
+   arcs. The .sky-day animation is the clock useSceneClock reads. */
+
+.sky-layer {
+	position: absolute;
+	inset: 0;
+}
+.sky-day {
+	background: linear-gradient(#8fd0f2 0%, #cdeeff 65%, #eaf9ec 100%);
+	animation: day-opacity 46s linear infinite;
+}
+.sky-twilight {
+	background: linear-gradient(#5b6bab 0%, #e08a5b 55%, #ffd39a 100%);
+	animation: twilight-opacity 46s linear infinite;
+}
+.sky-night {
+	background: linear-gradient(#0b1030 0%, #1c2350 60%, #2c2f5c 100%);
+	animation: night-opacity 46s linear infinite;
+}
+
+@keyframes day-opacity {
+	0% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+	40% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+@keyframes twilight-opacity {
+	0% {
+		opacity: 1;
+	}
+	10% {
+		opacity: 0;
+	}
+	40% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 0;
+	}
+	90% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes night-opacity {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	60% {
+		opacity: 1;
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+.star {
+	position: absolute;
+	width: 3px;
+	height: 3px;
+	border-radius: 50%;
+	background: #fff;
+	animation: twinkle 2.4s ease-in-out infinite;
+}
+@keyframes twinkle {
+	0%,
+	100% {
+		opacity: 0.25;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+.sun,
+.moon {
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+}
+.sun {
+	background: radial-gradient(circle at 35% 35%, #fff6d8, #ffd15c 55%, #ff9d3c 100%);
+	box-shadow: 0 0 46px 14px rgba(255, 180, 70, 0.55);
+	animation: sun-move 46s linear infinite;
+}
+.moon {
+	background: radial-gradient(circle at 38% 35%, #fbfcff, #d9e0ef 60%, #aab3cc 100%);
+	box-shadow: 0 0 30px 8px rgba(200, 210, 255, 0.35);
+	animation: moon-move 46s linear infinite;
+}
+.moon::before,
+.moon::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(150, 160, 190, 0.4);
+}
+.moon::before {
+	width: 14px;
+	height: 14px;
+	top: 14px;
+	left: 10px;
+}
+.moon::after {
+	width: 9px;
+	height: 9px;
+	top: 34px;
+	left: 30px;
+}
+
+/* The arc runs from just off the left screen edge to just off the right one, so
+   the disc slides into frame exactly at the edge instead of popping in. Height
+   follows low + sin(t*pi) * (peak - low); the low point sits at the hill
+   silhouette so the sun/moon clears the landscape right at the screen edge. */
+@keyframes sun-move {
+	0% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 1;
+	}
+	5% {
+		left: 6.8%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	10% {
+		left: 17.6%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	15% {
+		left: 28.4%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	20% {
+		left: 39.2%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	25% {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+	}
+	30% {
+		left: 60.8%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	35% {
+		left: 71.6%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	40% {
+		left: 82.4%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	45% {
+		left: 93.2%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		left: 104%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+}
+@keyframes moon-move {
+	0%,
+	49.9% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+	50% {
+		left: -4%;
+		bottom: var(--arc-low);
+		opacity: 1;
+	}
+	55% {
+		left: 6.8%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	60% {
+		left: 17.6%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	65% {
+		left: 28.4%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	70% {
+		left: 39.2%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	75% {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+	}
+	80% {
+		left: 60.8%;
+		bottom: calc(var(--arc-low) + 0.951 * var(--arc-rise));
+		opacity: 1;
+	}
+	85% {
+		left: 71.6%;
+		bottom: calc(var(--arc-low) + 0.809 * var(--arc-rise));
+		opacity: 1;
+	}
+	90% {
+		left: 82.4%;
+		bottom: calc(var(--arc-low) + 0.588 * var(--arc-rise));
+		opacity: 1;
+	}
+	95% {
+		left: 93.2%;
+		bottom: calc(var(--arc-low) + 0.309 * var(--arc-rise));
+		opacity: 1;
+	}
+	99% {
+		opacity: 1;
+	}
+	100% {
+		left: 104%;
+		bottom: var(--arc-low);
+		opacity: 0;
+	}
+}
