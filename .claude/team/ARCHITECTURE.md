@@ -101,8 +101,13 @@ The general test: a component is not `shared` because it is small or reused. It 
 - A `.tsx` component: up to 200 lines. More than that means another component is
   hiding inside it.
 - A model or utility file: up to 300 lines.
-- SVG geometry (long `d=` strings, sets of `path`s) does not live in a file with logic.
-  It moves to `assets/svg/` as data or as small primitive components.
+- SVG geometry follows cohesion, not line count. A file holding **one figure** keeps its
+  own geometry: a wolf's `path` data belongs beside the wolf's choreography, because
+  understanding the wolf means reading both. Geometry moves to `assets/svg/` only when it
+  is shared between figures, or when one file carries the geometry of several unrelated
+  ones — which is the actual defect in a 1477-line file holding eight animals. Splitting
+  it by figure fixes that; splitting each figure again into shape-plus-motion would mean
+  opening two files to understand one creature.
 - Types of a large slice go in `types.ts`, not interleaved with the implementation.
 
 These are guides, not dogma. But a 1347-line file (`SceneCritters.tsx`) is not "how it
