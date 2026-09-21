@@ -42,16 +42,16 @@ Node 22, npm (the lockfile is `package-lock.json`). CI uses the same.
 
 What is actually installed and used:
 
-| Area         | Choice                                                                        |
-| ------------ | ----------------------------------------------------------------------------- |
-| Framework    | React 19 + Vite 8                                                             |
-| Styling      | Tailwind CSS 4 via `@tailwindcss/vite`, plus a large hand-written `index.css` |
-| Global state | Zustand 5                                                                     |
-| Forms        | React Hook Form 7 + `@hookform/resolvers`                                     |
-| Validation   | Zod 4                                                                         |
-| Primitives   | Radix (`react-tooltip`, `react-dropdown-menu`) — wrapped by hand              |
-| Icons        | `@phosphor-icons/react`                                                       |
-| Tests        | Vitest 4                                                                      |
+| Area         | Choice                                                                         |
+| ------------ | ------------------------------------------------------------------------------ |
+| Framework    | React 19 + Vite 8                                                              |
+| Styling      | Tailwind CSS 4 via `@tailwindcss/vite`, plus hand-written CSS in `app/styles/` |
+| Global state | Zustand 5                                                                      |
+| Forms        | React Hook Form 7 + `@hookform/resolvers`                                      |
+| Validation   | Zod 4                                                                          |
+| Primitives   | Radix (`react-tooltip`, `react-dropdown-menu`) — wrapped by hand               |
+| Icons        | `@phosphor-icons/react`                                                        |
+| Tests        | Vitest 4                                                                       |
 
 ### Deliberately NOT in this project
 
@@ -60,7 +60,7 @@ Do not reach for these, and do not write code that assumes them:
 - **No TanStack Query, no server state.** There is nothing to fetch. Persistence is
   `localStorage`.
 - **No shadcn/ui.** There is no `components.json`, no `cn()`, no `clsx`, no CVA.
-  `@/components/ui` holds small hand-written wrappers over Radix primitives, styled
+  `@/shared/ui` holds small hand-written wrappers over Radix primitives, styled
   with plain classes. Add new ones the same way.
 - **No router.** One page.
 - **No `useOptimistic` / `useActionState`.** Nothing here is async enough to need them.
@@ -73,7 +73,9 @@ and `skillicons.dev` (skill icons). Both are optional to the app working.
 
 ### Current
 
-Flat: `src/components/`, `src/hooks/`, `src/services/`, with a root `src/index.ts` barrel.
+Mid-migration. `src/shared/` (ui, lib, i18n) and `src/app/styles/` exist; the rest is
+still flat under `src/components/`, `src/hooks/` and `src/services/`, with a root
+`src/index.ts` barrel that will be retired in the last wave.
 
 ### Target — Feature-Sliced Design
 
@@ -125,10 +127,12 @@ before the shape changed. Alongside them: `resume-canvas-palette`, `resume-canva
 away someone's saved work. Changing the draft shape means bumping the version suffix and
 migrating the old key, not editing it in place.
 
-Note that `readLegacyDraft` validates the merged draft with `resumeSchema`, which
-requires a valid email — while `initialResume` ships an empty one. The initial state
-therefore fails its own schema, and a v1 draft without an email is discarded whole.
-Pinned by a test that names it as a bug.
+`readLegacyDraft` validates the merged draft with `resumeSchema`, so that schema has
+to accept whatever a half-written draft looks like. It once demanded a valid email while
+`initialResume` shipped an empty one, which meant the initial state failed its own schema
+and any v1 draft without an email was discarded whole. Fixed, and guarded by a test
+asserting `resumeSchema.safeParse(initialResume)` succeeds. Tighten a field here and you
+must check it against `initialResume`, or you reintroduce the same class of data loss.
 
 **Printing is the export.** Anything under `@media print` is load-bearing product
 behaviour. Verify printing after touching layout.
@@ -150,9 +154,10 @@ Known problem, being worked on. Lighthouse: Performance **35**, Accessibility 95
 Best Practices 100, SEO 91. Target is Performance ≥ 85 **without** losing any of the
 other three and without changing how the scene looks.
 
-Main causes: the whole scene ships in the initial bundle (628 KB JS), `index.css` is
-3449 lines with 52 `@keyframes`, and there are 11 `backdrop-filter` and 12 `filter`
-declarations animating.
+Main causes: the whole scene ships in the initial bundle (643 KB JS), the stylesheet
+carries 52 `@keyframes` across `app/styles/`, and there are 10 `backdrop-filter` and 2
+`filter` declarations animating — several of them on large, always-visible surfaces
+composited over the moving scene, which is the expensive case.
 
 When measuring, use a clean Chrome profile — extensions distort the result badly.
 
