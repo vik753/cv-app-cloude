@@ -1,4 +1,4 @@
-import { getSkillIconId, getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
+import { getSkillIconId, getSkillIconUrl, skillIconSuggestions } from "@/entities/resume/lib/skillIcons";
 import { describe, expect, it } from "vitest";
 
 describe("skill icons", () => {

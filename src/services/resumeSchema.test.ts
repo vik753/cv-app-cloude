@@ -1,5 +1,5 @@
-import { initialResume } from "@/services/initialResume";
-import { experienceSchema, languageLevels, languageSchema, resumeSchema } from "@/services/resumeSchema";
+import { initialResume } from "@/entities/resume/model/initialResume";
+import { experienceSchema, languageLevels, languageSchema, resumeSchema } from "@/entities/resume/model/resumeSchema";
 import { describe, expect, it } from "vitest";
 
 const validResume = {

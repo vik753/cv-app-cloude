@@ -1,5 +1,10 @@
-import { initialResume } from "@/services/initialResume";
-import { resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
+import { initialResume } from "@/entities/resume/model/initialResume";
+import {
+	resumeSchema,
+	type ExperienceField,
+	type Resume,
+	type ResumeField,
+} from "@/entities/resume/model/resumeSchema";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

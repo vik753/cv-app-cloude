@@ -1,8 +1,8 @@
-import { SkillIcon } from "@/components/SkillIcon";
+import { SkillIcon } from "@/entities/resume";
 import { Tooltip } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
 import { quotes } from "@/shared/config";
-import type { Resume } from "@/services/resumeSchema";
+import type { Resume } from "@/entities/resume";
 import { Minus, Plus } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 

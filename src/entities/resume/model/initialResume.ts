@@ -1,4 +1,4 @@
-import type { Resume } from "@/services/resumeSchema";
+import type { Resume } from "@/entities/resume/model/resumeSchema";
 
 export const createEmptyExperience = (): Resume["experience"][number] => ({
 	id: Date.now(),

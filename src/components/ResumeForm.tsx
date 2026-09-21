@@ -1,16 +1,17 @@
-import { SkillIcon } from "@/components/SkillIcon";
 import { Tooltip } from "@/shared/ui";
 import type { Translation } from "@/shared/i18n";
-import { createEmptyExperience } from "@/services/initialResume";
-import { languageSuggestions } from "@/services/languageSuggestions";
 import {
+	createEmptyExperience,
+	getSkillIconUrl,
 	languageLevels,
+	languageSuggestions,
 	resumeSchema,
+	SkillIcon,
+	skillIconSuggestions,
 	type ExperienceField,
 	type Resume,
 	type ResumeField,
-} from "@/services/resumeSchema";
-import { getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
+} from "@/entities/resume";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Plus, Trash, X } from "@phosphor-icons/react";
 import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";

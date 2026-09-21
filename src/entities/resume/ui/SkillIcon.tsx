@@ -1,4 +1,4 @@
-import { getSkillIconUrl } from "@/services/skillIcons";
+import { getSkillIconUrl } from "@/entities/resume/lib/skillIcons";
 
 interface SkillIconProps {
 	skill: string;
