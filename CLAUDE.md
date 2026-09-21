@@ -117,10 +117,18 @@ and `DayNightScene`, and the CSS keyframes are authored against it. All copies m
 and their neighbours were picked to make the picture look right. They are not arbitrary
 and do not get "cleaned up".
 
-**`localStorage` keys are a contract with real users.** `resume-canvas-draft-v1`,
-`resume-canvas-palette`, `resume-canvas-mode`, `resume-canvas-scene`, plus the language
-key. Renaming one silently throws away someone's saved draft. Changing the draft shape
-means bumping the `-v1` suffix and handling the old one.
+**`localStorage` keys are a contract with real users.** The live draft key is
+`resume-canvas-draft-v2`, written by the Zustand `persist` middleware.
+`resume-canvas-draft-v1` is read once, by `readLegacyDraft`, to migrate drafts written
+before the shape changed. Alongside them: `resume-canvas-palette`, `resume-canvas-mode`,
+`resume-canvas-scene` and `resume-canvas-language`. Renaming any of them silently throws
+away someone's saved work. Changing the draft shape means bumping the version suffix and
+migrating the old key, not editing it in place.
+
+Note that `readLegacyDraft` validates the merged draft with `resumeSchema`, which
+requires a valid email — while `initialResume` ships an empty one. The initial state
+therefore fails its own schema, and a v1 draft without an email is discarded whole.
+Pinned by a test that names it as a bug.
 
 **Printing is the export.** Anything under `@media print` is load-bearing product
 behaviour. Verify printing after touching layout.
