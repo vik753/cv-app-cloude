@@ -107,6 +107,13 @@ reorder the animations declared on it, or change its duration, and the entire sc
 freezes — with no TypeScript error and no failing test. Nothing else in the codebase
 guards this. Touch it only deliberately.
 
+**The `birch-gnaw` contract.** The same trap as `.sky-day`, between two components.
+`Hare.tsx` gnaws the birch bark by writing opacity straight into
+`document.getElementById("birch-gnaw")` — an `<ellipse>` that `SceneFlora` renders, with
+`opacity={0}` as its starting state. Neither the id nor that initial zero is guarded by
+anything. Drop either while editing the birch and the bark damage simply stops appearing,
+with no error anywhere.
+
 **The scene writes to the DOM on purpose.** `requestAnimationFrame` sets `transform`
 and `opacity` attributes directly; React renders each figure once. This is a considered
 performance decision, not legacy. Do not "fix" it into React state — you will lose both
