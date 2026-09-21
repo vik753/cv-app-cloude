@@ -28,11 +28,7 @@ export function SceneSmoke() {
 			{CHIMNEYS.map((chimney) => {
 				const spot = scene.at(chimney.x, chimney.y);
 				return (
-					<div
-						key={chimney.x}
-						className='smoke-column'
-						style={{ left: `${spot.left}px`, top: `${spot.top}px` }}
-					>
+					<div key={chimney.x} className='smoke-column' style={{ left: `${spot.left}px`, top: `${spot.top}px` }}>
 						{PUFFS.map((delay) => (
 							<i
 								key={delay}

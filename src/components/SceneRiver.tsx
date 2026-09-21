@@ -29,7 +29,10 @@ const UNDER_ICE = [
 function Fish({ tone = "#6f8fa6" }: { tone?: string }) {
 	return (
 		<>
-			<path d='M-9,0 C-6,-4.4 2,-5.2 7,-2.6 C9,-1.6 10,-0.6 10.6,0 C10,0.6 9,1.6 7,2.6 C2,5.2 -6,4.4 -9,0 Z' fill={tone} />
+			<path
+				d='M-9,0 C-6,-4.4 2,-5.2 7,-2.6 C9,-1.6 10,-0.6 10.6,0 C10,0.6 9,1.6 7,2.6 C2,5.2 -6,4.4 -9,0 Z'
+				fill={tone}
+			/>
 			<path d='M-9,0 L-15,-4 C-14,-1.4 -14,1.4 -15,4 Z' fill={tone} />
 			<path d='M-1,-4.4 L1,-7.4 L4,-3.6 Z' fill={tone} opacity={0.85} />
 			<circle cx={7} cy={-0.9} r={0.8} fill='#1e2c36' />
@@ -86,7 +89,10 @@ export function RiverLife({ season }: { season: Season }) {
 					{LEAPS.map((fish) => {
 						const timing = { "--leap-delay": `-${fish.delay}s` } as CSSProperties;
 						return (
-							<g key={fish.x} transform={`translate(${fish.x} ${fish.y}) scale(${fish.flip * fish.scale} ${fish.scale})`}>
+							<g
+								key={fish.x}
+								transform={`translate(${fish.x} ${fish.y}) scale(${fish.flip * fish.scale} ${fish.scale})`}
+							>
 								{/* the water it breaks on the way out, and where it drops back in */}
 								<ellipse className='splash-out' rx={8} ry={2.4} style={timing} />
 								<g className='fish-leap' style={timing}>

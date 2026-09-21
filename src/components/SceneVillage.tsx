@@ -1,6 +1,5 @@
 import { FENCE, HOMESTEAD } from "@/services/landscape";
 
-
 /* Two small whitewashed хати at the right edge of the upper meadow, in the everyday
    village style: thick thatch with a dark combed eave, a small dark window with a
    light frame, curtains and a candle behind it at night, painted flowers on the
@@ -115,7 +114,10 @@ function WattleFence({ from, to }: { from: number; to: number }) {
 	const weave = (y: number, phase: number) =>
 		stakes
 			.slice(0, -1)
-			.map((x, index) => `M${x},${y + (index % 2 === phase ? -1.1 : 1.1)} Q${x + 5.5},${y + (index % 2 === phase ? 1.6 : -1.6)} ${x + 11},${y + (index % 2 === phase ? -1.1 : 1.1)}`)
+			.map(
+				(x, index) =>
+					`M${x},${y + (index % 2 === phase ? -1.1 : 1.1)} Q${x + 5.5},${y + (index % 2 === phase ? 1.6 : -1.6)} ${x + 11},${y + (index % 2 === phase ? -1.1 : 1.1)}`,
+			)
 			.join(" ");
 
 	return (

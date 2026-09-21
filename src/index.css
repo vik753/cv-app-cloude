@@ -1919,13 +1919,17 @@ textarea:focus-visible {
 	top: 12%;
 	animation-name: day-opacity, fly-2;
 	animation-duration: 46s, 21s;
-	animation-delay: 0s, -8s;
+	animation-delay:
+		0s,
+		-8s;
 }
 .bird-3 {
 	top: 27%;
 	animation-name: day-opacity, fly-3;
 	animation-duration: 46s, 15s;
-	animation-delay: 0s, -4s;
+	animation-delay:
+		0s,
+		-4s;
 }
 
 @keyframes fly-1 {

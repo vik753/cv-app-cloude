@@ -62,7 +62,8 @@ export const onRoute = <M extends string>(route: Waypoint<M>[], f: number) => {
 	const before = route[Math.max(0, i - 1)];
 	const after = route[Math.min(route.length - 1, i + 2)];
 	const p = (f - from.f) / (to.f - from.f);
-	if (from.x === to.x && from.d === to.d) return { x: from.x, d: from.d, dx: 0, p, mode: from.mode, facing: from.facing };
+	if (from.x === to.x && from.d === to.d)
+		return { x: from.x, d: from.d, dx: 0, p, mode: from.mode, facing: from.facing };
 	const x = catmull(before.x, from.x, to.x, after.x, p);
 	return {
 		x,

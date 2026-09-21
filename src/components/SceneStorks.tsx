@@ -62,8 +62,17 @@ function FlyingStork({ wing }: { wing: React.RefObject<SVGGElement | null> }) {
 		<>
 			<path d='M-9,1 L-19,3.2 M-9,1.6 L-19,3.8' stroke='#d8553a' strokeWidth={0.9} strokeLinecap='round' fill='none' />
 			<path d='M-10,0 L-16.4,-1.8 L-15.2,2 Z' fill='#e9e9e4' />
-			<path d='M-10,0 C-6,-3.2 2,-3.6 7,-2.2 L13.6,-1.2 C14.8,-0.7 14.8,0.7 13.6,1.2 L7,2.2 C2,3.2 -6,2.8 -10,0 Z' fill='#f7f7f4' />
-			<path d='M12,-0.9 C16,-2 20,-2.4 22.6,-2.6' stroke='#f7f7f4' strokeWidth={1.7} fill='none' strokeLinecap='round' />
+			<path
+				d='M-10,0 C-6,-3.2 2,-3.6 7,-2.2 L13.6,-1.2 C14.8,-0.7 14.8,0.7 13.6,1.2 L7,2.2 C2,3.2 -6,2.8 -10,0 Z'
+				fill='#f7f7f4'
+			/>
+			<path
+				d='M12,-0.9 C16,-2 20,-2.4 22.6,-2.6'
+				stroke='#f7f7f4'
+				strokeWidth={1.7}
+				fill='none'
+				strokeLinecap='round'
+			/>
 			<circle cx={23.2} cy={-2.8} r={1.5} fill='#f7f7f4' />
 			<path d='M24.4,-3.2 L31.6,-2.2 L24.4,-1.4 Z' fill='#d8553a' />
 			<circle cx={22.6} cy={-3.4} r={0.4} fill='#2a2a2a' />
@@ -158,7 +167,13 @@ export function StorkTree({ season }: { season: Season }) {
 				<path d='M-5.4,-4.6 C-2.6,-6.4 2.6,-6.4 5.4,-4.4 C2.6,-3 -2.4,-3 -5.4,-4.6 Z' fill='#e4e4df' />
 				<path d='M-6.4,-2.6 C-4,-1 -1,-0.4 1.6,-0.6 C-1,0.8 -4.4,0.4 -6.4,-1 Z' fill='#2f2f33' />
 				<g ref={sitterNeck}>
-					<path d='M3,-6 C6.4,-8.4 7.4,-12.6 6.6,-16' stroke='#f7f7f4' strokeWidth={2} fill='none' strokeLinecap='round' />
+					<path
+						d='M3,-6 C6.4,-8.4 7.4,-12.6 6.6,-16'
+						stroke='#f7f7f4'
+						strokeWidth={2}
+						fill='none'
+						strokeLinecap='round'
+					/>
 					<circle cx={6.4} cy={-16.8} r={1.7} fill='#f7f7f4' />
 					<path d='M7.6,-17.4 L15,-16.6 L7.6,-15.6 Z' fill='#d8553a' />
 					<circle cx={5.8} cy={-17.4} r={0.45} fill='#2a2a2a' />
@@ -168,7 +183,13 @@ export function StorkTree({ season }: { season: Season }) {
 				<ellipse cx={0} cy={-3} rx={5.6} ry={3.6} fill='#f2f2ee' />
 				<path d='M-5,-3.8 C-2.4,-5.2 2.4,-5.2 5,-3.6 C2.4,-2.4 -2.4,-2.4 -5,-3.8 Z' fill='#e4e4df' />
 				<path d='M-5.6,-2 C-3.4,-0.8 -0.8,-0.4 1.4,-0.6 C-0.8,0.6 -3.8,0.2 -5.6,-0.6 Z' fill='#2f2f33' />
-				<path d='M2.6,-5 C5.4,-7 6.4,-10 5.8,-12.6' stroke='#f2f2ee' strokeWidth={1.8} fill='none' strokeLinecap='round' />
+				<path
+					d='M2.6,-5 C5.4,-7 6.4,-10 5.8,-12.6'
+					stroke='#f2f2ee'
+					strokeWidth={1.8}
+					fill='none'
+					strokeLinecap='round'
+				/>
 				<circle cx={5.6} cy={-13.2} r={1.5} fill='#f2f2ee' />
 				<path d='M6.6,-13.8 L13,-13 L6.6,-12.2 Z' fill='#d8553a' />
 			</g>
@@ -208,11 +229,27 @@ export function StorkWedge() {
 					style={{ left: `${bird.x}px`, top: `${bird.y}px`, animationDelay: `${(index * 0.13).toFixed(2)}s` }}
 				>
 					<path d='M-8,0 C-4,-2.6 2,-3 6,-1.8 L12,-1 C13,-0.6 13,0.6 12,1 L6,1.8 C2,3 -4,2.6 -8,0 Z' fill='#f7f7f4' />
-					<path d='M10.6,-0.8 C13.6,-1.6 16,-2 18,-2.2' stroke='#f7f7f4' strokeWidth={1.4} fill='none' strokeLinecap='round' />
+					<path
+						d='M10.6,-0.8 C13.6,-1.6 16,-2 18,-2.2'
+						stroke='#f7f7f4'
+						strokeWidth={1.4}
+						fill='none'
+						strokeLinecap='round'
+					/>
 					<path d='M19,-2.6 L25,-2 L19,-1.4 Z' fill='#d8553a' />
-					<path d='M-7,1 L-15,2.6 M-7,1.4 L-15,3' stroke='#d8553a' strokeWidth={0.7} strokeLinecap='round' fill='none' />
+					<path
+						d='M-7,1 L-15,2.6 M-7,1.4 L-15,3'
+						stroke='#d8553a'
+						strokeWidth={0.7}
+						strokeLinecap='round'
+						fill='none'
+					/>
 					<path className='wedge-wing' d='M-1,-1 C2,-7 7,-9.6 10.6,-8.8 C7.4,-5.2 3.6,-2 1.6,-0.2 Z' fill='#fbfbf8' />
-					<path className='wedge-wing' d='M6.6,-8.2 C8.4,-8.6 9.8,-8.8 10.6,-8.8 C8.4,-6.6 6.6,-4.6 4.8,-3.2 Z' fill='#2f2f33' />
+					<path
+						className='wedge-wing'
+						d='M6.6,-8.2 C8.4,-8.6 9.8,-8.8 10.6,-8.8 C8.4,-6.6 6.6,-4.6 4.8,-3.2 Z'
+						fill='#2f2f33'
+					/>
 				</svg>
 			))}
 		</div>

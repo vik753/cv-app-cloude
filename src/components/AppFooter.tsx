@@ -23,7 +23,11 @@ export function AppFooter({ t }: AppFooterProps) {
 				<a href={MUSIC.url} target='_blank' rel='noreferrer'>
 					{MUSIC.title}
 				</a>{" "}
-				— <a href={MUSIC.artistUrl} target='_blank' rel='noreferrer'>{MUSIC.artist}</a>. {t.musicSource}
+				—{" "}
+				<a href={MUSIC.artistUrl} target='_blank' rel='noreferrer'>
+					{MUSIC.artist}
+				</a>
+				. {t.musicSource}
 			</p>
 		</footer>
 	);

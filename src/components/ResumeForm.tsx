@@ -3,7 +3,13 @@ import { Tooltip } from "@/components/ui/tooltip";
 import type { Translation } from "@/services/copy";
 import { createEmptyExperience } from "@/services/initialResume";
 import { languageSuggestions } from "@/services/languageSuggestions";
-import { languageLevels, resumeSchema, type ExperienceField, type Resume, type ResumeField } from "@/services/resumeSchema";
+import {
+	languageLevels,
+	resumeSchema,
+	type ExperienceField,
+	type Resume,
+	type ResumeField,
+} from "@/services/resumeSchema";
 import { getSkillIconUrl, skillIconSuggestions } from "@/services/skillIcons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Plus, Trash, X } from "@phosphor-icons/react";

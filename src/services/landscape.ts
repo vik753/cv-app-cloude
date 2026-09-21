@@ -157,9 +157,21 @@ export const KENNEL = { x: 1196, base: onBackMeadow(1196) + 20, scale: 1.45 };
 
 /* the middle хата is mirrored, so its chimney sits on the other side */
 export const CHIMNEYS = [
-	{ x: HOMESTEAD.near.x + 11.4 * HOMESTEAD.near.scale, y: HOMESTEAD.near.base - 44 * HOMESTEAD.near.scale, scale: HOMESTEAD.near.scale },
-	{ x: HOMESTEAD.far.x - 11.4 * HOMESTEAD.far.scale, y: HOMESTEAD.far.base - 44 * HOMESTEAD.far.scale, scale: HOMESTEAD.far.scale },
-	{ x: HOMESTEAD.distant.x + 11.4 * HOMESTEAD.distant.scale, y: HOMESTEAD.distant.base - 44 * HOMESTEAD.distant.scale, scale: HOMESTEAD.distant.scale },
+	{
+		x: HOMESTEAD.near.x + 11.4 * HOMESTEAD.near.scale,
+		y: HOMESTEAD.near.base - 44 * HOMESTEAD.near.scale,
+		scale: HOMESTEAD.near.scale,
+	},
+	{
+		x: HOMESTEAD.far.x - 11.4 * HOMESTEAD.far.scale,
+		y: HOMESTEAD.far.base - 44 * HOMESTEAD.far.scale,
+		scale: HOMESTEAD.far.scale,
+	},
+	{
+		x: HOMESTEAD.distant.x + 11.4 * HOMESTEAD.distant.scale,
+		y: HOMESTEAD.distant.base - 44 * HOMESTEAD.distant.scale,
+		scale: HOMESTEAD.distant.scale,
+	},
 ];
 
 /* Where a point of the landscape lands on the screen. The map is drawn with

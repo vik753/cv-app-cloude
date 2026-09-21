@@ -40,12 +40,44 @@ const COSTUMES: Record<"summer" | "coat" | "winter", [Costume, Costume]> = {
 		{ coat: "#f6efe0", coatDark: "#e2d6bf", trim: "#4f8a4a", trousers: "#6b4a2f", hair: "#3f2e22" },
 	],
 	coat: [
-		{ coat: "#5c6b52", coatDark: "#47543f", trim: "#2f3b28", trousers: "#3b4636", hat: "#3b4636", hatBand: "#2f3b28", hair: "#6b4a2f" },
-		{ coat: "#7a5c46", coatDark: "#644a38", trim: "#4a3729", trousers: "#4a3a2c", hat: "#4a3729", hatBand: "#3a2b21", hair: "#3f2e22" },
+		{
+			coat: "#5c6b52",
+			coatDark: "#47543f",
+			trim: "#2f3b28",
+			trousers: "#3b4636",
+			hat: "#3b4636",
+			hatBand: "#2f3b28",
+			hair: "#6b4a2f",
+		},
+		{
+			coat: "#7a5c46",
+			coatDark: "#644a38",
+			trim: "#4a3729",
+			trousers: "#4a3a2c",
+			hat: "#4a3729",
+			hatBand: "#3a2b21",
+			hair: "#3f2e22",
+		},
 	],
 	winter: [
-		{ coat: "#d8c9a8", coatDark: "#bda884", trim: "#efe6d2", trousers: "#4a3a2c", hat: "#4a4440", hatBand: "#efe6d2", hair: "#6b4a2f" },
-		{ coat: "#c9a97a", coatDark: "#ab8a5e", trim: "#efe6d2", trousers: "#3b3128", hat: "#6b4a2f", hatBand: "#efe6d2", hair: "#3f2e22" },
+		{
+			coat: "#d8c9a8",
+			coatDark: "#bda884",
+			trim: "#efe6d2",
+			trousers: "#4a3a2c",
+			hat: "#4a4440",
+			hatBand: "#efe6d2",
+			hair: "#6b4a2f",
+		},
+		{
+			coat: "#c9a97a",
+			coatDark: "#ab8a5e",
+			trim: "#efe6d2",
+			trousers: "#3b3128",
+			hat: "#6b4a2f",
+			hatBand: "#efe6d2",
+			hair: "#3f2e22",
+		},
 	],
 };
 
@@ -78,14 +110,26 @@ function Fellow({ dress, winter, summer, legNear, legFar, arm, moustache, bottle
 			{leg(legNear, 2.4, dress.trousers)}
 			{/* shirt in summer, a coat the rest of the year */}
 			<path d={`M-6,${hem} C-7.2,-18.6 -4.6,-23.4 0,-23.9 C4.6,-23.4 7.2,-18.6 6,${hem} Z`} fill={dress.coat} />
-			<path d={`M-0.8,-23.7 C-0.6,-18 -0.5,${hem + 1} -0.6,${hem} L0.8,${hem} C0.7,${hem + 1} 0.7,-18 0.9,-23.7 Z`} fill={dress.coatDark} />
+			<path
+				d={`M-0.8,-23.7 C-0.6,-18 -0.5,${hem + 1} -0.6,${hem} L0.8,${hem} C0.7,${hem + 1} 0.7,-18 0.9,-23.7 Z`}
+				fill={dress.coatDark}
+			/>
 			{summer ? (
 				<>
-					<path d='M-4.4,-23.4 C-2,-24.4 2,-24.4 4.4,-23.4 L3.6,-21.8 C1.6,-22.6 -1.6,-22.6 -3.6,-21.8 Z' fill={dress.trim} />
-					<path d='M-6.2,-14.6 C-3,-13.4 3,-13.4 6.2,-14.6 L6.1,-12.4 C3,-11.2 -3,-11.2 -6.1,-12.4 Z' fill={dress.trim} />
+					<path
+						d='M-4.4,-23.4 C-2,-24.4 2,-24.4 4.4,-23.4 L3.6,-21.8 C1.6,-22.6 -1.6,-22.6 -3.6,-21.8 Z'
+						fill={dress.trim}
+					/>
+					<path
+						d='M-6.2,-14.6 C-3,-13.4 3,-13.4 6.2,-14.6 L6.1,-12.4 C3,-11.2 -3,-11.2 -6.1,-12.4 Z'
+						fill={dress.trim}
+					/>
 				</>
 			) : (
-				<path d={`M-6.1,${hem - 1.6} C-3,${hem - 0.2} 3,${hem - 0.2} 6.1,${hem - 1.6} L6,${hem + 0.8} C3,${hem + 2.2} -3,${hem + 2.2} -6,${hem + 0.8} Z`} fill={dress.trim} />
+				<path
+					d={`M-6.1,${hem - 1.6} C-3,${hem - 0.2} 3,${hem - 0.2} 6.1,${hem - 1.6} L6,${hem + 0.8} C3,${hem + 2.2} -3,${hem + 2.2} -6,${hem + 0.8} Z`}
+					fill={dress.trim}
+				/>
 			)}
 
 			{/* the outer arm: one of them keeps time with it, the other has the bottle */}
@@ -110,8 +154,14 @@ function Fellow({ dress, winter, summer, legNear, legFar, arm, moustache, bottle
 				<circle cx={1.8} cy={-2} r={0.9} fill='#e08b7a' opacity={winter ? 0.9 : 0.45} />
 				{winter || !summer ? (
 					<>
-						<path d='M-4.6,-5.6 C-4.8,-9.4 -2.2,-11.2 0,-11.2 C2.2,-11.2 4.8,-9.4 4.6,-5.6 C2.4,-6.8 -2.4,-6.8 -4.6,-5.6 Z' fill={dress.hat ?? "#3b3128"} />
-						<path d='M-4.7,-6.4 C-2.4,-7.6 2.4,-7.6 4.7,-6.4 L4.6,-4.8 C2.2,-6 -2.2,-6 -4.6,-4.8 Z' fill={dress.hatBand ?? "#2f271f"} />
+						<path
+							d='M-4.6,-5.6 C-4.8,-9.4 -2.2,-11.2 0,-11.2 C2.2,-11.2 4.8,-9.4 4.6,-5.6 C2.4,-6.8 -2.4,-6.8 -4.6,-5.6 Z'
+							fill={dress.hat ?? "#3b3128"}
+						/>
+						<path
+							d='M-4.7,-6.4 C-2.4,-7.6 2.4,-7.6 4.7,-6.4 L4.6,-4.8 C2.2,-6 -2.2,-6 -4.6,-4.8 Z'
+							fill={dress.hatBand ?? "#2f271f"}
+						/>
 					</>
 				) : (
 					<path d='M-4.2,-5.4 C-3.6,-8.4 3.6,-8.6 4.2,-5.4 C2.2,-6.6 -2.2,-6.6 -4.2,-5.4 Z' fill={dress.hair} />
@@ -125,7 +175,10 @@ function Fellow({ dress, winter, summer, legNear, legFar, arm, moustache, bottle
 						fill={dress.hair}
 					/>
 				) : (
-					<path d='M-2.6,-1 C-1.2,-1.8 1.6,-1.8 3.2,-0.8 C3.4,1.6 2,3.4 0.2,3.6 C-1.6,3.4 -2.8,1.4 -2.6,-1 Z' fill={dress.hair} />
+					<path
+						d='M-2.6,-1 C-1.2,-1.8 1.6,-1.8 3.2,-0.8 C3.4,1.6 2,3.4 0.2,3.6 C-1.6,3.4 -2.8,1.4 -2.6,-1 Z'
+						fill={dress.hair}
+					/>
 				)}
 			</g>
 		</>
@@ -179,7 +232,15 @@ export function Revellers({ season }: { season: Season }) {
 		<g ref={root} className='critter revellers' opacity={0}>
 			<g ref={pair}>
 				<g transform='translate(-7 0)'>
-					<Fellow dress={dress[0]} winter={winter} summer={summer} legNear={leftNear} legFar={leftFar} arm={waving} moustache='droopy' />
+					<Fellow
+						dress={dress[0]}
+						winter={winter}
+						summer={summer}
+						legNear={leftNear}
+						legFar={leftFar}
+						arm={waving}
+						moustache='droopy'
+					/>
 				</g>
 				<g transform='translate(7 0)'>
 					<Fellow

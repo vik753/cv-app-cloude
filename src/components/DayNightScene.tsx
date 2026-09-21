@@ -121,12 +121,7 @@ function BannerPlane({ line, fontSize, stretch }: BannerPlaneProps) {
 		<svg viewBox={`0 0 ${820 + tail} 120`}>
 			{/* the text rides this baseline; it waves in step with the cloth below */}
 			<path id='banner-line' fill='none' stroke='none' d={lineRest}>
-				<animate
-					attributeName='d'
-					dur='3.2s'
-					repeatCount='indefinite'
-					values={`${lineRest};${lineWave};${lineRest}`}
-				/>
+				<animate attributeName='d' dur='3.2s' repeatCount='indefinite' values={`${lineRest};${lineWave};${lineRest}`} />
 			</path>
 			<path fill='#f7efdd' stroke='#c9563f' strokeWidth={3} strokeLinejoin='round' d={clothRest}>
 				<animate
@@ -321,11 +316,11 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 						/>
 					))}
 				</div>
-	
+
 				<div className='cloud cloud-1' />
 				<div className='cloud cloud-2' />
 				<SkyWeather />
-	
+
 				<svg className='landscape' viewBox='0 0 1600 900' preserveAspectRatio='xMidYMax slice'>
 					<defs>
 						{/* keeps the ripples strictly inside the water, whatever the banks do */}
@@ -343,7 +338,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 							<path d='M340,-2 c5,-4 11,-4 16,0' />
 						</g>
 					</defs>
-	
+
 					<BackMeadow season={season} />
 					<UpperCritters season={season} />
 					<UpperBush season={season} />
@@ -351,7 +346,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 
 					{/* river */}
 					<path d={RIVER_PATH} fill='#5fb0dd' />
-	
+
 					{/* drifting ripples: four rows at different depth, scale and speed */}
 					<g className='river-ripples' clipPath='url(#river-clip)'>
 						<g transform='translate(0,712) scale(0.75)' opacity={0.3}>
@@ -427,7 +422,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 							</g>
 						</g>
 					</g>
-	
+
 					<RiverLife season={season} />
 					{/* skating, once the river is hard enough to bear them */}
 					{season === "winter" ? <IceChildren /> : null}
@@ -440,7 +435,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 				{/* the wedge going south, which the pair falls in with */}
 				{season === "autumn" ? <StorkWedge /> : null}
 				<GroundWeather season={season} />
-	
+
 				<div className='tint' />
 			</div>
 

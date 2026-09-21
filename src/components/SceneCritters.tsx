@@ -17,17 +17,7 @@ import { FieldFolk } from "@/components/SceneFieldFolk";
 import { Revellers } from "@/components/SceneRevellers";
 import { HomesteadFence } from "@/components/SceneVillage";
 import type { Season } from "@/hooks/useDayNightCycle";
-import {
-	ease,
-	lerp,
-	onRoute,
-	presence,
-	set,
-	show,
-	TAU,
-	useCycleFrame,
-	type Waypoint,
-} from "@/hooks/useSceneClock";
+import { ease, lerp, onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/hooks/useSceneClock";
 import { useRef, type Ref, type RefObject } from "react";
 
 /* The critters are choreographed against the day: 0 is dawn, 0.1–0.4 full day,
@@ -114,7 +104,10 @@ function FoxLeg({ ref, x, far }: LimbProps & { far: boolean }) {
 		<g transform={`translate(${x} -10)`}>
 			<g ref={ref}>
 				<path d='M-1.6,0 L1.6,0 L1.1,9.6 L-1.1,9.6 Z' className={far ? "fox-leg-far" : "fox-leg"} />
-				<path d='M-1.3,9 L2.4,9.1 C2.9,9.9 2.4,10.4 1.6,10.4 L-1.3,10.4 Z' className={far ? "fox-leg-far" : "fox-leg"} />
+				<path
+					d='M-1.3,9 L2.4,9.1 C2.9,9.9 2.4,10.4 1.6,10.4 L-1.3,10.4 Z'
+					className={far ? "fox-leg-far" : "fox-leg"}
+				/>
 			</g>
 		</g>
 	);
@@ -133,14 +126,26 @@ function WolfHead({ ref, song }: { ref: Ref<SVGGElement>; song: Ref<SVGGElement>
 				fill='#cdd3da'
 			/>
 			<ellipse cx={20.9} cy={-2.2} rx={1.9} ry={1.5} fill='#2b2b30' />
-			<path d='M19.4,0.6 C17,1.9 13.6,1.9 11.6,0.9' stroke='#2b2b30' strokeWidth={0.6} fill='none' strokeLinecap='round' />
+			<path
+				d='M19.4,0.6 C17,1.9 13.6,1.9 11.6,0.9'
+				stroke='#2b2b30'
+				strokeWidth={0.6}
+				fill='none'
+				strokeLinecap='round'
+			/>
 			<g stroke='#4a5059' strokeWidth={0.4} strokeLinecap='round' opacity={0.6}>
 				<path d='M10.6,-1.6 L5,-3.4 M11,-0.2 L5.2,-0.6 M11.2,1 L5.8,2.2' />
 			</g>
 			<ellipse cx={5.4} cy={-5.4} rx={2.1} ry={1.8} fill='#f0b53c' />
 			<ellipse cx={6} cy={-5.4} rx={0.85} ry={1.5} fill='#2b2b30' />
 			<circle cx={6.4} cy={-6} r={0.35} fill='#fbfdff' />
-			<path d='M2.6,-8.4 C3.8,-9.4 6.6,-9.4 7.8,-8.2' stroke='#5f6772' strokeWidth={0.7} fill='none' strokeLinecap='round' />
+			<path
+				d='M2.6,-8.4 C3.8,-9.4 6.6,-9.4 7.8,-8.2'
+				stroke='#5f6772'
+				strokeWidth={0.7}
+				fill='none'
+				strokeLinecap='round'
+			/>
 			<g ref={song} opacity={0} fill='none' stroke='#e8ecf6' strokeWidth={1.1} strokeLinecap='round'>
 				<path d='M25,-6 q3,3 0,6' />
 				<path d='M28.5,-8.5 q4.6,5.5 0,11' />
@@ -171,14 +176,12 @@ const WOLF: Waypoint<Mode>[] = [
 	{ f: 1, x: LOWER_BUSH.x + 4, d: 74, mode: "hidden" },
 ];
 
-
 /* three long howls while the moon sails past overhead */
 const HOWLS: [number, number][] = [
 	[0.744, 0.778],
 	[0.802, 0.838],
 	[0.86, 0.896],
 ];
-
 
 function Wolf({ layer }: { layer: Layer }) {
 	const root = useRef<SVGGElement>(null);
@@ -260,7 +263,10 @@ function Wolf({ layer }: { layer: Layer }) {
 				<g ref={body}>
 					<g transform='translate(-19.5 -20.5)'>
 						<g ref={tail}>
-							<path d='M0,0 C-7,1.4 -13.6,6 -16.6,13 C-16.6,15.6 -13,16.6 -10.6,13.4 C-8,9 -3.4,5.4 1.4,3.2 Z' className='wolf-fur' />
+							<path
+								d='M0,0 C-7,1.4 -13.6,6 -16.6,13 C-16.6,15.6 -13,16.6 -10.6,13.4 C-8,9 -3.4,5.4 1.4,3.2 Z'
+								className='wolf-fur'
+							/>
 							<path d='M-16.6,13 C-16.6,15.6 -13,16.6 -10.6,13.4 C-12,12.8 -14.4,12 -15.6,10.8 Z' fill='#cdd3da' />
 						</g>
 					</g>
@@ -473,7 +479,10 @@ function Fox({ season, layer }: { season: Season; layer: Layer }) {
 						<g ref={head}>
 							<path d='M1.6,-5.6 L2.6,-13.4 L7,-6.4 Z' className='fox-fur' />
 							<path d='M2.4,-7 L2.8,-11.6 L5.4,-7.2 Z' fill='#3a2a22' />
-							<path d='M-2,1 C-2,-5 3,-8 8,-7 L18,-2.2 C19.2,-1 18.2,1 16,1 L8,2 C4,4 -1,4 -2,1 Z' className='fox-fur' />
+							<path
+								d='M-2,1 C-2,-5 3,-8 8,-7 L18,-2.2 C19.2,-1 18.2,1 16,1 L8,2 C4,4 -1,4 -2,1 Z'
+								className='fox-fur'
+							/>
 							<path d='M3.4,1 C7.6,3 12.6,2.2 16.4,1 L9,0 Z' fill='#f7f2ea' />
 							<circle cx={9} cy={-3.4} r={0.85} fill='#222' />
 							<circle cx={18.4} cy={-1.6} r={0.95} fill='#222' />
@@ -562,7 +571,10 @@ function Hare() {
 				break;
 		}
 		show(root, presence(f, 0.614, 0.894, 0.004));
-		set(root, `translate(${x.toFixed(1)} ${(upperGround(x) + 3 + lift).toFixed(1)}) scale(${segment.facing * 0.95} 0.95)`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(upperGround(x) + 3 + lift).toFixed(1)}) scale(${segment.facing * 0.95} 0.95)`,
+		);
 		set(body, `rotate(${tilt.toFixed(1)} -4 -4)`);
 		set(head, `rotate(${headAngle.toFixed(1)})`);
 		set(ears, `rotate(${earAngle.toFixed(1)})`);
@@ -576,10 +588,16 @@ function Hare() {
 			<ellipse className='hare-shadow' cx={-1} cy={0.6} rx={10} ry={1.8} />
 			<g ref={body}>
 				<circle cx={-9.6} cy={-9.4} r={2.2} fill='#f6f6f4' />
-				<path d='M-9,-8 C-11,-14 -4,-17 2,-16 C7,-15 10,-12 9,-8 C8,-5 4,-4 0,-4 L-6,-4 C-9,-4 -10,-6 -9,-8 Z' className='hare-fur' />
+				<path
+					d='M-9,-8 C-11,-14 -4,-17 2,-16 C7,-15 10,-12 9,-8 C8,-5 4,-4 0,-4 L-6,-4 C-9,-4 -10,-6 -9,-8 Z'
+					className='hare-fur'
+				/>
 				<g transform='translate(-5 -5)'>
 					<g ref={hind}>
-						<path d='M-3,-3.4 C-6.6,0 -5,4.4 -1,5 L7,5 C8.2,5 8.2,3.8 7,3.4 L0.6,2.6 C2.4,0 1.4,-3.6 -3,-3.4 Z' className='hare-fur' />
+						<path
+							d='M-3,-3.4 C-6.6,0 -5,4.4 -1,5 L7,5 C8.2,5 8.2,3.8 7,3.4 L0.6,2.6 C2.4,0 1.4,-3.6 -3,-3.4 Z'
+							className='hare-fur'
+						/>
 					</g>
 				</g>
 				<g transform='translate(6 -6)'>
@@ -673,7 +691,10 @@ function Hedgehog({ season }: { season: Season }) {
 		const bob = scurry ? Math.abs(Math.sin(seconds * 7 * TAU)) * -0.6 : 0;
 		const sniff = segment.mode === "forage" ? Math.max(0, Math.sin(p * TAU * 3)) * 16 : 0;
 		show(root, presence(f, 0.606, 0.872, 0.004));
-		set(root, `translate(${x.toFixed(1)} ${(upperGround(x) + 6 + bob).toFixed(1)}) scale(${segment.facing * 0.74} 0.74)`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(upperGround(x) + 6 + bob).toFixed(1)}) scale(${segment.facing * 0.74} 0.74)`,
+		);
 		set(body, `rotate(${sniff.toFixed(1)} 6 0)`);
 		set(feet, scurry ? `translate(${(Math.sin(seconds * 7 * TAU) * 1.2).toFixed(2)} 0)` : "");
 		show(carried, fruiting && f >= PICKUP ? 1 : 0);
@@ -683,7 +704,11 @@ function Hedgehog({ season }: { season: Season }) {
 		<>
 			{FALLEN.map((_, index) => (
 				<g key={index}>
-					<g ref={apples[index]} opacity={0} transform={`translate(${APPLE_TREE.x + FALLEN[index].dx} ${APPLE_TREE.base + 1.5})`}>
+					<g
+						ref={apples[index]}
+						opacity={0}
+						transform={`translate(${APPLE_TREE.x + FALLEN[index].dx} ${APPLE_TREE.base + 1.5})`}
+					>
 						<circle r={2.5} fill='#d8433a' />
 						<circle cx={-0.8} cy={-0.8} r={0.7} fill='#f08a7d' />
 					</g>
@@ -701,7 +726,12 @@ function Hedgehog({ season }: { season: Season }) {
 						d='M-10,-1 L-11,-4.4 L-8.6,-5.2 L-9.6,-8.6 L-6.4,-8.4 L-6.6,-11.6 L-3.2,-10.6 L-2.2,-13.6 L0,-11.4 L2.2,-13.6 L3.2,-10.4 L5.6,-11.4 L5.6,-8 L8,-7.6 L7,-4.6 L8.8,-3.6 L6.6,-1 Z'
 						fill='#6b5646'
 					/>
-					<path d='M-7,-3 L-5,-7 M-3,-4 L-1,-9.4 M1,-4 L3,-9 M4,-3 L5.6,-6' stroke='#9a846e' strokeWidth={0.9} strokeLinecap='round' />
+					<path
+						d='M-7,-3 L-5,-7 M-3,-4 L-1,-9.4 M1,-4 L3,-9 M4,-3 L5.6,-6'
+						stroke='#9a846e'
+						strokeWidth={0.9}
+						strokeLinecap='round'
+					/>
 					<path d='M5.2,-6.4 C8.4,-6.4 11.4,-4.2 12.4,-2 C12.6,-0.8 11.6,-0.4 10.4,-0.4 L5,-1 Z' fill='#d9c3a0' />
 					<circle cx={8.2} cy={-4} r={0.7} fill='#231b16' />
 					<circle cx={12.4} cy={-1.8} r={0.8} fill='#231b16' />
@@ -712,10 +742,21 @@ function Hedgehog({ season }: { season: Season }) {
 					</g>
 				</g>
 			</g>
-			<g ref={zzz} opacity={0} className='hedgehog-zzz' transform={`translate(${UPPER_BUSH.x + 6} ${UPPER_BUSH.base - 20})`}>
-				<text x={0} y={0}>z</text>
-				<text x={4} y={-6}>z</text>
-				<text x={9} y={-13}>Z</text>
+			<g
+				ref={zzz}
+				opacity={0}
+				className='hedgehog-zzz'
+				transform={`translate(${UPPER_BUSH.x + 6} ${UPPER_BUSH.base - 20})`}
+			>
+				<text x={0} y={0}>
+					z
+				</text>
+				<text x={4} y={-6}>
+					z
+				</text>
+				<text x={9} y={-13}>
+					Z
+				</text>
 			</g>
 		</>
 	);
@@ -788,9 +829,15 @@ export function Kennel() {
 			<path d='M-8.4,0 L-8.4,-8.4 C-8.4,-13.4 8.4,-13.4 8.4,-8.4 L8.4,0 Z' fill='#3a2a1c' />
 			{/* asleep in there, dreaming away */}
 			<g ref={dozing} opacity={0} className='sleep-zzz' transform='translate(6 -31)'>
-				<text x={0} y={0}>z</text>
-				<text x={4} y={-6}>z</text>
-				<text x={9} y={-13}>Z</text>
+				<text x={0} y={0}>
+					z
+				</text>
+				<text x={4} y={-6}>
+					z
+				</text>
+				<text x={9} y={-13}>
+					Z
+				</text>
 			</g>
 
 			{/* At home: the whole face fills the doorway, chin down on its front paws —
@@ -801,8 +848,20 @@ export function Kennel() {
 					<path d='M6,-10.4 C9.4,-10.2 10.4,-6 9,-2 C7.6,-4.6 6.6,-7.4 6.2,-9 Z' fill='#8a4f2c' />
 					<path d='M-6.6,-3.4 C-7.6,-8.4 -5,-12.4 0,-12.6 C5,-12.4 7.6,-8.4 6.6,-3.4 Z' fill='#a9663c' />
 					<path d='M-2.6,-11.6 C-1.4,-12.2 1.4,-12.2 2.6,-11.6 C1.4,-10.8 -1.4,-10.8 -2.6,-11.6 Z' fill='#8a4f2c' />
-					<path d='M-4.6,-9.6 C-3.8,-10.4 -2.4,-10.4 -1.6,-9.8' stroke='#8a4f2c' strokeWidth={0.7} fill='none' strokeLinecap='round' />
-					<path d='M1.6,-9.8 C2.4,-10.4 3.8,-10.4 4.6,-9.6' stroke='#8a4f2c' strokeWidth={0.7} fill='none' strokeLinecap='round' />
+					<path
+						d='M-4.6,-9.6 C-3.8,-10.4 -2.4,-10.4 -1.6,-9.8'
+						stroke='#8a4f2c'
+						strokeWidth={0.7}
+						fill='none'
+						strokeLinecap='round'
+					/>
+					<path
+						d='M1.6,-9.8 C2.4,-10.4 3.8,-10.4 4.6,-9.6'
+						stroke='#8a4f2c'
+						strokeWidth={0.7}
+						fill='none'
+						strokeLinecap='round'
+					/>
 					<g ref={awake} opacity={0}>
 						<circle cx={-2.9} cy={-8.2} r={1.9} fill='#f6f1e8' />
 						<circle cx={2.9} cy={-8.2} r={1.9} fill='#f6f1e8' />
@@ -815,10 +874,22 @@ export function Kennel() {
 						<path d='M-4.2,-8.4 C-3.4,-7.4 -2,-7.4 -1.4,-8.4 M1.4,-8.4 C2,-7.4 3.4,-7.4 4.2,-8.4' />
 					</g>
 					{/* snout, nose and jowls resting low in the opening */}
-					<path d='M-3.8,-5.6 C-3.8,-8.4 3.8,-8.4 3.8,-5.6 C3.8,-2.4 2,-1 0,-1 C-2,-1 -3.8,-2.4 -3.8,-5.6 Z' fill='#ddb389' />
-					<path d='M-1.8,-6.8 C-1.8,-8.2 1.8,-8.2 1.8,-6.8 C1.8,-5.6 0.9,-5 0,-5 C-0.9,-5 -1.8,-5.6 -1.8,-6.8 Z' fill='#2a1c14' />
+					<path
+						d='M-3.8,-5.6 C-3.8,-8.4 3.8,-8.4 3.8,-5.6 C3.8,-2.4 2,-1 0,-1 C-2,-1 -3.8,-2.4 -3.8,-5.6 Z'
+						fill='#ddb389'
+					/>
+					<path
+						d='M-1.8,-6.8 C-1.8,-8.2 1.8,-8.2 1.8,-6.8 C1.8,-5.6 0.9,-5 0,-5 C-0.9,-5 -1.8,-5.6 -1.8,-6.8 Z'
+						fill='#2a1c14'
+					/>
 					<path d='M0,-4.9 L0,-3.4' stroke='#2a1c14' strokeWidth={0.6} strokeLinecap='round' />
-					<path d='M0,-3.4 C-0.7,-2.5 -2,-2.6 -2.5,-3.4 M0,-3.4 C0.7,-2.5 2,-2.6 2.5,-3.4' stroke='#2a1c14' strokeWidth={0.6} fill='none' strokeLinecap='round' />
+					<path
+						d='M0,-3.4 C-0.7,-2.5 -2,-2.6 -2.5,-3.4 M0,-3.4 C0.7,-2.5 2,-2.6 2.5,-3.4'
+						stroke='#2a1c14'
+						strokeWidth={0.6}
+						fill='none'
+						strokeLinecap='round'
+					/>
 				</g>
 				{/* the front paws his chin is resting on */}
 				<path d='M-6.2,0 L-6.2,-2.4 C-6.2,-3.8 -1.4,-3.8 -1.4,-2.4 L-1.4,0 Z' fill='#a9663c' />
@@ -899,7 +970,8 @@ function Dog() {
 		set(foreFar, `rotate(${legs[3].toFixed(1)})`);
 		set(head, `rotate(${headAngle.toFixed(1)})`);
 		/* a wag when it is pleased with itself, a droop when the slipper lands */
-		const wag = mode === "run" ? 26 : mode === "sniff" ? -14 + Math.sin(seconds * 7) * 16 : -20 + Math.sin(seconds * 4) * 12;
+		const wag =
+			mode === "run" ? 26 : mode === "sniff" ? -14 + Math.sin(seconds * 7) * 16 : -20 + Math.sin(seconds * 4) * 12;
 		set(tail, `rotate(${wag.toFixed(1)})`);
 		show(drops, mode === "mark" && p > 0.35 && p < 0.8 ? 0.8 : 0);
 	});
@@ -936,7 +1008,10 @@ function Dog() {
 					<g transform='translate(11.4 -16)'>
 						<g ref={head}>
 							{/* the far ear, then the skull, the long near ear over it */}
-							<path d='M0.6,-5.4 C-2.4,-6 -4.6,-3.2 -4.2,0.8 C-3.8,3.4 -2.4,5 -0.6,5.6 C-1.4,2.4 -1.2,-1.6 0.6,-4.6 Z' fill='#7a4527' />
+							<path
+								d='M0.6,-5.4 C-2.4,-6 -4.6,-3.2 -4.2,0.8 C-3.8,3.4 -2.4,5 -0.6,5.6 C-1.4,2.4 -1.2,-1.6 0.6,-4.6 Z'
+								fill='#7a4527'
+							/>
 							<ellipse cx={3} cy={-2.6} rx={5.8} ry={5.2} fill='#a9663c' />
 							{/* broad snout, dark nose, a hint of jowl */}
 							<path
@@ -944,13 +1019,28 @@ function Dog() {
 								fill='#ddb389'
 							/>
 							<ellipse cx={15.1} cy={-0.2} rx={1.6} ry={1.3} fill='#2a1c14' />
-							<path d='M13.6,1.4 C12,2.3 9.8,2.3 8.4,1.5' stroke='#2a1c14' strokeWidth={0.6} fill='none' strokeLinecap='round' />
+							<path
+								d='M13.6,1.4 C12,2.3 9.8,2.3 8.4,1.5'
+								stroke='#2a1c14'
+								strokeWidth={0.6}
+								fill='none'
+								strokeLinecap='round'
+							/>
 							{/* the same wide eye as in the doorway, brow and all */}
 							<circle cx={4.6} cy={-4} r={1.9} fill='#f6f1e8' />
 							<circle cx={5.1} cy={-3.8} r={1.1} fill='#2a1c14' />
 							<circle cx={5.5} cy={-4.3} r={0.36} fill='#fbfdff' />
-							<path d='M2.8,-6.4 C3.8,-7.2 5.4,-7.2 6.4,-6.4' stroke='#8a4f2c' strokeWidth={0.7} fill='none' strokeLinecap='round' />
-							<path d='M1.4,-6.2 C-1.8,-6.8 -4,-3.4 -3.4,1 C-2.8,4.4 -1,6.4 1.2,7 C0,3.4 0.2,-1.6 1.4,-5.2 Z' fill='#8a4f2c' />
+							<path
+								d='M2.8,-6.4 C3.8,-7.2 5.4,-7.2 6.4,-6.4'
+								stroke='#8a4f2c'
+								strokeWidth={0.7}
+								fill='none'
+								strokeLinecap='round'
+							/>
+							<path
+								d='M1.4,-6.2 C-1.8,-6.8 -4,-3.4 -3.4,1 C-2.8,4.4 -1,6.4 1.2,7 C0,3.4 0.2,-1.6 1.4,-5.2 Z'
+								fill='#8a4f2c'
+							/>
 						</g>
 					</g>
 				</g>
@@ -1025,7 +1115,10 @@ function Cossack({ season }: { season: Season }) {
 		const swing = Math.sin(step) * 21 * gait;
 		const bob = (Math.cos(step * 2) - 1) * 0.42 * gait;
 		const sway = Math.sin(step) * 1.4 * gait;
-		set(root, `translate(${x.toFixed(1)} ${(upperGround(x) + d + bob).toFixed(1)}) scale(${heading.current * 0.92} 0.92)`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(upperGround(x) + d + bob).toFixed(1)}) scale(${heading.current * 0.92} 0.92)`,
+		);
 
 		/* standing: weight on one leg, the other a touch forward */
 		const restNear = -5 * (1 - gait);
@@ -1074,7 +1167,10 @@ function Cossack({ season }: { season: Season }) {
 				    as they cross. */}
 				<g transform='translate(-3.2 -13)'>
 					<g ref={hipFar}>
-						<path d='M-3,0 C-5.8,1.6 -7,4.6 -5.6,7.4 C-3.6,8.6 1.6,8.6 3.8,7.4 C4.6,4.8 4.2,1.8 2.8,0 Z' fill='#9c2e27' />
+						<path
+							d='M-3,0 C-5.8,1.6 -7,4.6 -5.6,7.4 C-3.6,8.6 1.6,8.6 3.8,7.4 C4.6,4.8 4.2,1.8 2.8,0 Z'
+							fill='#9c2e27'
+						/>
 						<path d='M-5.4,7 C-3.4,8.4 1.6,8.4 3.6,7 L3.4,8.8 C1.4,9.8 -3.2,9.8 -5,8.8 Z' fill='#7f251f' />
 						<path d='M-2.8,8.4 C-3,10 -3,11.6 -2.8,12.6 L2.8,12.6 C3,11.6 3,10 2.8,8.4 Z' fill='#1f1a18' />
 						<g ref={ankleFar} transform='translate(0 12.4)'>
@@ -1085,8 +1181,14 @@ function Cossack({ season }: { season: Season }) {
 				<path d='M-7.4,-13.8 C-8,-11.4 -7.6,-9.6 -6.8,-8.6 L6.8,-8.6 C7.6,-9.6 8,-11.4 7.4,-13.8 Z' fill='#c0392b' />
 				<g transform='translate(3.2 -13)'>
 					<g ref={hipNear}>
-						<path d='M-2.8,0 C-4.2,1.8 -4.6,4.8 -3.8,7.4 C-1.6,8.6 3.6,8.6 5.6,7.4 C7,4.6 5.8,1.6 3,0 Z' fill='#c0392b' />
-						<path d='M-2.8,0 C-4.2,1.8 -4.6,4.8 -3.8,7.4 C-3,7.8 -2,8.1 -0.8,8.3 C-1.8,5.6 -1.8,2.6 -1,0 Z' fill='#a5312a' />
+						<path
+							d='M-2.8,0 C-4.2,1.8 -4.6,4.8 -3.8,7.4 C-1.6,8.6 3.6,8.6 5.6,7.4 C7,4.6 5.8,1.6 3,0 Z'
+							fill='#c0392b'
+						/>
+						<path
+							d='M-2.8,0 C-4.2,1.8 -4.6,4.8 -3.8,7.4 C-3,7.8 -2,8.1 -0.8,8.3 C-1.8,5.6 -1.8,2.6 -1,0 Z'
+							fill='#a5312a'
+						/>
 						<path d='M-3.6,7 C-1.4,8.4 3.6,8.4 5.4,7 L5.2,8.8 C3.2,9.8 -1.6,9.8 -3.4,8.8 Z' fill='#a5312a' />
 						<path d='M-2.9,8.4 C-3.1,10 -3.1,11.6 -2.9,12.6 L2.9,12.6 C3.1,11.6 3.1,10 2.9,8.4 Z' fill='#2e231d' />
 						<path d='M-2.9,8.4 C-3.1,10 -3.1,11.6 -2.9,12.6 L-1.5,12.6 C-1.7,11.4 -1.7,9.8 -1.5,8.4 Z' fill='#453730' />
@@ -1111,8 +1213,14 @@ function Cossack({ season }: { season: Season }) {
 						/* winter: a sheepskin coat over everything, fleece at the collar and hem */
 						<>
 							<path d='M-8.6,-6.4 C-9.6,-14 -6.4,-23 0,-23.7 C6.4,-23 9.6,-14 8.6,-6.4 Z' fill='#c9a97a' />
-							<path d='M-0.9,-23.6 C-0.6,-17 -0.5,-11 -0.7,-6.5 L0.9,-6.5 C0.7,-11 0.8,-17 1.1,-23.6 Z' fill='#b08f62' />
-							<path d='M-8.6,-8.2 C-4.4,-6.4 4.4,-6.4 8.6,-8.2 L8.5,-5.6 C4.4,-3.8 -4.4,-3.8 -8.5,-5.6 Z' fill='#efe6d2' />
+							<path
+								d='M-0.9,-23.6 C-0.6,-17 -0.5,-11 -0.7,-6.5 L0.9,-6.5 C0.7,-11 0.8,-17 1.1,-23.6 Z'
+								fill='#b08f62'
+							/>
+							<path
+								d='M-8.6,-8.2 C-4.4,-6.4 4.4,-6.4 8.6,-8.2 L8.5,-5.6 C4.4,-3.8 -4.4,-3.8 -8.5,-5.6 Z'
+								fill='#efe6d2'
+							/>
 							<path d='M-5,-23.4 C-2.2,-24.8 2.2,-24.8 5,-23.4 C3.6,-21.2 -3.6,-21.2 -5,-23.4 Z' fill='#efe6d2' />
 							<path d='M-8.2,-14.6 C-4,-13.4 4,-13.4 8.2,-14.6 L8.1,-12.2 C4,-11 -4,-11 -8.1,-12.2 Z' fill='#8a5a33' />
 						</>
@@ -1124,7 +1232,10 @@ function Cossack({ season }: { season: Season }) {
 								<path d='M-1.9,-22.8 L-1.9,-14 M1.9,-22.8 L1.9,-14' />
 								<path d='M-1,-21.2 L0,-20.1 L1,-21.2 M-1,-19 L0,-17.9 L1,-19 M-1,-16.8 L0,-15.7 L1,-16.8' />
 							</g>
-							<path d='M-3.4,-23.7 C-1.4,-24.5 1.4,-24.5 3.4,-23.7 L2.6,-22 C1,-22.6 -1,-22.6 -2.6,-22 Z' fill='#c0392b' />
+							<path
+								d='M-3.4,-23.7 C-1.4,-24.5 1.4,-24.5 3.4,-23.7 L2.6,-22 C1,-22.6 -1,-22.6 -2.6,-22 Z'
+								fill='#c0392b'
+							/>
 
 							{/* the sash, with its ends hanging down the front */}
 							<path d='M-7.7,-15 C-4,-13.7 4,-13.7 7.7,-15 L7.6,-11.5 C4,-10.2 -4,-10.2 -7.6,-11.5 Z' fill='#3d9bd4' />
@@ -1146,21 +1257,39 @@ function Cossack({ season }: { season: Season }) {
 					<g transform='translate(0 -23.8)'>
 						<g ref={head}>
 							<ellipse cx={0} cy={-3.6} rx={4.4} ry={5} fill='#e8b98f' />
-							<path d='M1.2,-12.6 C3.6,-11.9 5,-10 5,-7.6 C5,-5.2 4.2,-3.2 3.2,-2 C4,-5 4,-8.4 2.5,-10.8 C2.1,-11.6 1.6,-12.2 1.2,-12.6 Z' fill='#c0392b' />
-							<path d='M-5.2,-6.6 C-5.6,-11 -3,-13.2 0,-13.2 C3,-13.2 5.6,-11 5.2,-6.6 C2.6,-8 -2.6,-8 -5.2,-6.6 Z' fill='#241f1e' />
+							<path
+								d='M1.2,-12.6 C3.6,-11.9 5,-10 5,-7.6 C5,-5.2 4.2,-3.2 3.2,-2 C4,-5 4,-8.4 2.5,-10.8 C2.1,-11.6 1.6,-12.2 1.2,-12.6 Z'
+								fill='#c0392b'
+							/>
+							<path
+								d='M-5.2,-6.6 C-5.6,-11 -3,-13.2 0,-13.2 C3,-13.2 5.6,-11 5.2,-6.6 C2.6,-8 -2.6,-8 -5.2,-6.6 Z'
+								fill='#241f1e'
+							/>
 							<path d='M-5.2,-7.4 C-2.6,-8.8 2.6,-8.8 5.2,-7.4 L5,-5.6 C2.4,-7 -2.4,-7 -5,-5.6 Z' fill='#161211' />
 							<circle cx={2.2} cy={-4} r={0.7} fill='#2a1c14' />
 							{/* The pipe stays in his teeth: the stem at his lips, the bowl forward
 							    and upright, the way one is actually smoked. His hand only comes up
 							    to it for a draw. */}
-							<path d='M3,-1.5 C4.8,-1.1 6.2,-0.5 7.4,0.3' stroke='#5a3d2b' strokeWidth={0.9} fill='none' strokeLinecap='round' />
+							<path
+								d='M3,-1.5 C4.8,-1.1 6.2,-0.5 7.4,0.3'
+								stroke='#5a3d2b'
+								strokeWidth={0.9}
+								fill='none'
+								strokeLinecap='round'
+							/>
 							<path d='M7,-0.5 L10,-0.5 L9.5,2.8 C9.3,3.7 7.7,3.7 7.5,2.8 Z' fill='#5a3d2b' />
 							<path d='M7,-0.5 L10,-0.5 L9.9,0.3 L7.1,0.3 Z' fill='#7a573c' />
 							<g ref={ember} opacity={0}>
 								<ellipse cx={8.5} cy={-0.2} rx={1.2} ry={0.5} fill='#ff7a2a' />
 							</g>
 							<g ref={calmMouth} opacity={0}>
-								<path d='M-0.6,-1 C0.8,-1.4 2.2,-1 3,-0.2' stroke='#7a5a44' strokeWidth={0.7} fill='none' strokeLinecap='round' />
+								<path
+									d='M-0.6,-1 C0.8,-1.4 2.2,-1 3,-0.2'
+									stroke='#7a5a44'
+									strokeWidth={0.7}
+									fill='none'
+									strokeLinecap='round'
+								/>
 							</g>
 							<g ref={laughMouth} opacity={0}>
 								<path d='M-0.4,-1.2 C1.2,-1.6 3,-1 3.4,0.4 C2.4,1.4 0.4,1 -0.4,-1.2 Z' fill='#5c3a30' />
@@ -1208,7 +1337,13 @@ interface Print {
 const MOVING = new Set<Mode>(["walk", "trot", "run"]);
 
 /* wolf: prints in pairs; fox: one neat line, each paw in the last one's print */
-const printsAlong = (route: Waypoint<Mode>[], stride: number, spread: number, size: number, depthScale: number): Print[] => {
+const printsAlong = (
+	route: Waypoint<Mode>[],
+	stride: number,
+	spread: number,
+	size: number,
+	depthScale: number,
+): Print[] => {
 	const prints: Print[] = [];
 	let last: Point | null = null;
 	let travelled = 0;
@@ -1275,21 +1410,16 @@ function Tracks({ prints }: { prints: Print[] }) {
 		let count = 0;
 		while (count < prints.length && prints[count].f <= f) count += 1;
 		if (count === shown.current || !group.current) return;
-		Array.from(group.current.children).forEach((print, index) => print.setAttribute("opacity", index < count ? "1" : "0"));
+		Array.from(group.current.children).forEach((print, index) =>
+			print.setAttribute("opacity", index < count ? "1" : "0"),
+		);
 		shown.current = count;
 	});
 
 	return (
 		<g ref={group} className='tracks'>
 			{prints.map((print, index) => (
-				<ellipse
-					key={index}
-					cx={print.x.toFixed(1)}
-					cy={print.y.toFixed(1)}
-					rx={print.rx}
-					ry={print.ry}
-					opacity={0}
-				/>
+				<ellipse key={index} cx={print.x.toFixed(1)} cy={print.y.toFixed(1)} rx={print.rx} ry={print.ry} opacity={0} />
 			))}
 		</g>
 	);

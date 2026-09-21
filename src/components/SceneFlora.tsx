@@ -60,7 +60,8 @@ const TREES: Record<TreeKind, TreeShape> = {
 	apple: {
 		trunk: "M-3.5,0 C-3,-10 -3,-20 -2.2,-30 L2.2,-30 C3,-20 3,-10 3.5,0 Z",
 		bark: "#6b4a33",
-		branches: "M0,-26 L-13,-42 M0,-28 L12,-44 M0,-29 L-1,-58 M-7,-35 L-19,-40 M6,-37 L19,-42 M-1,-48 L-9,-61 M-1,-50 L8,-62",
+		branches:
+			"M0,-26 L-13,-42 M0,-28 L12,-44 M0,-29 L-1,-58 M-7,-35 L-19,-40 M6,-37 L19,-42 M-1,-48 L-9,-61 M-1,-50 L8,-62",
 		branchWidth: 2.4,
 		crown: [
 			[0, -38, 13, 9, 1],
@@ -86,7 +87,8 @@ const TREES: Record<TreeKind, TreeShape> = {
 	cherry: {
 		trunk: "M-3,0 C-2.6,-10 -2.6,-20 -2,-27 L2,-27 C2.6,-20 2.6,-10 3,0 Z",
 		bark: "#6d3f35",
-		branches: "M0,-24 L-15,-40 M0,-25 L15,-41 M0,-26 L0,-58 M-9,-33 L-21,-36 M8,-33 L20,-37 M0,-44 L-8,-60 M0,-45 L9,-61",
+		branches:
+			"M0,-24 L-15,-40 M0,-25 L15,-41 M0,-26 L0,-58 M-9,-33 L-21,-36 M8,-33 L20,-37 M0,-44 L-8,-60 M0,-45 L9,-61",
 		branchWidth: 2.2,
 		crown: [
 			[-20, -36, 9, 7, 1],
@@ -112,7 +114,8 @@ const TREES: Record<TreeKind, TreeShape> = {
 	maple: {
 		trunk: "M-3.5,0 C-3,-10 -3,-20 -2.4,-32 L2.4,-32 C3,-20 3,-10 3.5,0 Z",
 		bark: "#5f4331",
-		branches: "M0,-28 L-14,-44 M0,-30 L13,-46 M0,-31 L0,-66 M-8,-38 L-20,-42 M7,-39 L20,-43 M0,-50 L-10,-62 M0,-52 L10,-63",
+		branches:
+			"M0,-28 L-14,-44 M0,-30 L13,-46 M0,-31 L0,-66 M-8,-38 L-20,-42 M7,-39 L20,-43 M0,-50 L-10,-62 M0,-52 L10,-63",
 		branchWidth: 2.4,
 		crown: [
 			[0, -37, 14, 8, 1],
@@ -129,8 +132,10 @@ const TREES: Record<TreeKind, TreeShape> = {
 		trunk: "M-2.4,0 C-2.2,-18 -1.8,-40 -1,-66 L1,-66 C1.8,-40 2.2,-18 2.4,0 Z",
 		bark: "#efece4",
 		twig: "#5d5048",
-		marks: "M-2.3,-8 L-0.5,-8.6 M0.6,-15 L2.2,-15.5 M-2.1,-24 L-0.4,-24.4 M0.4,-33 L1.9,-33.6 M-1.8,-42 L-0.3,-42.5 M0.3,-50 L1.5,-50.5",
-		branches: "M0,-30 L-10,-46 C-12,-50 -13,-54 -13,-58 M0,-34 L10,-50 C12,-54 12,-58 12,-60 M0,-46 L-6,-66 M0,-48 L6,-68",
+		marks:
+			"M-2.3,-8 L-0.5,-8.6 M0.6,-15 L2.2,-15.5 M-2.1,-24 L-0.4,-24.4 M0.4,-33 L1.9,-33.6 M-1.8,-42 L-0.3,-42.5 M0.3,-50 L1.5,-50.5",
+		branches:
+			"M0,-30 L-10,-46 C-12,-50 -13,-54 -13,-58 M0,-34 L10,-50 C12,-54 12,-58 12,-60 M0,-46 L-6,-66 M0,-48 L6,-68",
 		branchWidth: 1.6,
 		crown: [
 			[-10, -46, 8, 13, 1],
@@ -145,7 +150,8 @@ const TREES: Record<TreeKind, TreeShape> = {
 	oak: {
 		trunk: "M-5.5,0 C-4.5,-10 -4.5,-18 -4,-26 L4,-26 C4.5,-18 4.5,-10 5.5,0 Z",
 		bark: "#5a4030",
-		branches: "M0,-22 L-20,-38 M0,-23 L20,-39 M0,-25 L-2,-58 M-10,-30 L-24,-34 M10,-30 L25,-35 M-1,-44 L-12,-58 M-1,-46 L12,-58",
+		branches:
+			"M0,-22 L-20,-38 M0,-23 L20,-39 M0,-25 L-2,-58 M-10,-30 L-24,-34 M10,-30 L25,-35 M-1,-44 L-12,-58 M-1,-46 L12,-58",
 		branchWidth: 3,
 		crown: [
 			[-19, -39, 14, 11, 1],
@@ -307,12 +313,26 @@ function Tree({ kind, x, base, scale, tone, season, seed }: TreeProps) {
 
 	return (
 		<g className={`tree tree-${kind}`} transform={`translate(${x} ${base}) scale(${scale})`} style={palette}>
-			<path d={shape.branches} stroke={shape.twig ?? shape.bark} strokeWidth={shape.branchWidth} strokeLinecap='round' fill='none' />
-			<path d={twigs.path} stroke={shape.twig ?? shape.bark} strokeWidth={shape.branchWidth * 0.45} strokeLinecap='round' fill='none' />
+			<path
+				d={shape.branches}
+				stroke={shape.twig ?? shape.bark}
+				strokeWidth={shape.branchWidth}
+				strokeLinecap='round'
+				fill='none'
+			/>
+			<path
+				d={twigs.path}
+				stroke={shape.twig ?? shape.bark}
+				strokeWidth={shape.branchWidth * 0.45}
+				strokeLinecap='round'
+				fill='none'
+			/>
 			{shape.trunk ? <path d={shape.trunk} fill={shape.bark} /> : null}
 			{shape.marks ? <path d={shape.marks} stroke='#3b3b3b' strokeWidth={1.2} strokeLinecap='round' /> : null}
 			{/* the hare's nightly work; the critters' clock reveals it */}
-			{kind === "birch" ? <ellipse id='birch-gnaw' cx={0.2} cy={-9} rx={2.3} ry={3.6} fill='#c79a6c' opacity={0} /> : null}
+			{kind === "birch" ? (
+				<ellipse id='birch-gnaw' cx={0.2} cy={-9} rx={2.3} ry={3.6} fill='#c79a6c' opacity={0} />
+			) : null}
 			<path
 				className='snow-cap'
 				d={shape.branches}
@@ -347,7 +367,12 @@ function Tree({ kind, x, base, scale, tone, season, seed }: TreeProps) {
 			{shape.fruit === "cherry"
 				? shape.fruitAt?.map(([fx, fy], index) => (
 						<g key={index} className='fruit fruit-cherry'>
-							<path d={`M${fx - 1.8},${fy} L${fx},${fy - 4} L${fx + 1.8},${fy}`} stroke='#4a6b2a' strokeWidth={0.7} fill='none' />
+							<path
+								d={`M${fx - 1.8},${fy} L${fx},${fy - 4} L${fx + 1.8},${fy}`}
+								stroke='#4a6b2a'
+								strokeWidth={0.7}
+								fill='none'
+							/>
 							<circle cx={fx - 1.8} cy={fy} r={1.9} fill='#b3142f' />
 							<circle cx={fx + 1.8} cy={fy} r={1.9} fill='#b3142f' />
 						</g>
@@ -584,13 +609,24 @@ const scatter = (
 			[4.5, 1.2, 0.85],
 			[-4, 1.6, 0.9],
 		]) {
-			snowdrops.push({ x: x + dx * size * 1.5, y: y + dy * size, scale: s * size * 1.6, delay: delay + random() * 1.5 });
+			snowdrops.push({
+				x: x + dx * size * 1.5,
+				y: y + dy * size,
+				scale: s * size * 1.6,
+				delay: delay + random() * 1.5,
+			});
 		}
 	});
 	/* summer grass: tufts a little denser than the snowdrops, and flowers in pairs */
 	const tufts: Tuft[] = [];
 	plantGrid(random, Math.round(columns * 1.5), rows, top, bottom, [8 * size, 1 * size], (x, y) => {
-		tufts.push({ x, y, scale: size * between(random, 1.1, 1.6), flip: random() < 0.5 ? 1 : -1, shade: Math.floor(random() * 3) });
+		tufts.push({
+			x,
+			y,
+			scale: size * between(random, 1.1, 1.6),
+			flip: random() < 0.5 ? 1 : -1,
+			shade: Math.floor(random() * 3),
+		});
 	});
 	const flowers: Flower[] = [];
 	plantGrid(random, Math.round(columns * 1.2), rows, top, bottom, [12 * size, 1 * size], (x, y) => {
@@ -610,9 +646,33 @@ const scatter = (
 	return { specks, snowdrops, tufts, flowers };
 };
 
-const BACK_LITTER = scatter(11, 70, (x) => backRidgeAt(x), (x) => midRidgeAt(x), 0.7, 22, 2);
-const MID_LITTER = scatter(23, 44, (x) => midRidgeAt(x), (x) => riverTopAt(x), 0.85, 20, 2);
-const FRONT_LITTER = scatter(37, 96, (x) => frontRidgeAt(x), () => 898, 1.1, 18, 3);
+const BACK_LITTER = scatter(
+	11,
+	70,
+	(x) => backRidgeAt(x),
+	(x) => midRidgeAt(x),
+	0.7,
+	22,
+	2,
+);
+const MID_LITTER = scatter(
+	23,
+	44,
+	(x) => midRidgeAt(x),
+	(x) => riverTopAt(x),
+	0.85,
+	20,
+	2,
+);
+const FRONT_LITTER = scatter(
+	37,
+	96,
+	(x) => frontRidgeAt(x),
+	() => 898,
+	1.1,
+	18,
+	3,
+);
 
 const GRASS = ["#3f8a4f", "#4c9a58", "#5aa862"];
 
@@ -670,7 +730,10 @@ function MeadowLitter({ specks, snowdrops, tufts, flowers }: Litter) {
 				/>
 			))}
 			{flowers.map((flower, index) => (
-				<g key={index} transform={`translate(${flower.x.toFixed(1)} ${flower.y.toFixed(1)}) scale(${flower.scale.toFixed(2)})`}>
+				<g
+					key={index}
+					transform={`translate(${flower.x.toFixed(1)} ${flower.y.toFixed(1)}) scale(${flower.scale.toFixed(2)})`}
+				>
 					<g className='summer-flower' style={{ "--bloom-delay": `${flower.delay.toFixed(1)}s` } as CSSProperties}>
 						<g transform={`rotate(${flower.lean.toFixed(1)})`}>
 							<path d='M0,0 Q0.8,-4 0,-8' stroke='#4a8a45' strokeWidth={0.7} fill='none' strokeLinecap='round' />
@@ -773,8 +836,14 @@ export function FrontMeadow({ season, behindTrees }: FrontMeadowProps) {
 			))}
 			{/* a weathered stump, rings and all */}
 			<g transform={`translate(${STUMP.x} ${STUMP.base}) scale(${STUMP.scale})`}>
-				<path d='M-9.5,0 C-10.5,-6 -10,-12 -9,-14.6 L9,-14.6 C10,-12 10.5,-6 9.5,0 C4,1.6 -4,1.6 -9.5,0 Z' fill='#7a5a3c' />
-				<path d='M-9,-14.6 C-9.6,-11 -9.2,-5 -8.4,-0.6 C-6.6,0 -4.6,0.4 -2.6,0.6 C-3.6,-4.4 -4,-9.6 -3.6,-14.6 Z' fill='#6a4c31' />
+				<path
+					d='M-9.5,0 C-10.5,-6 -10,-12 -9,-14.6 L9,-14.6 C10,-12 10.5,-6 9.5,0 C4,1.6 -4,1.6 -9.5,0 Z'
+					fill='#7a5a3c'
+				/>
+				<path
+					d='M-9,-14.6 C-9.6,-11 -9.2,-5 -8.4,-0.6 C-6.6,0 -4.6,0.4 -2.6,0.6 C-3.6,-4.4 -4,-9.6 -3.6,-14.6 Z'
+					fill='#6a4c31'
+				/>
 				<ellipse cx={0} cy={-14.8} rx={9.2} ry={3.4} fill='#c4a271' />
 				<ellipse cx={0} cy={-14.8} rx={6} ry={2.2} fill='none' stroke='#a8875a' strokeWidth={0.7} />
 				<ellipse cx={0} cy={-14.8} rx={3} ry={1.1} fill='none' stroke='#a8875a' strokeWidth={0.6} />

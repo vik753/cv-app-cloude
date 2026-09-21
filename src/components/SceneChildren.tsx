@@ -26,7 +26,16 @@ interface KidLook {
 /* the three of the homestead: two boys and their sister */
 const LOOKS: KidLook[] = [
 	{ shirt: "#f7f4ec", trim: "#c0392b", hair: "#6b4a2f", hat: "#c0392b", scarf: "#3d9bd4" },
-	{ shirt: "#d4607f", trim: "#f7e6c8", hair: "#8a5a2f", hat: "#d4607f", scarf: "#f7e6c8", coat: "#d4607f", girl: true, bow: "#f2c14e" },
+	{
+		shirt: "#d4607f",
+		trim: "#f7e6c8",
+		hair: "#8a5a2f",
+		hat: "#d4607f",
+		scarf: "#f7e6c8",
+		coat: "#d4607f",
+		girl: true,
+		bow: "#f2c14e",
+	},
 	{ shirt: "#faf6ea", trim: "#4f8a4a", hair: "#a8763f", hat: "#4f8a4a", scarf: "#c0392b" },
 ];
 
@@ -103,7 +112,10 @@ function Kid({ route, look, outfit, ground, from, to, scale = 0.95 }: KidProps) 
 				arms = [-8, 10];
 		}
 		const s = typeof scale === "function" ? scale(at) : scale;
-		set(root, `translate(${x.toFixed(1)} ${(ground(x) + d + lift).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(ground(x) + d + lift).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`,
+		);
 		set(body, `rotate(${tilt.toFixed(1)} 0 -8)`);
 		set(legNear, `rotate(${legs[0].toFixed(1)})`);
 		set(legFar, `rotate(${legs[1].toFixed(1)})`);
@@ -153,7 +165,10 @@ function Kid({ route, look, outfit, ground, from, to, scale = 0.95 }: KidProps) 
 							fill={outfit === "winter" ? coat : look.shirt}
 						/>
 						{/* embroidery at the waist and round the hem */}
-						<path d='M-3.5,-9.8 C-1.2,-9.2 1.2,-9.2 3.5,-9.8 L3.7,-8.4 C1.2,-7.8 -1.2,-7.8 -3.7,-8.4 Z' fill={look.trim} />
+						<path
+							d='M-3.5,-9.8 C-1.2,-9.2 1.2,-9.2 3.5,-9.8 L3.7,-8.4 C1.2,-7.8 -1.2,-7.8 -3.7,-8.4 Z'
+							fill={look.trim}
+						/>
 						<path
 							d={
 								outfit === "winter"
@@ -173,10 +188,17 @@ function Kid({ route, look, outfit, ground, from, to, scale = 0.95 }: KidProps) 
 					<>
 						{/* a plain linen shirt, longer on the little ones in summer */}
 						<path
-							d={bare ? "M-4,-5.6 C-4.6,-10.6 -2.6,-14.6 0,-15 C2.6,-14.6 4.6,-10.6 4,-5.6 Z" : "M-3.8,-7.4 C-4.4,-11.2 -2.6,-14.6 0,-15 C2.6,-14.6 4.4,-11.2 3.8,-7.4 Z"}
+							d={
+								bare
+									? "M-4,-5.6 C-4.6,-10.6 -2.6,-14.6 0,-15 C2.6,-14.6 4.6,-10.6 4,-5.6 Z"
+									: "M-3.8,-7.4 C-4.4,-11.2 -2.6,-14.6 0,-15 C2.6,-14.6 4.4,-11.2 3.8,-7.4 Z"
+							}
 							fill={look.shirt}
 						/>
-						<path d={bare ? "M-3.9,-8.2 L3.9,-8.2 L3.9,-6.8 L-3.9,-6.8 Z" : "M-3.8,-9 L3.8,-9 L3.8,-7.8 L-3.8,-7.8 Z"} fill={look.trim} />
+						<path
+							d={bare ? "M-3.9,-8.2 L3.9,-8.2 L3.9,-6.8 L-3.9,-6.8 Z" : "M-3.8,-9 L3.8,-9 L3.8,-7.8 L-3.8,-7.8 Z"}
+							fill={look.trim}
+						/>
 						<path d='M-0.7,-14.4 L0.7,-14.4 L0.7,-9.4 L-0.7,-9.4 Z' fill={look.trim} opacity={0.8} />
 					</>
 				)}
@@ -198,9 +220,15 @@ function Kid({ route, look, outfit, ground, from, to, scale = 0.95 }: KidProps) 
 						<>
 							<circle cx={-1.2} cy={-1.6} r={0.9} fill='#e88b7a' />
 							<circle cx={2} cy={-1.6} r={0.9} fill='#e88b7a' />
-							<path d='M-2.9,-3.6 C-2.6,-6.4 2.6,-6.6 2.9,-3.6 C1,-4.4 -1,-4.4 -2.9,-3.6 Z' fill={look.hat ?? "#c0392b"} />
+							<path
+								d='M-2.9,-3.6 C-2.6,-6.4 2.6,-6.6 2.9,-3.6 C1,-4.4 -1,-4.4 -2.9,-3.6 Z'
+								fill={look.hat ?? "#c0392b"}
+							/>
 							<circle cx={0} cy={-6.2} r={1} fill='#efe6d2' />
-							<path d='M-3,-0.6 C-1,0.4 1.6,0.4 3,-0.6 L3.2,1.2 C1.4,2.2 -1.4,2.2 -3.2,1.2 Z' fill={look.scarf ?? "#3d9bd4"} />
+							<path
+								d='M-3,-0.6 C-1,0.4 1.6,0.4 3,-0.6 L3.2,1.2 C1.4,2.2 -1.4,2.2 -3.2,1.2 Z'
+								fill={look.scarf ?? "#3d9bd4"}
+							/>
 							<path d='M2.4,0.8 L4.2,0.6 L4.6,3.6 L2.8,3.8 Z' fill={look.scarf ?? "#3d9bd4"} />
 						</>
 					) : (
@@ -321,12 +349,30 @@ export function Snowman() {
 				<circle cx={-1.5} cy={-25.4} r={0.7} fill='#2a2a2a' />
 				<circle cx={1.5} cy={-25.4} r={0.7} fill='#2a2a2a' />
 				<path d='M0.4,-24 L4.6,-22.8 L0.4,-22.2 Z' fill='#e08a2a' />
-				<path d='M-2,-21.6 C-0.8,-20.8 0.8,-20.8 2,-21.6' stroke='#2a2a2a' strokeWidth={0.6} fill='none' strokeLinecap='round' />
+				<path
+					d='M-2,-21.6 C-0.8,-20.8 0.8,-20.8 2,-21.6'
+					stroke='#2a2a2a'
+					strokeWidth={0.6}
+					fill='none'
+					strokeLinecap='round'
+				/>
 			</g>
 			<g ref={trimmings} opacity={0}>
 				{/* twig arms, a bucket for a hat and a scarf like the children's */}
-				<path d='M-5,-17.4 L-11,-21 M-11,-21 L-13,-23.4 M-11,-21 L-13.4,-20.2' stroke='#6b4a2f' strokeWidth={0.8} fill='none' strokeLinecap='round' />
-				<path d='M5,-17.4 L11.4,-20 M11.4,-20 L13.6,-22.2 M11.4,-20 L13.8,-19.4' stroke='#6b4a2f' strokeWidth={0.8} fill='none' strokeLinecap='round' />
+				<path
+					d='M-5,-17.4 L-11,-21 M-11,-21 L-13,-23.4 M-11,-21 L-13.4,-20.2'
+					stroke='#6b4a2f'
+					strokeWidth={0.8}
+					fill='none'
+					strokeLinecap='round'
+				/>
+				<path
+					d='M5,-17.4 L11.4,-20 M11.4,-20 L13.6,-22.2 M11.4,-20 L13.8,-19.4'
+					stroke='#6b4a2f'
+					strokeWidth={0.8}
+					fill='none'
+					strokeLinecap='round'
+				/>
 				<path d='M-3.6,-27.6 L3.6,-27.6 L2.8,-33.4 L-2.8,-33.4 Z' fill='#7f8a94' />
 				<path d='M-4.4,-27.8 L4.4,-27.8 L4.4,-26.6 L-4.4,-26.6 Z' fill='#697580' />
 				<path d='M-3.8,-21.2 C-1.4,-20 1.4,-20 3.8,-21.2 L4,-19.2 C1.4,-18 -1.4,-18 -4,-19.2 Z' fill='#c0392b' />
@@ -415,7 +461,15 @@ export function SnowChildren() {
 		<g className='children'>
 			<Kid route={ROLLER_ONE} look={LOOKS[0]} outfit='winter' ground={yardGround} from={0.125} to={0.566} />
 			<Kid route={ROLLER_TWO} look={LOOKS[1]} outfit='winter' ground={yardGround} from={0.128} to={0.562} scale={1} />
-			<Kid route={ROLLER_THREE} look={LOOKS[2]} outfit='winter' ground={yardGround} from={0.132} to={0.572} scale={0.82} />
+			<Kid
+				route={ROLLER_THREE}
+				look={LOOKS[2]}
+				outfit='winter'
+				ground={yardGround}
+				from={0.132}
+				to={0.572}
+				scale={0.82}
+			/>
 		</g>
 	);
 }
@@ -494,9 +548,33 @@ const SKATER_THREE: Waypoint<KidMode>[] = [
 export function IceChildren() {
 	return (
 		<g className='children children-ice'>
-			<Kid route={SKATER_ONE} look={ICE_LOOKS[0]} outfit='winter' ground={iceGround} from={0.242} to={0.552} scale={downhill(1.35)} />
-			<Kid route={SKATER_TWO} look={ICE_LOOKS[1]} outfit='winter' ground={iceGround} from={0.262} to={0.558} scale={downhill(1.45)} />
-			<Kid route={SKATER_THREE} look={ICE_LOOKS[2]} outfit='winter' ground={iceGround} from={0.252} to={0.562} scale={downhill(1.15)} />
+			<Kid
+				route={SKATER_ONE}
+				look={ICE_LOOKS[0]}
+				outfit='winter'
+				ground={iceGround}
+				from={0.242}
+				to={0.552}
+				scale={downhill(1.35)}
+			/>
+			<Kid
+				route={SKATER_TWO}
+				look={ICE_LOOKS[1]}
+				outfit='winter'
+				ground={iceGround}
+				from={0.262}
+				to={0.558}
+				scale={downhill(1.45)}
+			/>
+			<Kid
+				route={SKATER_THREE}
+				look={ICE_LOOKS[2]}
+				outfit='winter'
+				ground={iceGround}
+				from={0.252}
+				to={0.562}
+				scale={downhill(1.15)}
+			/>
 		</g>
 	);
 }

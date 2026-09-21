@@ -89,18 +89,31 @@ function Woman({ dress, tool, coat, root, bend, legNear, legFar, armNear, armFar
 		<g transform={`translate(${x} -13)`}>
 			<g ref={ref}>
 				<path d='M-1.7,0 L1.7,0 L1.5,7 L-1.5,7 Z' fill='#f0e8d8' opacity={shade} />
-				<path d='M-1.6,6.4 C-1.8,8.6 -1.6,10.6 -1.4,12 L1.7,12 C1.9,10.6 1.9,8.6 1.7,6.4 Z' fill='#9c2f2a' opacity={shade} />
+				<path
+					d='M-1.6,6.4 C-1.8,8.6 -1.6,10.6 -1.4,12 L1.7,12 C1.9,10.6 1.9,8.6 1.7,6.4 Z'
+					fill='#9c2f2a'
+					opacity={shade}
+				/>
 				<path d='M-1.6,11.6 L1.7,11.6 L2.6,13 L-1.6,13 Z' fill='#5c2420' opacity={shade} />
 			</g>
 		</g>
 	);
 
-	const arm = (ref: React.RefObject<SVGGElement | null>, x: number, shade: number, holds: "basket" | "sickle" | "none") => (
+	const arm = (
+		ref: React.RefObject<SVGGElement | null>,
+		x: number,
+		shade: number,
+		holds: "basket" | "sickle" | "none",
+	) => (
 		<g transform={`translate(${x} -25)`}>
 			<g ref={ref}>
 				{/* the sleeve is a shade off the body of the coat, or the whole of her
 				    reads as one flat slab at this size */}
-				<path d='M-1.1,0 L1.1,0 L0.95,5.8 L-0.95,5.8 Z' fill={coat ? dress.sheepskinDark : dress.blouse} opacity={shade} />
+				<path
+					d='M-1.1,0 L1.1,0 L0.95,5.8 L-0.95,5.8 Z'
+					fill={coat ? dress.sheepskinDark : dress.blouse}
+					opacity={shade}
+				/>
 				<path
 					d={coat ? "M-1,4.3 L1,4.3 L0.95,5.8 L-0.95,5.8 Z" : "M-1.08,1.3 L1.08,1.3 L1.05,2.6 L-1.05,2.6 Z"}
 					fill={coat ? "#efe6d2" : dress.trim}
@@ -132,17 +145,35 @@ function Woman({ dress, tool, coat, root, bend, legNear, legFar, armNear, armFar
 			{coat ? (
 				/* a sheepskin over everything, long enough to hide the плахта */
 				<>
-					<path d='M0,-19.8 C3.8,-19.4 5.6,-14.4 6.8,-7.6 C3.4,-6.1 -3.4,-6.1 -6.8,-7.6 C-5.6,-14.4 -3.8,-19.4 0,-19.8 Z' fill={dress.sheepskin} />
-					<path d='M-6.8,-7.6 C-3.4,-6.1 3.4,-6.1 6.8,-7.6 L6.6,-9.6 C3.3,-8.1 -3.3,-8.1 -6.6,-9.6 Z' fill={dress.sheepskinDark} />
-					<path d='M-0.8,-19.6 C-0.6,-14 -0.5,-10.4 -0.6,-7.2 L0.8,-7.2 C0.7,-10.4 0.7,-14 0.9,-19.6 Z' fill={dress.sheepskinDark} />
+					<path
+						d='M0,-19.8 C3.8,-19.4 5.6,-14.4 6.8,-7.6 C3.4,-6.1 -3.4,-6.1 -6.8,-7.6 C-5.6,-14.4 -3.8,-19.4 0,-19.8 Z'
+						fill={dress.sheepskin}
+					/>
+					<path
+						d='M-6.8,-7.6 C-3.4,-6.1 3.4,-6.1 6.8,-7.6 L6.6,-9.6 C3.3,-8.1 -3.3,-8.1 -6.6,-9.6 Z'
+						fill={dress.sheepskinDark}
+					/>
+					<path
+						d='M-0.8,-19.6 C-0.6,-14 -0.5,-10.4 -0.6,-7.2 L0.8,-7.2 C0.7,-10.4 0.7,-14 0.9,-19.6 Z'
+						fill={dress.sheepskinDark}
+					/>
 				</>
 			) : (
 				<>
 					{/* плахта, with the apron over the front of it */}
-					<path d='M0,-19.4 C3.6,-19 5.4,-14.6 6.6,-8.2 C3.3,-6.7 -3.3,-6.7 -6.6,-8.2 C-5.4,-14.6 -3.6,-19 0,-19.4 Z' fill={dress.skirt} />
-					<path d='M-6.6,-8.2 C-3.3,-6.7 3.3,-6.7 6.6,-8.2 L6.4,-10.1 C3.2,-8.6 -3.2,-8.6 -6.4,-10.1 Z' fill={dress.skirtTrim} />
+					<path
+						d='M0,-19.4 C3.6,-19 5.4,-14.6 6.6,-8.2 C3.3,-6.7 -3.3,-6.7 -6.6,-8.2 C-5.4,-14.6 -3.6,-19 0,-19.4 Z'
+						fill={dress.skirt}
+					/>
+					<path
+						d='M-6.6,-8.2 C-3.3,-6.7 3.3,-6.7 6.6,-8.2 L6.4,-10.1 C3.2,-8.6 -3.2,-8.6 -6.4,-10.1 Z'
+						fill={dress.skirtTrim}
+					/>
 					<path d='M-2.8,-18.4 C-1,-18 1,-18 2.8,-18.4 L3.4,-8.6 C1.1,-7.5 -1.1,-7.5 -3.4,-8.6 Z' fill={dress.apron} />
-					<path d='M-3.36,-9.8 C-1.1,-8.7 1.1,-8.7 3.36,-9.8 L3.4,-8.6 C1.1,-7.5 -1.1,-7.5 -3.4,-8.6 Z' fill={dress.trim} />
+					<path
+						d='M-3.36,-9.8 C-1.1,-8.7 1.1,-8.7 3.36,-9.8 L3.4,-8.6 C1.1,-7.5 -1.1,-7.5 -3.4,-8.6 Z'
+						fill={dress.trim}
+					/>
 				</>
 			)}
 
@@ -151,17 +182,32 @@ function Woman({ dress, tool, coat, root, bend, legNear, legFar, armNear, armFar
 				{arm(armFar, -2.9, 0.86, tool === "basket" ? "basket" : "none")}
 				{coat ? (
 					<>
-						<path d='M-3.7,-19.6 C-4.3,-23.6 -2.4,-26.6 0,-27 C2.4,-26.6 4.3,-23.6 3.7,-19.6 Z' fill={dress.sheepskin} />
+						<path
+							d='M-3.7,-19.6 C-4.3,-23.6 -2.4,-26.6 0,-27 C2.4,-26.6 4.3,-23.6 3.7,-19.6 Z'
+							fill={dress.sheepskin}
+						/>
 						{/* the seam down the front, and the fleece turned out at the collar */}
-						<path d='M-0.7,-26.6 C-0.5,-23.6 -0.5,-21.4 -0.6,-19.4 L0.7,-19.4 C0.6,-21.4 0.6,-23.6 0.8,-26.6 Z' fill={dress.sheepskinDark} />
-						<path d='M-3,-25.4 C-1.6,-26.2 1.6,-26.2 3,-25.4 L2.8,-23.8 C1.5,-24.6 -1.5,-24.6 -2.8,-23.8 Z' fill='#efe6d2' />
+						<path
+							d='M-0.7,-26.6 C-0.5,-23.6 -0.5,-21.4 -0.6,-19.4 L0.7,-19.4 C0.6,-21.4 0.6,-23.6 0.8,-26.6 Z'
+							fill={dress.sheepskinDark}
+						/>
+						<path
+							d='M-3,-25.4 C-1.6,-26.2 1.6,-26.2 3,-25.4 L2.8,-23.8 C1.5,-24.6 -1.5,-24.6 -2.8,-23.8 Z'
+							fill='#efe6d2'
+						/>
 					</>
 				) : (
 					<>
 						<path d='M-3.5,-18.8 C-4.1,-23.4 -2.3,-26.4 0,-26.8 C2.3,-26.4 4.1,-23.4 3.5,-18.8 Z' fill={dress.blouse} />
 						{/* керсетка over the вишиванка, so the sleeves stay white */}
-						<path d='M-3.3,-18.8 C-3.7,-22 -2.5,-24.2 -1.3,-25.1 L1.3,-25.1 C2.5,-24.2 3.7,-22 3.3,-18.8 Z' fill={dress.bodice} />
-						<path d='M-2,-25.4 C-0.7,-25.9 0.7,-25.9 2,-25.4 L2.1,-24.3 C0.7,-24.8 -0.7,-24.8 -2.1,-24.3 Z' fill={dress.trim} />
+						<path
+							d='M-3.3,-18.8 C-3.7,-22 -2.5,-24.2 -1.3,-25.1 L1.3,-25.1 C2.5,-24.2 3.7,-22 3.3,-18.8 Z'
+							fill={dress.bodice}
+						/>
+						<path
+							d='M-2,-25.4 C-0.7,-25.9 0.7,-25.9 2,-25.4 L2.1,-24.3 C0.7,-24.8 -0.7,-24.8 -2.1,-24.3 Z'
+							fill={dress.trim}
+						/>
 					</>
 				)}
 
@@ -172,8 +218,14 @@ function Woman({ dress, tool, coat, root, bend, legNear, legFar, armNear, armFar
 						<>
 							<path d='M-3,-3.6 C-4.4,-0.6 -4.2,3.4 -3.2,5.6 L-1.5,5 C-2.4,2.8 -2.6,-0.4 -2,-2.8 Z' fill={dress.hair} />
 							<path d='M-3.4,5 L-1.6,4.4 L-1.2,6.2 L-3,6.8 Z' fill={dress.trim} />
-							<path d='M-3.4,-4.6 C-4.2,-1.6 -4.3,1.6 -3.8,4 L-2.9,3.8 C-3.3,1.4 -3.2,-1.6 -2.5,-4.2 Z' fill='#c0392b' />
-							<path d='M-2.6,-5.2 C-3.4,-2.4 -3.5,0.4 -3,2.6 L-2.1,2.4 C-2.5,0.2 -2.4,-2.4 -1.7,-4.8 Z' fill='#3d7bb8' />
+							<path
+								d='M-3.4,-4.6 C-4.2,-1.6 -4.3,1.6 -3.8,4 L-2.9,3.8 C-3.3,1.4 -3.2,-1.6 -2.5,-4.2 Z'
+								fill='#c0392b'
+							/>
+							<path
+								d='M-2.6,-5.2 C-3.4,-2.4 -3.5,0.4 -3,2.6 L-2.1,2.4 C-2.5,0.2 -2.4,-2.4 -1.7,-4.8 Z'
+								fill='#3d7bb8'
+							/>
 						</>
 					) : null}
 					<circle cx={0} cy={-3.2} r={3} fill='#e8b98f' />
@@ -343,7 +395,10 @@ const binding = (lag: number, depth: number, drift: number): Waypoint<WorkMode>[
 	{ f: 1, x: DOOR_X, d: -20, mode: "hidden" },
 ];
 
-const BINDING: [Waypoint<WorkMode>[], Waypoint<WorkMode>[]] = [binding(BIND_LAG, -7, 4), binding(BIND_LAG + 0.012, -10, 22)];
+const BINDING: [Waypoint<WorkMode>[], Waypoint<WorkMode>[]] = [
+	binding(BIND_LAG, -7, 4),
+	binding(BIND_LAG + 0.012, -10, 22),
+];
 
 /* winter: nothing to do up there, so it is only from one хата to the other */
 const VISITING: [Waypoint<WorkMode>[], Waypoint<WorkMode>[]] = [
@@ -451,7 +506,10 @@ function Worker({ route, dress, tool, season, ground, tempo, from, to }: WorkerP
 			}
 		}
 		const s = winter ? 0.86 : upField(0.86)(at);
-		set(root, `translate(${x.toFixed(1)} ${(ground(x) + d + lift).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(ground(x) + d + lift).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`,
+		);
 		set(bend, `rotate(${stoop.toFixed(1)} 0 -19)`);
 		set(legNear, `rotate(${legs[0].toFixed(1)})`);
 		set(legFar, `rotate(${legs[1].toFixed(1)})`);
@@ -460,7 +518,17 @@ function Worker({ route, dress, tool, season, ground, tempo, from, to }: WorkerP
 	});
 
 	return (
-		<Woman dress={dress} tool={tool} coat={winter} root={root} bend={bend} legNear={legNear} legFar={legFar} armNear={armNear} armFar={armFar} />
+		<Woman
+			dress={dress}
+			tool={tool}
+			coat={winter}
+			root={root}
+			bend={bend}
+			legNear={legNear}
+			legFar={legFar}
+			armNear={armNear}
+			armFar={armFar}
+		/>
 	);
 }
 
@@ -504,7 +572,11 @@ function Mower({
 		<g transform={`translate(${x} -15)`}>
 			<g ref={ref}>
 				<path d='M-2,0 L2,0 L1.8,7.6 L-1.8,7.6 Z' fill='#4a5a6b' opacity={shade} />
-				<path d='M-1.9,7 C-2.1,9.4 -1.9,11.6 -1.7,13 L1.9,13 C2.1,11.6 2.1,9.4 1.9,7 Z' fill='#3b2f26' opacity={shade} />
+				<path
+					d='M-1.9,7 C-2.1,9.4 -1.9,11.6 -1.7,13 L1.9,13 C2.1,11.6 2.1,9.4 1.9,7 Z'
+					fill='#3b2f26'
+					opacity={shade}
+				/>
 				<path d='M-1.9,12.6 L1.9,12.6 L3,14.2 L-1.9,14.2 Z' fill='#2e231d' opacity={shade} />
 			</g>
 		</g>
@@ -517,12 +589,18 @@ function Mower({
 			<g ref={bend}>
 				{/* a long linen сорочка, belted, over the trousers */}
 				<path d='M-5,-15.4 C-5.8,-21 -3.2,-26.4 0,-26.9 C3.2,-26.4 5.8,-21 5,-15.4 Z' fill='#f4efe4' />
-				<path d='M-4.6,-25.4 C-2.2,-26.4 2.2,-26.4 4.6,-25.4 L3.9,-23.8 C1.9,-24.6 -1.9,-24.6 -3.9,-23.8 Z' fill='#b8402f' />
+				<path
+					d='M-4.6,-25.4 C-2.2,-26.4 2.2,-26.4 4.6,-25.4 L3.9,-23.8 C1.9,-24.6 -1.9,-24.6 -3.9,-23.8 Z'
+					fill='#b8402f'
+				/>
 				<path d='M-5.1,-18.4 C-2.4,-17.2 2.4,-17.2 5.1,-18.4 L5,-16.2 C2.4,-15 -2.4,-15 -5,-16.2 Z' fill='#7a5c38' />
 				<g transform='translate(0 -26.9)'>
 					<circle cx={0} cy={-3.4} r={3.2} fill='#e8b98f' />
 					<circle cx={1.8} cy={-3.8} r={0.6} fill='#2a1c14' />
-					<path d='M-0.6,-1.8 C0.6,-2.4 2.2,-2.2 3,-1.4 C2.5,-0.2 1.5,0.6 0.5,0.8 C1.3,-0.1 1.6,-0.8 1.3,-1.2 Z' fill='#4a3524' />
+					<path
+						d='M-0.6,-1.8 C0.6,-2.4 2.2,-2.2 3,-1.4 C2.5,-0.2 1.5,0.6 0.5,0.8 C1.3,-0.1 1.6,-0.8 1.3,-1.2 Z'
+						fill='#4a3524'
+					/>
 					{/* a straw бриль against the sun */}
 					<path d='M-5.6,-5.2 C-3,-6.6 3,-6.6 5.6,-5.2 L5.4,-3.9 C2.8,-5.1 -2.8,-5.1 -5.4,-3.9 Z' fill='#d9b96a' />
 					<path d='M-3.2,-5.4 C-2.8,-9.4 2.8,-9.4 3.2,-5.4 C1,-6.4 -1,-6.4 -3.2,-5.4 Z' fill='#e0c478' />
@@ -595,7 +673,10 @@ function Reaper({ route, ground }: { route: Waypoint<WorkMode>[]; ground: (x: nu
 			stoop = 3;
 		}
 		const s = upField(0.9)(at);
-		set(root, `translate(${x.toFixed(1)} ${(ground(x) + d).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`);
+		set(
+			root,
+			`translate(${x.toFixed(1)} ${(ground(x) + d).toFixed(1)}) scale(${(heading.current * s).toFixed(3)} ${s.toFixed(3)})`,
+		);
 		set(bend, `rotate(${stoop.toFixed(1)} 0 -17)`);
 		set(legNear, `rotate(${legs[0].toFixed(1)})`);
 		set(legFar, `rotate(${legs[1].toFixed(1)})`);
@@ -626,8 +707,26 @@ export function FieldFolk({ season }: { season: Season }) {
 		<g className='field-folk'>
 			{/* he works deeper up the plot than they do, so he goes in behind them */}
 			{season === "autumn" ? <Reaper route={MOWING} ground={ground} /> : null}
-			<Worker route={first} dress={DRESSES[0]} tool={TOOLS[season]} season={season} ground={ground} tempo={1} from={fromA} to={toA} />
-			<Worker route={second} dress={DRESSES[1]} tool={TOOLS[season]} season={season} ground={ground} tempo={0.88} from={fromB} to={toB} />
+			<Worker
+				route={first}
+				dress={DRESSES[0]}
+				tool={TOOLS[season]}
+				season={season}
+				ground={ground}
+				tempo={1}
+				from={fromA}
+				to={toA}
+			/>
+			<Worker
+				route={second}
+				dress={DRESSES[1]}
+				tool={TOOLS[season]}
+				season={season}
+				ground={ground}
+				tempo={0.88}
+				from={fromB}
+				to={toB}
+			/>
 		</g>
 	);
 }

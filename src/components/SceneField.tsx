@@ -172,7 +172,15 @@ function Sunflower({ x, y, scale }: { x: number; y: number; scale: number }) {
 			<path d='M0.4,-9.4 C3,-10.6 4.6,-12.4 4.6,-14 C2.6,-13.8 1.2,-12.4 0.4,-10.6 Z' fill='#4f8a3a' />
 			<g transform='translate(0.8 -16.6)'>
 				{Array.from({ length: 11 }, (_, i) => (
-					<ellipse key={i} cx={0} cy={-3} rx={1.05} ry={2.3} fill={i % 2 ? "#f0c02a" : "#e8a81f"} transform={`rotate(${(i * 360) / 11})`} />
+					<ellipse
+						key={i}
+						cx={0}
+						cy={-3}
+						rx={1.05}
+						ry={2.3}
+						fill={i % 2 ? "#f0c02a" : "#e8a81f"}
+						transform={`rotate(${(i * 360) / 11})`}
+					/>
 				))}
 				<circle cx={0} cy={0} r={1.9} fill='#6b4a2f' />
 				<circle cx={0} cy={0} r={1.1} fill='#5a3b24' />
@@ -238,7 +246,8 @@ const CARTED = 0.55;
 /* how tall the crop stands, and how far it has turned from green to gold */
 const growth = (season: Season, f: number): [number, number] => {
 	if (season === "spring") return [Math.max(0, Math.min(0.2, (f - 0.24) * 0.5)), 0];
-	if (season === "summer") return [Math.min(1, 0.2 + Math.max(0, f - 0.04) * 1.6), Math.max(0, Math.min(1, (f - 0.3) / 0.3))];
+	if (season === "summer")
+		return [Math.min(1, 0.2 + Math.max(0, f - 0.04) * 1.6), Math.max(0, Math.min(1, (f - 0.3) / 0.3))];
 	return [1, 1];
 };
 
@@ -315,11 +324,22 @@ export function WheatField({ season }: FieldProps) {
 			<path className='field-soil' d={CROP_PATH} fill={soil} />
 			{Array.from({ length: 7 }, (_, i) => {
 				const row = fieldRow(furrowFrom + (i * (furrowTo - furrowFrom)) / 6);
-				return <path key={i} d={`M${row.from + 4},${row.y} L${row.to - 4},${row.y}`} stroke={furrow} strokeWidth={0.7} opacity={0.35} />;
+				return (
+					<path
+						key={i}
+						d={`M${row.from + 4},${row.y} L${row.to - 4},${row.y}`}
+						stroke={furrow}
+						strokeWidth={0.7}
+						opacity={0.35}
+					/>
+				);
 			})}
 			{autumn
 				? STUBBLE.map((tuft, i) => (
-						<g key={i} transform={`translate(${tuft.x.toFixed(1)} ${tuft.y.toFixed(1)}) scale(${tuft.scale.toFixed(2)})`}>
+						<g
+							key={i}
+							transform={`translate(${tuft.x.toFixed(1)} ${tuft.y.toFixed(1)}) scale(${tuft.scale.toFixed(2)})`}
+						>
 							<path d={TUFT} fill='#b39a62' />
 						</g>
 					))
@@ -347,7 +367,10 @@ export function WheatField({ season }: FieldProps) {
 								   origin */
 								<g key={c} className='wheat-tuft' style={{ animationDelay: `${clump.delay.toFixed(2)}s` }}>
 									{clump.tufts.map((tuft, i) => (
-										<g key={i} transform={`translate(${tuft.x.toFixed(1)} ${tuft.y.toFixed(1)}) scale(${tuft.scale.toFixed(2)})`}>
+										<g
+											key={i}
+											transform={`translate(${tuft.x.toFixed(1)} ${tuft.y.toFixed(1)}) scale(${tuft.scale.toFixed(2)})`}
+										>
 											<path d={TUFT} fill={`var(--ear-${tuft.tone})`} />
 										</g>
 									))}
