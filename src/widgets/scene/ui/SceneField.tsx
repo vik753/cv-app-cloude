@@ -1,5 +1,6 @@
 import type { Season } from "@/widgets/scene/model/useDayNightCycle";
-import { lerp, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { lerp } from "@/widgets/scene/lib/choreography";
 import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt } from "@/widgets/scene/lib/landscape";
 import { seededRandom } from "@/shared/lib";
 import { useRef } from "react";

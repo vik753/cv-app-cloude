@@ -1,5 +1,6 @@
 import type { Season } from "@/widgets/scene/model/useDayNightCycle";
-import { onRoute, presence, set, show, TAU, useCycleFrame, type Waypoint } from "@/widgets/scene/model/useSceneClock";
+import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { onRoute, presence, TAU, type Waypoint } from "@/widgets/scene/lib/choreography";
 import { riverTopAt, upperGround } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 

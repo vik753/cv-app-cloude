@@ -1,15 +1,6 @@
 import type { Season } from "@/widgets/scene/model/useDayNightCycle";
-import {
-	ease,
-	lerp,
-	onRoute,
-	presence,
-	set,
-	show,
-	TAU,
-	useCycleFrame,
-	type Waypoint,
-} from "@/widgets/scene/model/useSceneClock";
+import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { ease, lerp, onRoute, presence, TAU, type Waypoint } from "@/widgets/scene/lib/choreography";
 import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt, upperGround } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 

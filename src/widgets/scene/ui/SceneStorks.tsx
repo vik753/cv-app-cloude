@@ -1,5 +1,6 @@
 import type { Season } from "@/widgets/scene/model/useDayNightCycle";
-import { set, show, TAU, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
+import { TAU } from "@/widgets/scene/lib/choreography";
 import { HOMESTEAD } from "@/widgets/scene/lib/landscape";
 import { useRef } from "react";
 

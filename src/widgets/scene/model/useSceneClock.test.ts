@@ -1,4 +1,4 @@
-import { ease, lerp, onRoute, presence, type Waypoint } from "@/widgets/scene/model/useSceneClock";
+import { ease, lerp, onRoute, presence, type Waypoint } from "@/widgets/scene/lib/choreography";
 import { describe, expect, it } from "vitest";
 
 describe("lerp", () => {
