@@ -19,7 +19,9 @@ export const languageSchema = z.object({
 export const resumeSchema = z.object({
 	name: z.string(),
 	role: z.string(),
-	email: z.string().email(),
+	/* this schema validates an autosaved draft, not a finished resume: an empty email is
+	   the normal state of a half-written one, so only a non-empty value has to parse */
+	email: z.string().email().or(z.literal("")),
 	phone: z.string(),
 	location: z.string(),
 	website: z.string(),

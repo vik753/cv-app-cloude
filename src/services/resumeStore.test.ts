@@ -113,21 +113,14 @@ describe("resumeStore persistence contract", () => {
 		expect(useResumeStore.getState().resume.role).toBe("Old Role");
 	});
 
-	/* BUG (reported to the team lead, not fixed here): readLegacyDraft merges the
-	   saved v1 draft over `initialResume` and validates the merged object with
-	   `resumeSchema`, which requires `email` to be a syntactically valid address.
-	   `initialResume.email` is "". Any legacy draft that does not itself carry a
-	   valid email - the normal case for a resume still being filled in - fails
-	   `safeParse` and the *entire* draft, not just the email, is silently replaced
-	   by a blank resume. This is exactly the drafts this migration path exists to
-	   protect. Documented here as current behaviour; see the report for repro. */
-	it("legacy migration silently discards an otherwise-valid draft that has no email yet", async () => {
+	it("migrates a legacy draft that has no email yet, since an incomplete draft is the normal case", async () => {
 		localStorage.setItem(
 			"resume-canvas-draft-v1",
 			JSON.stringify({ name: "Legacy User", skills: ["React", "TypeScript"] }),
 		);
 		const { useResumeStore } = await import("@/services/resumeStore");
-		expect(useResumeStore.getState().resume).toEqual(initialResume);
+		expect(useResumeStore.getState().resume.name).toBe("Legacy User");
+		expect(useResumeStore.getState().resume.skills).toEqual(["React", "TypeScript"]);
 	});
 
 	it("reads the palette from its own legacy key when no draft has been persisted yet", async () => {

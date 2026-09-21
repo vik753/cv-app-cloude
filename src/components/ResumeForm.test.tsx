@@ -76,6 +76,14 @@ describe("ResumeForm - validation", () => {
 		await user.tab();
 		expect(screen.queryByText(/invalid email/i)).not.toBeInTheDocument();
 	});
+
+	it("shows no validation error for a still-empty email, since an incomplete draft is not an invalid one", async () => {
+		const user = userEvent.setup();
+		render(<ControlledResumeForm />);
+		await user.click(screen.getByLabelText(t.email));
+		await user.tab();
+		expect(screen.queryByText(/invalid email/i)).not.toBeInTheDocument();
+	});
 });
 
 describe("ResumeForm - work experience", () => {

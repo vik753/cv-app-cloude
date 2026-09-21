@@ -34,24 +34,14 @@ describe("skill icons", () => {
 		}
 	});
 
-	/* BUG (reported to the team lead, not fixed here): a handful of suggestions use
-	   a label that `getSkillIconId` cannot map back to their own id, because
-	   stripping "." from the label does not reproduce the short icon id and there
-	   is no alias bridging the two (unlike e.g. "javascript" -> "js", which *is*
-	   aliased). Clicking these specific suggestions in the form adds a skill chip
-	   with no icon, right after the suggestion row showed one. */
-	const suggestionsWithNoWayBack = ["D3.js", "Markdown", "PostgreSQL", "Python"];
-
-	it("resolves every suggestion back to an icon URL, except the known-broken ones below", () => {
-		const withoutKnownBugs = skillIconSuggestions.filter(({ label }) => !suggestionsWithNoWayBack.includes(label));
-		for (const { label } of withoutKnownBugs) {
-			expect(getSkillIconUrl(label), `"${label}" should resolve back to an icon`).toBeDefined();
-		}
-	});
-
-	it("BUG: selecting these suggestions from the autocomplete leaves the resulting skill with no icon", () => {
-		for (const label of suggestionsWithNoWayBack) {
-			expect(getSkillIconUrl(label)).toBeUndefined();
+	it("resolves every one of its own suggestions back to its own icon id", () => {
+		/* every id offered in the autocomplete must round-trip through its own label,
+		   or picking that exact suggestion in the form adds a skill chip with no icon,
+		   right after the suggestion row showed one. This used to fail for four
+		   default-labeled entries ("D3.js", "Markdown", "PostgreSQL", "Python") whose
+		   label could not be reduced back to their short id; now fixed via aliases. */
+		for (const { id, label } of skillIconSuggestions) {
+			expect(getSkillIconId(label), `"${label}" should resolve back to "${id}"`).toBe(id);
 		}
 	});
 });

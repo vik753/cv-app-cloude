@@ -1,3 +1,4 @@
+import { initialResume } from "@/services/initialResume";
 import { experienceSchema, languageLevels, languageSchema, resumeSchema } from "@/services/resumeSchema";
 import { describe, expect, it } from "vitest";
 
@@ -24,10 +25,6 @@ describe("resumeSchema", () => {
 		expect(resumeSchema.safeParse(validResume).success).toBe(true);
 	});
 
-	it("rejects an invalid email", () => {
-		expect(resumeSchema.safeParse({ ...validResume, email: "invalid" }).success).toBe(false);
-	});
-
 	it("rejects an invalid language level", () => {
 		expect(
 			resumeSchema.safeParse({ ...validResume, languages: [{ id: 1, language: "English", level: "Z9" }] }).success,
@@ -47,11 +44,21 @@ describe("resumeSchema", () => {
 		expect(resumeSchema.safeParse({ ...validResume, skills: [], languages: [], experience: [] }).success).toBe(true);
 	});
 
-	it("rejects an empty email, since an empty string is not a valid address", () => {
-		/* documents a real interaction: initialResume's own default email is "", so
-		   any full-schema validation of a still-empty draft fails on this field alone
-		   - see resumeStore.test.ts for where that bites the legacy draft migration */
-		expect(resumeSchema.safeParse({ ...validResume, email: "" }).success).toBe(false);
+	it("accepts an empty email, since this schema validates an autosaved draft that may still be incomplete", () => {
+		expect(resumeSchema.safeParse({ ...validResume, email: "" }).success).toBe(true);
+	});
+
+	it("still rejects a malformed, non-empty email", () => {
+		expect(resumeSchema.safeParse({ ...validResume, email: "not-an-email" }).success).toBe(false);
+	});
+
+	it("accepts the app's own blank initial resume", () => {
+		/* regression guard for the root cause behind a real bug: initialResume used to
+		   fail its own schema (email: "" is not a valid address), which is exactly what
+		   made readLegacyDraft's safeParse discard whole legacy drafts on merge - see
+		   resumeStore.test.ts. Any future field tightened without checking against
+		   initialResume risks reintroducing the same class of bug. */
+		expect(resumeSchema.safeParse(initialResume).success).toBe(true);
 	});
 });
 
