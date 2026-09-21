@@ -1,4 +1,4 @@
-import { App } from "@/App";
+import { App } from "@/app";
 import { useResumeStore } from "@/entities/resume";
 import { renderWithProviders as render } from "@/test-utils/renderWithProviders";
 import { screen } from "@testing-library/react";
