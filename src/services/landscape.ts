@@ -112,6 +112,46 @@ export const FENCE = {
 	to: 106,
 };
 
+/* The strip of ploughed land at the top of the slope, left of the хати and well
+   above the yard the children play in: a trapezoid lying on the hillside, wider at
+   the near edge because it falls away from us. Depth is measured up from the near
+   edge — 0 at the margin the women walk along, `depth` at the far edge — which is
+   how their routes and the crop rows are both written. */
+export const FIELD = {
+	nearY: 568,
+	nearFrom: 880,
+	nearTo: 1206,
+	farFrom: 936,
+	farTo: 1160,
+	depth: 44,
+	/* the crop stands between these two depths; the rest is the bare margin, which
+	   is nearer than anything growing and so never hides the women working it */
+	cropFrom: 12,
+	cropTo: 41,
+};
+
+/* where a row at a given depth runs from and to, and how high it sits */
+export const fieldRow = (depth: number) => {
+	const t = depth / FIELD.depth;
+	return {
+		y: FIELD.nearY - depth,
+		from: FIELD.nearFrom + (FIELD.farFrom - FIELD.nearFrom) * t,
+		to: FIELD.nearTo + (FIELD.farTo - FIELD.nearTo) * t,
+	};
+};
+
+/* The plot is worked in bands of width — the strip the mower takes with him as he
+   goes along it. The field cuts itself on this schedule and the folk walking it are
+   routed off the same one, so nobody is ever bending over wheat still standing. */
+export const BANDS = 6;
+export const MOW_FROM = 0.17;
+export const MOW_STEP = 0.052;
+/* how far behind the mower the binders are */
+export const BIND_LAG = 0.05;
+export const mownAt = (band: number) => MOW_FROM + MOW_STEP * (BANDS - 1 - band);
+
+export const FIELD_PATH = `M${FIELD.nearFrom},${FIELD.nearY} L${FIELD.nearTo},${FIELD.nearY} L${FIELD.farTo},${FIELD.nearY - FIELD.depth} L${FIELD.farFrom},${FIELD.nearY - FIELD.depth} Z`;
+
 /* the dog's kennel, out on the near side of the fence */
 export const KENNEL = { x: 1196, base: onBackMeadow(1196) + 20, scale: 1.45 };
 
