@@ -1,0 +1,9 @@
+# Revisions to skip when running git blame: bulk reformatting, never authorship.
+#
+# Enable locally with:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# GitHub reads this file automatically.
+
+# style: run prettier over the whole tree, once
+133037de8155b8e273c016c7857edfb330aa6705
