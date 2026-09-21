@@ -1,5 +1,6 @@
 import type { Season } from "@/widgets/scene/model/useDayNightCycle";
-import { SnowChildren, Snowman, YardChildren } from "@/widgets/scene/ui/SceneChildren";
+import { SnowChildren, YardChildren } from "@/widgets/scene/ui/SceneChildren";
+import { Snowman } from "@/widgets/scene/ui/children/Snowman";
 import { FieldFolk } from "@/widgets/scene/ui/SceneFieldFolk";
 import { Revellers } from "@/widgets/scene/ui/SceneRevellers";
 import { HomesteadFence } from "@/widgets/scene/ui/SceneVillage";
