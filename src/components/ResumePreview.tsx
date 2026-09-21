@@ -18,7 +18,7 @@ export function ResumePreview({ resume, t, language }: ResumePreviewProps) {
 		() => Math.max(1, Math.ceil((resume.experience.length * 120 + resume.summary.length / 4 + 360) / 650)),
 		[resume.experience.length, resume.summary.length],
 	);
-	const quote = useMemo(() => quotes[Math.floor(Math.random() * quotes.length)], []);
+	const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
 	return (
 		<aside
 			className='print-preview min-w-0 border-t border-[#d7d8d0] bg-[#e7e6df] px-5 py-8 sm:px-8 lg:border-l lg:border-t-0 lg:px-[3vw] lg:py-11'
@@ -89,8 +89,8 @@ export function ResumePreview({ resume, t, language }: ResumePreviewProps) {
 					</div>
 					<div className='mt-7 border-y border-[#deded5] py-5'>
 						<p className='whitespace-pre-line text-[11px] leading-[1.55] text-[#66736b]'>
-						{resume.summary || t.previewSummary}
-					</p>
+							{resume.summary || t.previewSummary}
+						</p>
 					</div>
 					<div className='resume-content pt-7'>
 						<div className='resume-summary'>
@@ -141,7 +141,9 @@ export function ResumePreview({ resume, t, language }: ResumePreviewProps) {
 									<time className='mt-1 block font-mono text-[11px] text-[var(--accent-text)]'>
 										{item.period || t.period}
 									</time>
-									<p className='mt-2 whitespace-pre-line text-[10px] leading-[1.45] text-[#758079]'>{item.description}</p>
+									<p className='mt-2 whitespace-pre-line text-[10px] leading-[1.45] text-[#758079]'>
+										{item.description}
+									</p>
 								</div>
 							))}
 						</div>
