@@ -1,0 +1,223 @@
+/* The animals and the people: wolf, fox, hare, tracks, the stork wedge, the
+   song notes and the sleeping z's. */
+
+/* --- critters --- */
+.wolf-fur {
+	fill: #737a85;
+}
+/* the wolf's winter coat is paler and denser */
+.critters-winter .wolf-fur {
+	fill: #8b929c;
+}
+
+/* red fox: a rich, deep coat in winter; a faded, patchy one while it moults in
+   spring and wears it through summer (the tail and body thin out too, in JS) */
+.fox-fur,
+.fox-leg,
+.fox-leg-far {
+	transition: fill 10s ease;
+}
+.fox-fur {
+	fill: #c9793e;
+}
+.fox-leg {
+	fill: #4a3328;
+}
+.fox-leg-far {
+	fill: #36251d;
+}
+.critters-autumn .fox-fur {
+	fill: #d9692a;
+}
+.critters-winter .fox-fur {
+	fill: #e0561f;
+}
+.critters-winter .fox-leg {
+	fill: #2e1f19;
+}
+.critters-spring .fox-fur {
+	fill: #cf7a45;
+}
+
+/* mountain hare: grey-brown most of the year, white in winter, patchy between */
+.hare-fur,
+.hare-fur-dark {
+	transition:
+		fill 12s ease,
+		stroke 12s ease;
+}
+.hare-fur {
+	fill: #9a8a76;
+}
+.hare-fur-dark {
+	fill: #85765f;
+}
+.critters-autumn .hare-fur {
+	fill: #b9ae9f;
+}
+.critters-autumn .hare-fur-dark {
+	fill: #a79a88;
+}
+.critters-winter .hare-fur {
+	fill: #f4f6f8;
+}
+.critters-winter .hare-fur-dark {
+	fill: #e3e8ee;
+}
+.critters-spring .hare-fur {
+	fill: #a89a86;
+}
+/* the outline and the shadow fade in with the white coat */
+.hare-fur,
+.hare-fur-dark {
+	stroke: rgba(92, 108, 136, 0);
+	stroke-width: 0.7;
+	stroke-linejoin: round;
+	paint-order: stroke;
+}
+.hare-shadow {
+	fill: rgba(70, 84, 110, 0);
+	transition: fill 12s ease;
+}
+.critters-winter .hare-fur,
+.critters-winter .hare-fur-dark {
+	stroke: rgba(92, 108, 136, 0.85);
+}
+.critters-winter .hare-shadow {
+	fill: rgba(70, 84, 110, 0.28);
+}
+
+.fox-puff {
+	fill: #d6e6b8;
+}
+.fox-puff-autumn {
+	fill: #e0b347;
+}
+.fox-puff-winter {
+	fill: #fbfdff;
+}
+
+/* pressed into the snow: a shade of the snow's own blue, not a stamp */
+.tracks {
+	fill: #9fb1c6;
+}
+
+/* the wedge of storks crossing the autumn sky, and their wingbeats */
+.stork-wedge {
+	position: absolute;
+	top: 15%;
+	left: 0;
+	width: 0;
+	height: 0;
+	animation: wedge-cross 46s linear infinite;
+}
+@keyframes wedge-cross {
+	0%,
+	26% {
+		opacity: 0;
+		transform: translateX(-22vw);
+	}
+	28.5% {
+		opacity: 1;
+	}
+	41% {
+		opacity: 1;
+	}
+	44%,
+	100% {
+		opacity: 0;
+		transform: translateX(122vw);
+	}
+}
+.wedge-bird {
+	position: absolute;
+	width: 52px;
+	height: 26px;
+	overflow: visible;
+	animation: wedge-lift 2.6s ease-in-out infinite alternate;
+}
+@keyframes wedge-lift {
+	from {
+		transform: translateY(-2px);
+	}
+	to {
+		transform: translateY(3px);
+	}
+}
+.wedge-wing {
+	transform-box: view-box;
+	transform-origin: 0 0;
+	animation: wing-beat 0.62s ease-in-out infinite alternate;
+}
+@keyframes wing-beat {
+	from {
+		transform: rotate(-20deg);
+	}
+	to {
+		transform: rotate(18deg);
+	}
+}
+
+/* notes drifting up from the singing */
+.song-note {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: note-rise 4.2s ease-out var(--note-delay, 0s) infinite;
+}
+@keyframes note-rise {
+	0% {
+		opacity: 0;
+		transform: translate(0, 4px) scale(0.6) rotate(-8deg);
+	}
+	18% {
+		opacity: 0.85;
+	}
+	70% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(7px, -22px) scale(1.15) rotate(12deg);
+	}
+}
+
+/* the little z's that rise off anyone asleep */
+.sleep-zzz {
+	fill: #3f4d6e;
+	font: 700 7px var(--font-mono);
+}
+.sleep-zzz text {
+	animation: zzz-float 3s ease-in-out infinite;
+}
+.sleep-zzz text:nth-child(2) {
+	animation-delay: 1s;
+}
+.sleep-zzz text:nth-child(3) {
+	animation-delay: 2s;
+}
+
+.hedgehog-zzz {
+	/* dark on purpose: it floats over snow */
+	fill: #3f4d6e;
+	font: 700 8px var(--font-mono);
+}
+.hedgehog-zzz text {
+	animation: zzz-float 3s ease-in-out infinite;
+}
+.hedgehog-zzz text:nth-child(2) {
+	animation-delay: 1s;
+}
+.hedgehog-zzz text:nth-child(3) {
+	animation-delay: 2s;
+}
+@keyframes zzz-float {
+	0%,
+	100% {
+		opacity: 0.2;
+		transform: translateY(1px);
+	}
+	50% {
+		opacity: 1;
+		transform: translateY(-2px);
+	}
+}

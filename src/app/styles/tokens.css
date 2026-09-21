@@ -1,0 +1,327 @@
+/* Design tokens: the Tailwind theme bridge, the animatable custom properties,
+   and the palette/mode variants that set them. */
+
+@theme {
+	--font-sans: "DM Sans", sans-serif;
+	--font-display: "Space Grotesk", sans-serif;
+	--font-mono: "DM Mono", monospace;
+}
+
+:root {
+	--ground: #f2f1eb;
+	--panel: #e7e6df;
+	--card: #f7f6f0;
+	--divider: #d7d8d0;
+	--border: #c9cabf;
+	--input-border: #d0d4cb;
+	--muted: #68716c;
+	--label: #59625e;
+	--text: #17201d;
+	--tint: #eaf0e8;
+	--chip-border: #ccd8ce;
+	--on-tint: #153b34;
+	--accent-text: #d36f48;
+	--chip-x: #91a095;
+	--accent: #d36f48;
+	--paper: #fbfaf5;
+	--paper-ink: #263832;
+	--paper-muted: #758079;
+	--paper-border: #deded5;
+	--paper-chip: #eaf0e8;
+	--paper-chip-ink: #3d6254;
+	--paper-avatar: #e4d3be;
+	--lang-tint: #e7f1de;
+	--lang-chip-border: #c6ddb4;
+	--lang-on-tint: #3f6b2f;
+	--paper-lang-chip: #f7ece1;
+	--paper-lang-chip-ink: #8a4a2e;
+	--danger-text: #b8503f;
+	--danger-border: #c9695a;
+}
+
+/* Registering these as <color> lets the browser interpolate the custom
+   property itself, so every element reading var(--ground) etc. crossfades
+   smoothly when the day/night cycle flips data-mode — no per-component
+   transition rules needed. Unsupported browsers just snap instantly. */
+@property --ground {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f2f1eb;
+}
+@property --panel {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e7e6df;
+}
+@property --card {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f7f6f0;
+}
+@property --divider {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d7d8d0;
+}
+@property --border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c9cabf;
+}
+@property --input-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d0d4cb;
+}
+@property --muted {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #68716c;
+}
+@property --label {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #59625e;
+}
+@property --text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #17201d;
+}
+@property --tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #eaf0e8;
+}
+@property --chip-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #ccd8ce;
+}
+@property --on-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #153b34;
+}
+@property --accent-text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d36f48;
+}
+@property --chip-x {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #91a095;
+}
+@property --accent {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #d36f48;
+}
+@property --paper {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #fbfaf5;
+}
+@property --paper-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #263832;
+}
+@property --paper-muted {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #758079;
+}
+@property --paper-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #deded5;
+}
+@property --paper-chip {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #eaf0e8;
+}
+@property --paper-chip-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #3d6254;
+}
+@property --paper-avatar {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e4d3be;
+}
+@property --lang-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #e7f1de;
+}
+@property --lang-chip-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c6ddb4;
+}
+@property --lang-on-tint {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #3f6b2f;
+}
+@property --paper-lang-chip {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #f7ece1;
+}
+@property --paper-lang-chip-ink {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #8a4a2e;
+}
+@property --danger-text {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #b8503f;
+}
+@property --danger-border {
+	syntax: "<color>";
+	inherits: true;
+	initial-value: #c9695a;
+}
+
+.app-shell[data-palette="blurple"][data-mode="dark"] {
+	--ground: #161826;
+	--panel: #131424;
+	--card: #1b1d2c;
+	--divider: #292b31;
+	--border: #3f424d;
+	--input-border: #595d6c;
+	--muted: #75798c;
+	--label: #9397ab;
+	--text: #e9e9ed;
+	--tint: #2b2741;
+	--chip-border: #423a6a;
+	--on-tint: #d2cefd;
+	--accent-text: #b5abfc;
+	--chip-x: #7972a9;
+	--accent: #9184d9;
+	--paper: #f3f5fe;
+	--paper-ink: #2b293a;
+	--paper-muted: #5c5783;
+	--paper-border: #cfd3e5;
+	--paper-chip: #e7e5fe;
+	--paper-chip-ink: #5d5294;
+	--paper-avatar: #d2cefd;
+	--lang-tint: #1c2c45;
+	--lang-chip-border: #35507a;
+	--lang-on-tint: #a9d0fb;
+	--paper-lang-chip: #f7e3cf;
+	--paper-lang-chip-ink: #8a5a2e;
+}
+.app-shell[data-palette="blurple"][data-mode="light"] {
+	--ground: #f3f5fe;
+	--panel: #e4e7f5;
+	--card: #e4e7f5;
+	--divider: #cfd3e5;
+	--border: #b2b6ca;
+	--input-border: #b2b6ca;
+	--muted: #595d6c;
+	--label: #595d6c;
+	--text: #292b31;
+	--tint: #e7e5fe;
+	--chip-border: #b5abfc;
+	--on-tint: #5d5294;
+	--accent-text: #5d5294;
+	--chip-x: #796cbf;
+	--accent: #9184d9;
+	--paper: #f3f5fe;
+	--paper-ink: #2b293a;
+	--paper-muted: #5c5783;
+	--paper-border: #cfd3e5;
+	--paper-chip: #e7e5fe;
+	--paper-chip-ink: #5d5294;
+	--paper-avatar: #d2cefd;
+	--lang-tint: #f1e6fb;
+	--lang-chip-border: #d1b3ec;
+	--lang-on-tint: #7a4a9e;
+	--paper-lang-chip: #f7e3cf;
+	--paper-lang-chip-ink: #8a5a2e;
+}
+.app-shell[data-palette="cream"][data-mode="dark"] {
+	--ground: #1a1512;
+	--panel: #14100e;
+	--card: #241d18;
+	--divider: #332a24;
+	--border: #453a31;
+	--input-border: #50433a;
+	--muted: #9b8d82;
+	--label: #b3a79c;
+	--text: #f1ece6;
+	--tint: #3a2318;
+	--chip-border: #5a3323;
+	--on-tint: #eab595;
+	--accent-text: #e09271;
+	--chip-x: #a1745f;
+	--accent: #d36f48;
+	--lang-tint: #4a2f1c;
+	--lang-chip-border: #6b4a2c;
+	--lang-on-tint: #f0c896;
+}
+.app-shell[data-palette="slate"][data-mode="light"] {
+	--ground: #f5f6f7;
+	--panel: #eef0f2;
+	--card: #fbfcfd;
+	--divider: #dfe2e5;
+	--border: #c9ced3;
+	--input-border: #cdd2d7;
+	--muted: #667079;
+	--label: #57616b;
+	--text: #1b2126;
+	--tint: #e7eaed;
+	--chip-border: #d3d7db;
+	--on-tint: #29323a;
+	--accent-text: #4f6473;
+	--chip-x: #98a0a7;
+	--accent: #4f6473;
+	--paper: #ffffff;
+	--paper-ink: #1b2126;
+	--paper-muted: #6b7480;
+	--paper-border: #dde1e5;
+	--paper-chip: transparent;
+	--paper-chip-ink: #333c44;
+	--paper-avatar: transparent;
+	--lang-tint: #e7eaed;
+	--lang-chip-border: #d3d7db;
+	--lang-on-tint: #3d4a55;
+	--paper-lang-chip: transparent;
+	--paper-lang-chip-ink: #3d4a55;
+}
+.app-shell[data-palette="slate"][data-mode="dark"] {
+	--ground: #2b2f33;
+	--panel: #24282c;
+	--card: #34383c;
+	--divider: #3d4146;
+	--border: #4b4f54;
+	--input-border: #575c62;
+	--muted: #9ba1a8;
+	--label: #acb2b8;
+	--text: #eef1f2;
+	--tint: #343940;
+	--chip-border: #4b5056;
+	--on-tint: #dde3e7;
+	--accent-text: #a3b7c5;
+	--chip-x: #7d848b;
+	--accent: #a3b7c5;
+	--paper: #ffffff;
+	--paper-ink: #1b2126;
+	--paper-muted: #6b7480;
+	--paper-border: #dde1e5;
+	--paper-chip: transparent;
+	--paper-chip-ink: #333c44;
+	--paper-avatar: transparent;
+	--lang-tint: #e7eaed;
+	--lang-chip-border: #d3d7db;
+	--lang-on-tint: #3d4a55;
+	--paper-lang-chip: transparent;
+	--paper-lang-chip-ink: #3d4a55;
+}

@@ -1,0 +1,688 @@
+/* The app chrome: shell, glass mode, header, body columns, footer, the
+   minimize-to-a-badge window, and the music player. */
+
+.app-shell {
+	display: flex;
+	flex-direction: column;
+	/* .scene is fixed with z-index 0, so it paints above non-positioned content.
+	   Without an explicit stacking context here the shell only stayed on top by
+	   accident, via backdrop-filter — which the production minifier can strip. */
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	height: 100vh;
+	margin: 0;
+	overflow: hidden;
+	border-radius: 0;
+	background: var(--ground);
+	color: var(--text);
+	box-shadow:
+		0 0 0 1px var(--border),
+		0 16px 40px color-mix(in srgb, #000 25%, transparent);
+}
+.app-shell[data-mode="dark"] {
+	color-scheme: dark;
+	--danger-text: #e2917f;
+	--danger-border: #b56354;
+}
+.app-shell[data-mode="light"] {
+	color-scheme: light;
+}
+.app-shell.scene-active {
+	--glass-alpha: 77%;
+	--glass-blur: 6px;
+	background: transparent;
+	/* the scene toggle itself fades fast; the day/night colour swap (driven by
+	   data-mode flipping every half-cycle) fades slowly so the theme never blinks */
+	transition:
+		background 600ms ease,
+		--ground 10s ease-in-out,
+		--panel 10s ease-in-out,
+		--card 10s ease-in-out,
+		--divider 10s ease-in-out,
+		--border 10s ease-in-out,
+		--input-border 10s ease-in-out,
+		--muted 10s ease-in-out,
+		--label 10s ease-in-out,
+		--text 10s ease-in-out,
+		--tint 10s ease-in-out,
+		--chip-border 10s ease-in-out,
+		--on-tint 10s ease-in-out,
+		--accent-text 10s ease-in-out,
+		--chip-x 10s ease-in-out,
+		--accent 10s ease-in-out,
+		--paper 10s ease-in-out,
+		--paper-ink 10s ease-in-out,
+		--paper-muted 10s ease-in-out,
+		--paper-border 10s ease-in-out,
+		--paper-chip 10s ease-in-out,
+		--paper-chip-ink 10s ease-in-out,
+		--paper-avatar 10s ease-in-out,
+		--lang-tint 10s ease-in-out,
+		--lang-chip-border 10s ease-in-out,
+		--lang-on-tint 10s ease-in-out,
+		--paper-lang-chip 10s ease-in-out,
+		--paper-lang-chip-ink 10s ease-in-out,
+		--danger-text 10s ease-in-out,
+		--danger-border 10s ease-in-out;
+}
+.app-shell.scene-active .print-preview {
+	background: transparent !important;
+	transition: background 600ms ease;
+}
+.app-shell.scene-active .app-header,
+.app-shell.scene-active .app-footer,
+.app-shell.scene-active .preview-toolbar,
+.app-shell.scene-active .print-note {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .preview-toolbar,
+.app-shell.scene-active .print-note {
+	border-radius: 10px;
+}
+.app-shell.scene-active .preview-toolbar {
+	padding: 12px 16px;
+}
+.app-shell.scene-active .print-note {
+	padding: 8px 14px;
+}
+
+/* glass: the whole form column is ONE frosted panel — everything inside it
+   (hero, section headings, fields, the experience card) stays background-free
+   so their borders don't stack into extra blurred layers on top of it. */
+.app-shell.scene-active .form-card {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .form-column input,
+.app-shell.scene-active .form-column select,
+.app-shell.scene-active .form-column textarea {
+	background: transparent !important;
+	backdrop-filter: none;
+}
+.app-shell.scene-active .form-column [class*="bg-white/20"] {
+	background: transparent !important;
+	backdrop-filter: none;
+}
+/* Skills/Education/Courses containers already sit on the glass paper behind them —
+   keep just their border, no extra fill, so they don't read as a lighter patch. */
+.app-shell.scene-active .print-paper .bg-\[\#f8f7f1\] {
+	background: transparent !important;
+	backdrop-filter: none;
+}
+.app-shell.scene-active .print-paper .bg-\[\#e8eee7\] {
+	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
+	backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .header-download,
+.app-shell.scene-active .header-clear,
+.app-shell.scene-active .preview-toggle,
+.app-shell.scene-active .scene-toggle,
+.app-shell.scene-active .segmented,
+.app-shell.scene-active .palette-trigger,
+.app-shell.scene-active .language-switcher,
+.app-shell.scene-active .zoom-stepper {
+	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
+	backdrop-filter: blur(var(--glass-blur));
+}
+.app-shell.scene-active .segmented button.active,
+.app-shell.scene-active .scene-toggle.active,
+.app-shell.scene-active .language-switcher button.active {
+	background: color-mix(in srgb, var(--tint) var(--glass-alpha), transparent);
+}
+.app-shell.scene-active .print-paper {
+	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
+	backdrop-filter: blur(var(--glass-blur));
+}
+
+.app-header {
+	display: grid;
+	flex-shrink: 0;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	gap: 24px;
+	min-height: 52px;
+	padding: 0 20px;
+	border-bottom: 1px solid var(--divider);
+}
+.header-start {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+.app-brand {
+	flex-shrink: 0;
+	color: var(--text);
+}
+.header-start .autosave {
+	margin-inline: auto;
+	padding-inline: 12px;
+	white-space: nowrap;
+}
+.header-center {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.header-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 14px;
+}
+.header-download {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 6px 12px;
+	border: 1px solid var(--accent);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--on-tint);
+	font-size: 12px;
+}
+.header-download:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.header-clear:hover {
+	background: color-mix(in srgb, var(--danger-border) 12%, transparent);
+}
+.segmented {
+	display: flex;
+	padding: 2px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+}
+.segmented button {
+	display: grid;
+	width: 26px;
+	height: 20px;
+	place-items: center;
+	border: 0;
+	border-radius: 4px;
+	background: transparent;
+	color: var(--muted);
+}
+.segmented button.active {
+	background: var(--tint);
+	color: var(--on-tint);
+}
+.segmented button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+.scene-toggle.active {
+	background: var(--tint);
+	border-color: var(--accent);
+	color: var(--on-tint);
+}
+.palette-trigger {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 9px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--muted);
+}
+.palette-trigger:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--on-tint);
+}
+.palette-trigger[data-state="open"] {
+	background: var(--tint);
+	border-color: var(--accent);
+	color: var(--on-tint);
+}
+.palette-trigger .caret {
+	color: var(--muted);
+	transition: transform 160ms ease;
+}
+.palette-trigger[data-state="open"] .caret {
+	transform: rotate(180deg);
+	color: inherit;
+}
+.swatch {
+	width: 14px;
+	height: 14px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+.swatch.blurple {
+	background: #9184d9;
+}
+.swatch.cream {
+	background: #d36f48;
+}
+.swatch.slate {
+	background: #4f6473;
+}
+.palette-menu {
+	z-index: 50;
+	min-width: 232px;
+	padding: 6px;
+	border-radius: 10px;
+	border: 1px solid var(--border);
+	background: var(--card);
+	color: var(--text);
+	box-shadow: 0 12px 28px color-mix(in srgb, #000 22%, transparent);
+	transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+	animation: tooltip-in 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.palette-menu[data-state="closed"] {
+	animation: tooltip-out 100ms ease-in forwards;
+}
+.palette-menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 9px;
+	border-radius: 7px;
+	cursor: pointer;
+	outline: none;
+}
+.palette-menu-item[data-highlighted] {
+	background: var(--tint);
+}
+.palette-menu-item[data-state="checked"] {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.palette-menu-text {
+	display: flex;
+	min-width: 0;
+	flex: 1;
+	flex-direction: column;
+	gap: 1px;
+}
+.palette-menu-text strong {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: var(--text);
+}
+.palette-menu-text small {
+	font-size: 10.5px;
+	color: var(--muted);
+}
+.palette-menu-check {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
+	color: var(--accent-text);
+}
+.autosave {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--muted);
+	font: 12px var(--font-mono);
+}
+.autosave span {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--accent);
+}
+.header-clear {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 6px 12px;
+	border: 1px solid var(--danger-border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--danger-text);
+	font-size: 12px;
+}
+.preview-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--label);
+}
+.preview-toggle:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--on-tint);
+}
+.preview-toggle.active {
+	background: var(--tint);
+	border-color: var(--accent);
+	color: var(--on-tint);
+}
+.preview-toggle-state {
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.scene-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--label);
+}
+.scene-toggle:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--on-tint);
+}
+.scene-toggle-state {
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.glass-alpha-slider {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px dashed var(--accent);
+	border-radius: 8px;
+	color: var(--label);
+	font: 11px var(--font-mono);
+}
+.glass-alpha-slider input[type="range"] {
+	width: 70px;
+	accent-color: var(--accent);
+}
+.glass-alpha-slider span {
+	min-width: 30px;
+	text-align: right;
+}
+.language-switcher {
+	border-color: var(--border);
+}
+.language-switcher button {
+	border: 0;
+	background: transparent;
+	color: var(--muted);
+}
+.language-switcher button.active {
+	background: var(--tint);
+	color: var(--on-tint);
+}
+.app-body {
+	display: grid;
+	flex: 1;
+	min-height: 0;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: minmax(0, 1fr);
+	align-items: stretch;
+	overflow: hidden;
+	transition: grid-template-columns 360ms ease;
+}
+.app-body.preview-hidden {
+	grid-template-columns: minmax(0, 1fr) 0px;
+}
+.app-body .form-column {
+	width: 100%;
+	max-width: 1100px;
+	margin-inline: auto;
+	justify-self: center;
+	opacity: 1;
+	transform: translateX(0);
+	transition:
+		opacity 360ms ease,
+		transform 360ms ease,
+		border-color 360ms ease;
+}
+.app-body.preview-entering .form-column {
+	opacity: 0.55;
+	transform: translateX(14px);
+}
+.app-body .print-preview {
+	min-width: 0;
+	opacity: 1;
+	transform: translateX(0);
+	transition:
+		opacity 260ms ease,
+		transform 360ms ease;
+}
+.app-body:not(.preview-hidden) .print-preview {
+	transition-delay: 360ms;
+}
+.app-body.preview-hidden .print-preview {
+	opacity: 0;
+	transform: translateX(18px);
+	pointer-events: none;
+	transition-delay: 0ms;
+}
+.form-column {
+	height: 100%;
+	overflow-y: auto;
+	padding: 24px 16px 16px;
+}
+/* a quiet line under everything: who made this, and whose music is playing */
+.app-footer {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px 24px;
+	padding: 10px 20px;
+	border-top: 1px solid var(--divider);
+	color: var(--muted);
+	font: 11px var(--font-mono);
+}
+.app-footer p {
+	margin: 0;
+}
+.footer-author {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.footer-author span + a::before,
+.footer-author a + span::before {
+	content: "·";
+	margin-right: 10px;
+	color: color-mix(in srgb, var(--muted) 60%, transparent);
+}
+.footer-credit {
+	text-align: right;
+}
+.app-footer a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px solid color-mix(in srgb, var(--muted) 45%, transparent);
+}
+.app-footer a:hover {
+	color: var(--text);
+	border-bottom-color: currentColor;
+}
+@media (max-width: 720px) {
+	.app-footer {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 12px 16px;
+	}
+	.footer-credit {
+		text-align: left;
+	}
+}
+
+/* ---- minimize to a badge ----
+   header + body live in .app-window, which shrinks into the bottom-right corner.
+   The shell itself stays put: it carries the theme tokens the badge needs. */
+.app-window {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-height: 0;
+	transform-origin: calc(100% - 70px) calc(100% - 34px);
+	transition:
+		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
+		opacity 360ms ease,
+		visibility 0s linear 0s;
+}
+.app-shell.minimized {
+	/* above the sky actors so nothing flies over the badge; the shell is transparent
+	   in scene mode, so the whole scene still shows through it */
+	z-index: 3;
+	pointer-events: none;
+}
+.app-shell.minimized .app-window {
+	transform: scale(0.06);
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
+		opacity 420ms ease 60ms,
+		visibility 0s linear 480ms;
+}
+.form-card {
+	position: relative;
+}
+.window-minimize,
+.window-restore {
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	background: #f5bf4f;
+	box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+	color: rgba(90, 55, 0, 0.8);
+}
+.window-minimize {
+	position: absolute;
+	top: 9px;
+	left: 9px;
+	z-index: 1;
+	width: 13px;
+	height: 13px;
+	padding: 0;
+	border: 0;
+	cursor: pointer;
+}
+/* like a desktop window: the glyph only shows once you reach for the button */
+.window-minimize svg {
+	opacity: 0;
+	transition: opacity 120ms ease;
+}
+.window-minimize:hover svg,
+.window-minimize:focus-visible svg {
+	opacity: 1;
+}
+.window-minimize:hover {
+	background: #f7c85f;
+}
+/* The scene's music comes from YouTube's own embedded player. Their terms require
+   it to stay visible and at least 200x200, so it sits as a small card above the
+   badge rather than playing out of sight. */
+.scene-music {
+	position: fixed;
+	right: 20px;
+	bottom: 86px;
+	overflow: hidden;
+	width: 268px;
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 14px;
+	background: #000;
+	box-shadow: 0 16px 36px -14px color-mix(in srgb, #000 55%, transparent);
+	pointer-events: auto;
+	/* slides in and out from the edge: YouTube's terms forbid altering the player
+	   itself, so it never fades — only the card travels */
+	animation: music-in 400ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+}
+.scene-music.leaving {
+	animation: music-out 420ms ease forwards;
+	pointer-events: none;
+}
+@keyframes music-in {
+	from {
+		transform: translateX(320px);
+	}
+	to {
+		transform: none;
+	}
+}
+.scene-music-player,
+.scene-music iframe {
+	display: block;
+	width: 268px;
+	height: 201px;
+	border: 0;
+}
+@keyframes music-out {
+	to {
+		transform: translateX(320px);
+	}
+}
+@media (max-width: 560px) {
+	.scene-music {
+		right: 12px;
+		bottom: 78px;
+		width: 220px;
+	}
+	.scene-music-player,
+	.scene-music iframe {
+		width: 220px;
+		height: 201px;
+	}
+}
+
+.window-badge {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 12px 8px 14px;
+	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+	border-radius: 14px;
+	background: color-mix(in srgb, var(--card) 82%, transparent);
+	backdrop-filter: blur(8px);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
+		0 14px 34px -12px color-mix(in srgb, #000 40%, transparent);
+	color: var(--text);
+	pointer-events: auto;
+	cursor: pointer;
+	animation: badge-in 380ms cubic-bezier(0.32, 0.72, 0, 1) 260ms backwards;
+	transition:
+		transform 160ms ease,
+		box-shadow 160ms ease;
+}
+.window-badge:hover {
+	transform: translateY(-2px);
+	box-shadow:
+		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
+		0 18px 38px -12px color-mix(in srgb, #000 45%, transparent);
+}
+.window-restore {
+	width: 20px;
+	height: 20px;
+}
+@keyframes badge-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.85);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.app-window,
+	.app-shell.minimized .app-window {
+		transition: none;
+	}
+	.window-badge {
+		animation: none;
+	}
+}

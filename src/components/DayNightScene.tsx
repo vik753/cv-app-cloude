@@ -28,7 +28,7 @@ const createStars = (): Star[] =>
 		animationDuration: `${1.8 + Math.random() * 1.8}s`,
 	}));
 
-/* The sky keyframes in index.css run a 46s cycle: day holds from 10% to 40%,
+/* The sky keyframes in src/app/styles/scene/sky.css run a 46s cycle: day holds from 10% to 40%,
    night from 60% to 90% (27.6s to 41.4s). The flybys are scheduled inside those
    windows and unmount once their animation ends, so being mounted at all is what
    keeps them to the right half of the cycle — they carry no opacity keyframes.

@@ -1,0 +1,183 @@
+/* The river: fish leaping by day, a snag drifting by night, ice in winter. */
+
+/* --- the river --- */
+/* fish rise through the day; a snag drifts past at night */
+.river-day {
+	animation: day-opacity 46s linear infinite;
+}
+.river-night {
+	animation: night-opacity 46s linear infinite;
+}
+.fish-leap {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: fish-leap 12s linear var(--leap-delay, 0s) infinite;
+}
+/* A real leap is over in about a second: out fast, a short arc, and back in nose
+   first. The steps below sample a ballistic curve at equal times — even spacing
+   across, quick at the water, slower only at the very top. */
+@keyframes fish-leap {
+	0%,
+	88% {
+		opacity: 0;
+		transform: translate(0, 7px) rotate(-62deg);
+	}
+	88.3% {
+		opacity: 1;
+		transform: translate(1px, 2px) rotate(-58deg);
+	}
+	89% {
+		transform: translate(4px, -8px) rotate(-46deg);
+	}
+	89.7% {
+		transform: translate(7.5px, -16px) rotate(-33deg);
+	}
+	90.4% {
+		transform: translate(11px, -21.5px) rotate(-19deg);
+	}
+	91.1% {
+		transform: translate(14.5px, -24.5px) rotate(-5deg);
+	}
+	91.8% {
+		transform: translate(18px, -25px) rotate(9deg);
+	}
+	92.5% {
+		transform: translate(21.5px, -22.5px) rotate(23deg);
+	}
+	93.2% {
+		transform: translate(25px, -17.5px) rotate(36deg);
+	}
+	93.9% {
+		transform: translate(28px, -10px) rotate(48deg);
+	}
+	94.6% {
+		transform: translate(31px, 0) rotate(58deg);
+	}
+	95.2% {
+		opacity: 1;
+		transform: translate(33px, 7px) rotate(64deg);
+	}
+	95.6%,
+	100% {
+		opacity: 0;
+		transform: translate(33.5px, 9px) rotate(66deg);
+	}
+}
+.splash-out,
+.splash-in {
+	fill: none;
+	stroke: #eaf7ff;
+	stroke-width: 1.3;
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: splash-out 12s linear var(--leap-delay, 0s) infinite;
+}
+.splash-in {
+	animation-name: splash-in;
+}
+@keyframes splash-out {
+	0%,
+	88% {
+		opacity: 0;
+		transform: scale(0.25);
+	}
+	88.5% {
+		opacity: 0.9;
+		transform: scale(0.55);
+	}
+	92.5% {
+		opacity: 0;
+		transform: scale(1.5);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.5);
+	}
+}
+@keyframes splash-in {
+	0%,
+	95.2% {
+		opacity: 0;
+		transform: scale(0.25);
+	}
+	95.7% {
+		opacity: 0.95;
+		transform: scale(0.6);
+	}
+	99.6% {
+		opacity: 0;
+		transform: scale(1.9);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.9);
+	}
+}
+/* the spray thrown up where it goes back under */
+.splash-drops {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: splash-drops 12s linear var(--leap-delay, 0s) infinite;
+}
+@keyframes splash-drops {
+	0%,
+	95.3% {
+		opacity: 0;
+		transform: translate(0, 0) scale(0.5);
+	}
+	95.8% {
+		opacity: 0.9;
+		transform: translate(0, -3px) scale(1);
+	}
+	97.6% {
+		opacity: 0;
+		transform: translate(2px, -7px) scale(1.2);
+	}
+	100% {
+		opacity: 0;
+		transform: translate(2px, -7px) scale(1.2);
+	}
+}
+.drift-log {
+	animation: drift-log 46s linear infinite;
+}
+@keyframes drift-log {
+	0%,
+	56% {
+		transform: translateX(-140px) rotate(-1deg);
+	}
+	94%,
+	100% {
+		transform: translateX(1760px) rotate(2deg);
+	}
+}
+
+/* winter: a lid of ice over the water, with the fish still moving underneath */
+.river-ice {
+	opacity: 0;
+	transition: opacity 12s ease;
+}
+.scene[data-season="winter"] .river-ice {
+	opacity: 1;
+}
+.river-ripples {
+	transition: opacity 10s ease;
+}
+.scene[data-season="winter"] .river-ripples {
+	opacity: 0.18;
+}
+.ice-fish {
+	opacity: 0.62;
+	animation: ice-swim var(--swim-duration, 40s) linear var(--swim-delay, 0s) infinite;
+}
+@keyframes ice-swim {
+	from {
+		transform: translateX(var(--swim-from, -140px));
+	}
+	to {
+		transform: translateX(var(--swim-to, 1740px));
+	}
+}

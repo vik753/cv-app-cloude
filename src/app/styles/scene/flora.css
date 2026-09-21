@@ -1,0 +1,226 @@
+/* Things that grow: the wheat field, the meadows and the trees, each easing
+   from one season's look to the next. */
+
+/* ============ Seasons ============
+   One day and night is one season: summer, autumn, winter, spring. The scene carries
+   data-season, and everything below eases from one look to the next on its own. */
+
+/* --- the wheat field --- */
+
+/* the soil eases from fresh-turned in spring to stubble in autumn to snow */
+.field-soil {
+	transition: fill 12s ease;
+}
+
+/* The crop carries its own height and colour as custom properties, set once a
+   frame while it grows and ripens. The flat ground of it comes in with the shoots,
+   so bare soil shows between them while they are still short. */
+.wheat-field {
+	--grow: 1;
+	--field-cover: 1;
+}
+.field-base {
+	opacity: var(--field-cover, 1);
+}
+
+/* Every clump leans on its own delay, so the field moves across in waves rather
+   than all at once, and stands as tall as the crop has grown. The growth goes in
+   the keyframes too: a CSS transform replaces the whole transform, so it has to
+   carry both. */
+.wheat-tuft,
+.field-grown {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+}
+.wheat-tuft {
+	animation: wheat-sway 4.2s ease-in-out infinite;
+}
+.field-grown {
+	transform: scaleY(var(--grow, 1));
+}
+@keyframes wheat-sway {
+	0%,
+	100% {
+		transform: scaleY(var(--grow, 1)) rotate(-4deg);
+	}
+	50% {
+		transform: scaleY(var(--grow, 1)) rotate(4deg);
+	}
+}
+
+/* --- meadows --- */
+.hill {
+	transition: fill 12s ease;
+}
+.scene[data-season="autumn"] .hill-back {
+	fill: #b4d38f;
+}
+.scene[data-season="autumn"] .hill-mid {
+	fill: #8fbd78;
+}
+.scene[data-season="autumn"] .hill-front {
+	fill: #6d9e5c;
+}
+.scene[data-season="winter"] .hill-back {
+	fill: #eef4f8;
+}
+.scene[data-season="winter"] .hill-mid {
+	fill: #e1eaf2;
+}
+.scene[data-season="winter"] .hill-front {
+	fill: #d5e1ec;
+}
+.scene[data-season="spring"] .hill-back {
+	fill: #a9dd9c;
+}
+.scene[data-season="spring"] .hill-mid {
+	fill: #7ccb8a;
+}
+.scene[data-season="spring"] .hill-front {
+	fill: #57a86f;
+}
+
+.meadow-leaf,
+.ground-leaf {
+	opacity: 0;
+	transition: opacity 6s ease;
+}
+.scene[data-season="autumn"] .meadow-leaf,
+.scene[data-season="autumn"] .ground-leaf {
+	opacity: 0.95;
+	transition: opacity 12s ease 3s;
+}
+
+/* summer meadows: grass tufts and wildflowers. The grass dries to straw in autumn,
+   goes under the snow in winter and comes back green after the thaw; the flowers
+   are summer only and bloom one by one when it arrives. */
+.grass {
+	transition:
+		stroke 10s ease,
+		opacity 6s ease;
+}
+.scene[data-season="autumn"] .grass {
+	stroke: #b9a652;
+}
+.scene[data-season="winter"] .grass {
+	opacity: 0;
+}
+.scene[data-season="spring"] .grass {
+	opacity: 0.85;
+	transition:
+		stroke 10s ease,
+		opacity 6s ease 10s;
+}
+.summer-flower {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	transition:
+		opacity 4s ease,
+		transform 4s ease;
+}
+.scene[data-season="summer"] .summer-flower {
+	transition-delay: var(--bloom-delay, 4s);
+}
+.scene:not([data-season="summer"]) .summer-flower {
+	opacity: 0;
+	transform: scale(0.2);
+}
+
+.snowdrop {
+	opacity: 0;
+	transform: scale(0);
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	transition:
+		opacity 3s ease,
+		transform 3s ease;
+}
+/* after the snow has melted */
+.scene[data-season="spring"] .snowdrop {
+	opacity: 1;
+	transform: scale(1);
+	transition-delay: var(--bloom-delay, 8s);
+}
+
+/* --- trees --- */
+.leaf {
+	transition:
+		fill 8s ease,
+		opacity 6s ease;
+}
+.scene[data-season="autumn"] .leaf-0 {
+	fill: var(--autumn-0);
+}
+.scene[data-season="autumn"] .leaf-1 {
+	fill: var(--autumn-1);
+}
+.scene[data-season="autumn"] .leaf-2 {
+	fill: var(--autumn-2);
+}
+/* bare through winter and spring; the pines keep their needles */
+.scene[data-season="winter"] .leaf,
+.scene[data-season="spring"] .leaf {
+	opacity: 0;
+}
+
+.fruit {
+	transition: opacity 5s ease;
+}
+.scene[data-season="autumn"] .fruit-cherry,
+.scene[data-season="winter"] .fruit-apple,
+.scene[data-season="winter"] .fruit-cherry,
+.scene[data-season="spring"] .fruit {
+	opacity: 0;
+}
+
+.snow-cap {
+	opacity: 0;
+	transition: opacity 9s ease;
+}
+/* the snow settles once it has been falling for a while */
+.scene[data-season="winter"] .snow-cap {
+	opacity: 1;
+	transition: opacity 10s ease 5s;
+}
+
+.falling-leaf {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: leaf-drop var(--fall-duration, 6s) ease-in var(--fall-delay, 0s) infinite both;
+}
+@keyframes leaf-drop {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) rotate(0deg);
+	}
+	10% {
+		opacity: 1;
+	}
+	50% {
+		transform: translate(calc(var(--fall-x) * 0.3 + 5px), calc(var(--fall-y) * 0.45)) rotate(170deg);
+	}
+	88% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(var(--fall-x), var(--fall-y)) rotate(330deg);
+	}
+}
+
+/* spring buds swell on bare twigs, one by one */
+.bud {
+	opacity: 0;
+	transform: scale(0);
+	transform-box: fill-box;
+	transform-origin: center;
+	transition:
+		opacity 3s ease,
+		transform 3s ease;
+}
+.scene[data-season="spring"] .bud {
+	opacity: 1;
+	transform: scale(1);
+	transition-delay: var(--bud-delay, 12s);
+}

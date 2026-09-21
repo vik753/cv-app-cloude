@@ -1,0 +1,89 @@
+/* An honest switch-off for anyone who asked not to be moved. */
+
+@media (prefers-reduced-motion: reduce) {
+	.wheat-tuft {
+		animation: none;
+	}
+	.sky-day {
+		opacity: 1;
+		animation: none;
+	}
+	.sky-twilight,
+	.sky-night {
+		opacity: 0;
+		animation: none;
+	}
+	.sun {
+		left: 50%;
+		bottom: var(--arc-peak);
+		opacity: 1;
+		animation: none;
+	}
+	.moon {
+		opacity: 0;
+		animation: none;
+	}
+	.tint {
+		animation: none;
+		background-color: rgba(255, 255, 255, 0);
+	}
+	.cloud,
+	.bird {
+		animation: none;
+		opacity: 1;
+	}
+	.cloud-1 {
+		transform: translateX(20vw);
+	}
+	.cloud-2 {
+		transform: translateX(55vw);
+	}
+	.bird-1 {
+		transform: translate(20vw, 0);
+	}
+	.bird-2 {
+		transform: translate(55vw, 0);
+	}
+	.bird-3 {
+		transform: translate(80vw, 0);
+	}
+	.bird svg {
+		animation: none;
+	}
+	.star {
+		animation: none;
+		opacity: 0.7;
+	}
+	.fish-leap,
+	.splash-out,
+	.splash-in,
+	.splash-drops,
+	.drift-log,
+	.ice-fish,
+	.river-day,
+	.river-night,
+	.smoke-puff,
+	.pipe-puff,
+	.pine-light,
+	.star-glow,
+	.song-note,
+	.wedge-bird,
+	.wedge-wing,
+	.stork-wedge,
+	.candle-flame,
+	.candle-glow,
+	.candle-halo,
+	.candle-spill,
+	.candle-pool {
+		animation: none;
+	}
+	.window-night {
+		animation: none;
+		opacity: 0;
+	}
+	/* the comet and the banner flight are never scheduled in this mode; the
+	   station is mounted for good, so it has to be parked by hand */
+	.iss {
+		display: none;
+	}
+}
