@@ -44,7 +44,9 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 		return {
 			...registered,
 			onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-				registered.onChange(event);
+				/* RHF's onChange starts validation and resolves later; the draft has to be
+				   updated on this same keystroke, so the promise is fired and not awaited. */
+				void registered.onChange(event);
 				onChange(field, event.target.value);
 			},
 		};
@@ -138,7 +140,11 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 		const file = event.target.files?.[0];
 		if (!file) return;
 		const reader = new FileReader();
-		reader.onload = () => onChange("photo", String(reader.result));
+		/* readAsDataURL resolves to a string, but the result is typed as a union: anything
+		   else has to be ignored rather than stringified into the saved draft. */
+		reader.onload = () => {
+			if (typeof reader.result === "string") onChange("photo", reader.result);
+		};
 		reader.readAsDataURL(file);
 	};
 	const section = "border-b border-[#d7d8d0] py-8";
