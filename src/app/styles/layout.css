@@ -1,12 +1,13 @@
-/* The app chrome: shell, glass mode, header, body columns, footer, the
-   minimize-to-a-badge window, and the music player. */
+/* The app chrome: shell, header, body columns, footer, and the music player. */
 
 .app-shell {
 	display: flex;
 	flex-direction: column;
-	/* .scene is fixed with z-index 0, so it paints above non-positioned content.
-	   Without an explicit stacking context here the shell only stayed on top by
-	   accident, via backdrop-filter — which the production minifier can strip. */
+	/* z-index 1 places the shell between the scene's two layers — above .scene, which
+	   is fixed at z-index 0, and below .scene-front at 2 — and z-index needs the
+	   position to apply at all. Nothing stacks against it today, since the scene is
+	   unmounted whenever the form is on screen; the pair is kept because those two
+	   z-indexes in scene/stage.css are written against this one. */
 	position: relative;
 	z-index: 1;
 	width: 100%;
@@ -27,113 +28,6 @@
 }
 .app-shell[data-mode="light"] {
 	color-scheme: light;
-}
-.app-shell.scene-active {
-	--glass-alpha: 77%;
-	--glass-blur: 6px;
-	background: transparent;
-	/* the scene toggle itself fades fast; the day/night colour swap (driven by
-	   data-mode flipping every half-cycle) fades slowly so the theme never blinks */
-	transition:
-		background 600ms ease,
-		--ground 10s ease-in-out,
-		--panel 10s ease-in-out,
-		--card 10s ease-in-out,
-		--divider 10s ease-in-out,
-		--border 10s ease-in-out,
-		--input-border 10s ease-in-out,
-		--muted 10s ease-in-out,
-		--label 10s ease-in-out,
-		--text 10s ease-in-out,
-		--tint 10s ease-in-out,
-		--chip-border 10s ease-in-out,
-		--on-tint 10s ease-in-out,
-		--accent-text 10s ease-in-out,
-		--chip-x 10s ease-in-out,
-		--accent 10s ease-in-out,
-		--paper 10s ease-in-out,
-		--paper-ink 10s ease-in-out,
-		--paper-muted 10s ease-in-out,
-		--paper-border 10s ease-in-out,
-		--paper-chip 10s ease-in-out,
-		--paper-chip-ink 10s ease-in-out,
-		--paper-avatar 10s ease-in-out,
-		--lang-tint 10s ease-in-out,
-		--lang-chip-border 10s ease-in-out,
-		--lang-on-tint 10s ease-in-out,
-		--paper-lang-chip 10s ease-in-out,
-		--paper-lang-chip-ink 10s ease-in-out,
-		--danger-text 10s ease-in-out,
-		--danger-border 10s ease-in-out;
-}
-.app-shell.scene-active .print-preview {
-	background: transparent !important;
-	transition: background 600ms ease;
-}
-.app-shell.scene-active .app-header,
-.app-shell.scene-active .app-footer,
-.app-shell.scene-active .preview-toolbar,
-.app-shell.scene-active .print-note {
-	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
-	backdrop-filter: blur(var(--glass-blur));
-}
-.app-shell.scene-active .preview-toolbar,
-.app-shell.scene-active .print-note {
-	border-radius: 10px;
-}
-.app-shell.scene-active .preview-toolbar {
-	padding: 12px 16px;
-}
-.app-shell.scene-active .print-note {
-	padding: 8px 14px;
-}
-
-/* glass: the whole form column is ONE frosted panel — everything inside it
-   (hero, section headings, fields, the experience card) stays background-free
-   so their borders don't stack into extra blurred layers on top of it. */
-.app-shell.scene-active .form-card {
-	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
-	backdrop-filter: blur(var(--glass-blur));
-}
-.app-shell.scene-active .form-column input,
-.app-shell.scene-active .form-column select,
-.app-shell.scene-active .form-column textarea {
-	background: transparent !important;
-	backdrop-filter: none;
-}
-.app-shell.scene-active .form-column [class*="bg-white/20"] {
-	background: transparent !important;
-	backdrop-filter: none;
-}
-/* Skills/Education/Courses containers already sit on the glass paper behind them —
-   keep just their border, no extra fill, so they don't read as a lighter patch. */
-.app-shell.scene-active .print-paper .bg-\[\#f8f7f1\] {
-	background: transparent !important;
-	backdrop-filter: none;
-}
-.app-shell.scene-active .print-paper .bg-\[\#e8eee7\] {
-	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
-	backdrop-filter: blur(var(--glass-blur));
-}
-.app-shell.scene-active .header-download,
-.app-shell.scene-active .header-clear,
-.app-shell.scene-active .preview-toggle,
-.app-shell.scene-active .scene-toggle,
-.app-shell.scene-active .segmented,
-.app-shell.scene-active .palette-trigger,
-.app-shell.scene-active .language-switcher,
-.app-shell.scene-active .zoom-stepper {
-	background: color-mix(in srgb, var(--card) var(--glass-alpha), transparent);
-	backdrop-filter: blur(var(--glass-blur));
-}
-.app-shell.scene-active .segmented button.active,
-.app-shell.scene-active .scene-toggle.active,
-.app-shell.scene-active .language-switcher button.active {
-	background: color-mix(in srgb, var(--tint) var(--glass-alpha), transparent);
-}
-.app-shell.scene-active .print-paper {
-	background: color-mix(in srgb, var(--paper) var(--glass-alpha), transparent) !important;
-	backdrop-filter: blur(var(--glass-blur));
 }
 
 .app-header {
@@ -211,11 +105,6 @@
 .segmented button:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
-}
-.scene-toggle.active {
-	background: var(--tint);
-	border-color: var(--accent);
-	color: var(--on-tint);
 }
 .palette-trigger {
 	display: inline-flex;
@@ -363,46 +252,6 @@
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
 }
-.scene-toggle {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	height: 30px;
-	padding: 0 10px;
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	background: transparent;
-	color: var(--label);
-}
-.scene-toggle:hover {
-	background: color-mix(in srgb, var(--accent) 10%, transparent);
-	color: var(--on-tint);
-}
-.scene-toggle-state {
-	font-size: 10.5px;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-}
-.glass-alpha-slider {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	height: 30px;
-	padding: 0 10px;
-	border: 1px dashed var(--accent);
-	border-radius: 8px;
-	color: var(--label);
-	font: 11px var(--font-mono);
-}
-.glass-alpha-slider input[type="range"] {
-	width: 70px;
-	accent-color: var(--accent);
-}
-.glass-alpha-slider span {
-	min-width: 30px;
-	text-align: right;
-}
 .language-switcher {
 	border-color: var(--border);
 }
@@ -515,69 +364,14 @@
 	}
 }
 
-/* ---- minimize to a badge ----
-   header + body live in .app-window, which shrinks into the bottom-right corner.
-   The shell itself stays put: it carries the theme tokens the badge needs. */
 .app-window {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
 	min-height: 0;
-	transform-origin: calc(100% - 70px) calc(100% - 34px);
-	transition:
-		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
-		opacity 360ms ease,
-		visibility 0s linear 0s;
-}
-.app-shell.minimized {
-	/* above the sky actors so nothing flies over the badge; the shell is transparent
-	   in scene mode, so the whole scene still shows through it */
-	z-index: 3;
-	pointer-events: none;
-}
-.app-shell.minimized .app-window {
-	transform: scale(0.06);
-	opacity: 0;
-	visibility: hidden;
-	transition:
-		transform 460ms cubic-bezier(0.32, 0.72, 0, 1),
-		opacity 420ms ease 60ms,
-		visibility 0s linear 480ms;
 }
 .form-card {
 	position: relative;
-}
-.window-minimize,
-.window-restore {
-	display: grid;
-	place-items: center;
-	border-radius: 50%;
-	background: #f5bf4f;
-	box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
-	color: rgba(90, 55, 0, 0.8);
-}
-.window-minimize {
-	position: absolute;
-	top: 9px;
-	left: 9px;
-	z-index: 1;
-	width: 13px;
-	height: 13px;
-	padding: 0;
-	border: 0;
-	cursor: pointer;
-}
-/* like a desktop window: the glyph only shows once you reach for the button */
-.window-minimize svg {
-	opacity: 0;
-	transition: opacity 120ms ease;
-}
-.window-minimize:hover svg,
-.window-minimize:focus-visible svg {
-	opacity: 1;
-}
-.window-minimize:hover {
-	background: #f7c85f;
 }
 /* The scene's music comes from YouTube's own embedded player. Their terms require
    it to stay visible and at least 200x200, so it sits as a small card above the
@@ -638,55 +432,8 @@
 	}
 }
 
-.window-badge {
-	position: fixed;
-	right: 20px;
-	bottom: 20px;
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 8px 12px 8px 14px;
-	border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
-	border-radius: 14px;
-	background: color-mix(in srgb, var(--card) 82%, transparent);
-	backdrop-filter: blur(8px);
-	box-shadow:
-		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
-		0 14px 34px -12px color-mix(in srgb, #000 40%, transparent);
-	color: var(--text);
-	pointer-events: auto;
-	cursor: pointer;
-	animation: badge-in 380ms cubic-bezier(0.32, 0.72, 0, 1) 260ms backwards;
-	transition:
-		transform 160ms ease,
-		box-shadow 160ms ease;
-}
-.window-badge:hover {
-	transform: translateY(-2px);
-	box-shadow:
-		0 1px 2px color-mix(in srgb, var(--text) 10%, transparent),
-		0 18px 38px -12px color-mix(in srgb, #000 45%, transparent);
-}
-.window-restore {
-	width: 20px;
-	height: 20px;
-}
-@keyframes badge-in {
-	from {
-		opacity: 0;
-		transform: translateY(12px) scale(0.85);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
 @media (prefers-reduced-motion: reduce) {
-	.app-window,
-	.app-shell.minimized .app-window {
+	.app-window {
 		transition: none;
-	}
-	.window-badge {
-		animation: none;
 	}
 }
