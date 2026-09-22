@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lighthouse": "node scripts/performance-audit.mjs"
   },
   "engines": {
     "node": ">=24"
@@ -40,6 +41,7 @@
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "^4.1.11",
+    "chrome-launcher": "^1.2.1",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -47,6 +49,7 @@
     "globals": "^17.12.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lighthouse": "^13.5.0",
     "lint-staged": "^17.5.1",
     "prettier": "^3.9.8",
     "tailwindcss": "^4.3.3",

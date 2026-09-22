@@ -9,10 +9,20 @@ describe("i18n dictionaries", () => {
 	});
 
 	it("leaves no translation value blank in either language", () => {
+		/* a few entries are a sentence in pieces rather than one string, because the
+		   button they belong to picks part of it out in colour — the guarantee is the
+		   same for every piece, so the check walks into them */
+		const expectFilled = (label: string, value: string | Record<string, string>) => {
+			if (typeof value === "string") {
+				expect(value.trim(), `${label} is empty`).not.toBe("");
+				return;
+			}
+			for (const [part, piece] of Object.entries(value)) expectFilled(`${label}.${part}`, piece);
+		};
 		for (const [language, dictionary] of Object.entries(translations)) {
-			const entries = Object.entries(dictionary) as [keyof Translation, string][];
+			const entries = Object.entries(dictionary) as [keyof Translation, string | Record<string, string>][];
 			for (const [key, value] of entries) {
-				expect(value.trim(), `${language}.${key} is empty`).not.toBe("");
+				expectFilled(`${language}.${key}`, value);
 			}
 		}
 	});

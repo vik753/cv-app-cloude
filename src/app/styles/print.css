@@ -1,5 +1,5 @@
 /* Printing is the export, so everything under @media print is product behaviour.
-   The four blocks below are in their original relative order; they are collected
+   The three blocks below are in their original relative order; they are collected
    last because nothing outside @media print overrides them. */
 
 @media print {
@@ -11,13 +11,6 @@
 
 @media print {
 	.scene-music {
-		display: none !important;
-	}
-}
-
-@media print {
-	.window-minimize,
-	.window-badge {
 		display: none !important;
 	}
 }

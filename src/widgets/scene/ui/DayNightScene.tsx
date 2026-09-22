@@ -5,11 +5,12 @@ import { RiverLife } from "@/widgets/scene/ui/SceneRiver";
 import { SceneSmoke } from "@/widgets/scene/ui/SceneSmoke";
 import { StorkWedge } from "@/widgets/scene/ui/SceneStorks";
 import { GroundWeather, SkyWeather } from "@/widgets/scene/ui/SceneWeather";
+import { ScenePausedContext } from "@/widgets/scene/model/sceneMotion";
 import { nextSeason, type Season } from "@/widgets/scene/model/useDayNightCycle";
 import type { Language } from "@/shared/i18n";
 import { RIVER_PATH } from "@/widgets/scene/lib/landscape";
 import { quotes, type Quote } from "@/shared/config";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface Star {
 	left: string;
@@ -232,17 +233,38 @@ function Bird({ variant }: { variant: 1 | 2 | 3 }) {
 
 interface DayNightSceneProps {
 	active: boolean;
+	/* on screen but standing still on its first frame, as the welcome screen shows it */
+	paused?: boolean;
 	language: Language;
 }
 
-export function DayNightScene({ active, language }: DayNightSceneProps) {
+export function DayNightScene({ active, paused = false, language }: DayNightSceneProps) {
 	const stars = useMemo(() => createStars(), []);
 	const [comets, setComets] = useState<CometFlash[]>([]);
 	const [flight, setFlight] = useState<PlaneFlight | null>(null);
 	const [season, setSeason] = useState<Season>("summer");
+	const sky = useRef<HTMLDivElement>(null);
+	const front = useRef<HTMLDivElement>(null);
+
+	/* `animation-play-state` reaches the CSS animations, but the ripples on the
+	   river, the banner cloth and the station's blinking lights are SMIL, which that
+	   property does not touch: each SVG document has to be stopped on its own root. */
+	useEffect(() => {
+		const roots = [sky.current, front.current].flatMap((layer) =>
+			layer ? Array.from(layer.querySelectorAll("svg")) : [],
+		);
+		roots.forEach((root) => {
+			/* jsdom implements no SMIL at all, so the scene can still be mounted in a test */
+			if (typeof root.pauseAnimations !== "function") return;
+			if (paused) root.pauseAnimations();
+			else root.unpauseAnimations();
+		});
+		/* nothing new mounts while the scene stands still, so the pause state is the
+		   only thing that can send this looking for SVG roots again */
+	}, [paused]);
 
 	useEffect(() => {
-		if (!active) return;
+		if (!active || paused) return;
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
 		const pending = new Set<number>();
@@ -279,7 +301,7 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 			setComets([]);
 			setFlight(null);
 		};
-	}, [active]);
+	}, [active, paused]);
 
 	const banner = flight ? `“${language === "uk" ? flight.quote.uk : flight.quote.en}” — ${flight.quote.author}` : "";
 	const bannerChars = Math.max(banner.length, 1);
@@ -298,8 +320,14 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 	if (!active) return null;
 
 	return (
-		<>
-			<div className='scene' data-season={season} aria-hidden='true'>
+		<ScenePausedContext value={paused}>
+			<div
+				ref={sky}
+				className='scene'
+				data-season={season}
+				data-paused={paused ? "true" : undefined}
+				aria-hidden='true'
+			>
 				<div className='sky-layer sky-day' />
 				<div className='sky-layer sky-twilight' />
 				<div className='sky-layer sky-night'>
@@ -443,7 +471,13 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 			    app shell, so it stays visible over the form instead of being painted under
 			    it. The layer ignores pointer events, and portalled menus and tooltips at
 			    z-index 50 still come out on top of it. */}
-			<div className='scene-front' data-season={season} aria-hidden='true'>
+			<div
+				ref={front}
+				className='scene-front'
+				data-season={season}
+				data-paused={paused ? "true" : undefined}
+				aria-hidden='true'
+			>
 				<div className='sun' />
 				<div className='moon' />
 
@@ -484,6 +518,6 @@ export function DayNightScene({ active, language }: DayNightSceneProps) {
 					<SpaceStation />
 				</div>
 			</div>
-		</>
+		</ScenePausedContext>
 	);
 }

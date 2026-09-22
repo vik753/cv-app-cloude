@@ -2,8 +2,13 @@
 
 ## 📖 What this is
 
-A single-page resume builder. The left column is a form, the right is a live preview,
-and behind both runs an animated day/night village scene with its own soundtrack.
+A single-page resume builder that opens on the scene. A first-time visitor lands on the
+animated day/night village held on its first frame, with one button over it; that click
+starts the animation and the soundtrack together, because browsers refuse audio before a
+user gesture. From there one button opens the builder — the left column a form, the right
+a live preview — and the scene is unmounted entirely while the form is on screen. A
+labelled control in the header goes back to it. Anyone with a saved draft skips the
+welcome and opens straight in the form.
 Export is `window.print()` — there is no PDF library, print styles _are_ the export.
 
 Fully client-side: no backend, no API, no router. Drafts, palette, mode and language
@@ -164,16 +169,40 @@ references must survive that prefix — test against `npm run preview`, not just
 
 ## ⚡ Performance
 
-Known problem, being worked on. Lighthouse: Performance **35**, Accessibility 95,
-Best Practices 100, SEO 91. Target is Performance ≥ 85 **without** losing any of the
-other three and without changing how the scene looks.
+The stage opened to fix this found nothing to fix. The Performance score of **35** that
+started it was measured against the dev server with browser extensions loaded: 79
+unbundled `/src/` modules, 42.7 MB transferred, and 150 of the run's 266 requests coming
+from an extension. Measured properly, the deployed site scores **96 / 91 / 100 / 91**.
+Those four are the regression guard now — none of them may drop.
 
-Main causes: the whole scene ships in the initial bundle (643 KB JS), the stylesheet
-carries 52 `@keyframes` across `app/styles/`, and there are 10 `backdrop-filter` and 2
-`filter` declarations animating — several of them on large, always-visible surfaces
-composited over the moving scene, which is the expensive case.
+`npm run lighthouse` is the rig. It measures the production build through `preview`, never
+`dev`, and refuses to run rather than measure something that is not this build.
+**Do not steer by the Performance score.** A load-time score cannot see an animation that
+never stops: the same build scores 92 under simulated throttling and 52 under real CPU
+throttling. The acceptance metrics are blocking time, main-thread time, bootup and
+long-task count, taken with `throttlingMethod: "devtools"` over three runs and reported as
+a median **and a spread**. The spread is not decoration — it is what tells you whether an
+improvement is real. On the old design it was what exposed blocking time as too noisy to
+judge anything by: median 5,504 ms with a spread of 2,656 ms, while long-task count held
+rock steady at 20.
 
-When measuring, use a clean Chrome profile — extensions distort the result badly.
+What is genuinely expensive is the scene, and only while it is on screen. Under real CPU
+throttling Lighthouse sometimes cannot compute blocking time for it at all, failing with
+`NO_TTI_CPU_IDLE_PERIOD` because the main thread never goes quiet. That is not a broken
+measurement; it is the problem stated precisely. Since the entry-flow redesign the scene
+is unmounted whenever the form is up, so it costs nothing while anyone is working, and the
+welcome screen freezes it — each animation loop draws one frame and stops.
+
+The bundle is one chunk, about 640 kB raw and 200 kB gzipped, and stays that way
+deliberately: 322 KiB transferred, blocking time 0 and TTI 1.1 s on the deployed site mean
+code splitting would fix nothing. The stylesheet carries 52 `@keyframes` and two animating
+`filter` declarations in `scene/weather.css`. One `backdrop-filter` survives —
+`none !important` on `.print-paper` — and it is a leftover cancel that now cancels
+nothing. The frosted-glass surfaces that used to composite over the moving scene are gone,
+because the form never has a scene behind it any more.
+
+When measuring by hand, use a clean Chrome profile and the production build. Extensions
+and the dev server between them account for the whole of that 35.
 
 ## 🤖 Agent Instructions (Claude-Specific)
 

@@ -1,0 +1,280 @@
+/* The entry flow: the welcome layer, the two buttons that stand over the running
+   scene, and the one in the header that goes back to it.
+
+   All three wear the same embroidered border. The motif is ours — a chain of stepped
+   diamonds with a small cross in every gap between them, composed in the spirit of
+   Ukrainian cross-stitch rather than copied from any one region's pattern, the same
+   way the Cossack and the homestead in the scene are likenesses of nobody.
+
+   The thread is red and black in every palette and both modes: the two ornament
+   colours are literals rather than tokens, because the moment the ornament follows
+   the accent it stops reading as вишиванка and becomes a decorative frame.
+
+   Every one of the three carries its own surface, so the ornament never has to
+   survive a sky that travels from dawn to night every 46 seconds. Which surface
+   differs, by the owner's decision: the welcome button keeps the linen the
+   embroidery is traditionally worked on, while the two smaller buttons take the
+   theme's own card colour so they sit inside the palette rather than beside it.
+   Every label's contrast is measured against the surface under it — never against
+   the sky, and never against the header.
+
+   The ornament lives entirely in ::before and ::after, so it is decoration no screen
+   reader ever meets, and the padding keeps the band clear of the text. */
+
+.welcome-button,
+.scene-to-form,
+.scene-return {
+	/* the band is exactly one tile deep, so --stitch sets both its thickness and the
+	   size of the motif; below roughly 6px the crosses stop being legible */
+	--stitch: 10px;
+	--vyshyvanka: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c8232c' d='M8 0h8v4h4v4h4v8h-4v4h-4v4H8v-4H4v-4H0V8h4V4h4z'/%3E%3Cpath fill='%231b1b1b' d='M10 8h4v8h-4zM8 10h8v4H8z'/%3E%3Cpath fill='%231b1b1b' d='M0 0h6v2H0zM0 0h2v6H0zM18 0h6v2h-6zM22 0h2v6h-2zM0 22h6v2H0zM0 18h2v6H0zM18 22h6v2h-6zM22 18h2v6h-2z'/%3E%3C/svg%3E");
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	border-radius: 10px;
+	text-align: center;
+	box-shadow:
+		inset 0 0 0 1px rgba(27, 27, 27, 0.32),
+		0 12px 26px -14px rgba(0, 0, 0, 0.7);
+}
+
+/* the embroidery itself: the motif tiled into a ring the width of the band. The two
+   solid layers cut the middle out of the mask — content box excluded from border box
+   — so the motif only ever shows along the edge, and `round` scales the tile to a
+   whole number of repeats per side, which is what keeps a half diamond off the
+   corners of a button whose width nobody controls. */
+.welcome-button::before,
+.scene-to-form::before,
+.scene-return::before,
+.welcome-button::after,
+.scene-to-form::after,
+.scene-return::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	padding: var(--stitch);
+	border-radius: inherit;
+	pointer-events: none;
+	mask-clip: content-box, border-box;
+	mask-composite: exclude;
+	mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+}
+.welcome-button::before,
+.scene-to-form::before,
+.scene-return::before {
+	background-image: var(--vyshyvanka);
+	background-origin: border-box;
+	background-repeat: round;
+	background-size: var(--stitch) var(--stitch);
+}
+
+/* the shimmer travels along the thread and nowhere else: the same
+   motif is added as a third mask layer, so the moving light is clipped to the
+   stitches instead of sweeping across the button as a second effect of its own.
+   The tiling matches ::before exactly — same size, same `round`, same origin — or
+   the light would land beside the embroidery rather than on it. */
+.welcome-button::after,
+.scene-to-form::after,
+.scene-return::after {
+	background-image: linear-gradient(
+		100deg,
+		rgba(255, 244, 214, 0) 47.5%,
+		rgba(255, 252, 240, 0.88) 50%,
+		rgba(255, 244, 214, 0) 52.5%
+	);
+	background-repeat: no-repeat;
+	background-size: 300% 100%;
+	background-position: 130% 0;
+	mask-clip: border-box, content-box, border-box;
+	mask-composite: intersect, exclude, add;
+	mask-image: var(--vyshyvanka), linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+	mask-repeat: round, no-repeat, no-repeat;
+	mask-size:
+		var(--stitch) var(--stitch),
+		auto,
+		auto;
+	animation: embroidery-shimmer 5.4s ease-in-out 1.4s infinite;
+}
+/* the light crosses in the first half and the border rests for the second: a
+   highlight that never stops reads as a loading bar rather than as a glint */
+@keyframes embroidery-shimmer {
+	0% {
+		background-position: 130% 0;
+	}
+	55%,
+	100% {
+		background-position: -30% 0;
+	}
+}
+
+/* the focus ring has the same problem the ornament has — it is drawn outside the
+   linen, over whatever hour it is — so it is two rings: red thread on a pale halo,
+   and one of the two always has contrast */
+.welcome-button:focus-visible,
+.scene-to-form:focus-visible,
+.scene-return:focus-visible {
+	outline: 2px solid #c8232c;
+	outline-offset: 3px;
+	box-shadow:
+		inset 0 0 0 1px rgba(27, 27, 27, 0.32),
+		0 0 0 5px rgba(247, 240, 225, 0.92),
+		0 12px 26px -14px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- the welcome layer ---- */
+
+/* above .scene-front (2) so the button is never flown over, below the portalled
+   menus and tooltips (50). The layer itself takes no clicks: only the button does. */
+.welcome-gate {
+	position: fixed;
+	inset: 0;
+	z-index: 3;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+	pointer-events: none;
+}
+.welcome-button {
+	--stitch: 12px;
+	/* linen, the cloth the stitch belongs on, and the one surface in this file that
+	   answers to nobody's palette */
+	--linen: #f7f0e1;
+	--ink: #241f1c;
+	/* Not the shared inline-flex, and this is load-bearing rather than tidying: the
+	   label arrives as three nodes with the brand's <span> between them, and a flex
+	   container turns each run into its own anonymous item, which drops the spaces
+	   at their edges — "the" and "not boring CV" printed against each other. As one
+	   inline flow the sentence keeps the spacing the dictionary wrote. */
+	display: inline-block;
+	max-width: min(34rem, 100%);
+	/* the owner picked this radius in the browser: the wider curve reads as a sewn
+	   patch rather than a dialog button */
+	border-radius: 25px;
+	background: var(--linen);
+	color: var(--ink);
+	padding: calc(var(--stitch) + 18px) calc(var(--stitch) + 30px);
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.45;
+	letter-spacing: 0.01em;
+	pointer-events: auto;
+	transition:
+		transform 160ms ease,
+		background-color 160ms ease;
+}
+.welcome-button:hover {
+	background: #fdf8ec;
+	transform: translateY(-2px);
+}
+.welcome-button:active {
+	transform: translateY(0);
+}
+/* The brand's own name, in the ornament's red so the words and the embroidery around
+   them read as one thought. It is that red deepened by a tenth of its lightness —
+   same hue, same saturation, #c8232c at L36 instead of L46 — because the thread
+   colour itself only reaches 4.96:1 against the linen, which passes AA for text this
+   size and nothing more; this reaches 7.16:1. Colour only, at the sentence's own
+   weight: three words tinted inside a sentence, not a headline inside a button. */
+.welcome-brand {
+	color: #9c1a22;
+}
+
+/* ---- over the running scene ---- */
+
+/* --card is the theme's lifted surface — what every panel and every header control
+   in this app sits on — so it is the token a button asking to be part of the palette
+   belongs on, and --text is its matching label colour.
+
+   One thing to know about this particular button: data-palette and data-mode are set
+   on .app-shell, and .app-shell does not exist while the scene is on screen. So the
+   tokens here always resolve to their :root values, whatever palette the visitor
+   chose for the form. That is the light, default card — which is why the change of
+   surface is barely visible on this one and cannot go dark. */
+.scene-to-form {
+	--stitch: 9px;
+	background: var(--card);
+	color: var(--text);
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	z-index: 3;
+	padding: calc(var(--stitch) + 9px) calc(var(--stitch) + 16px);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.2;
+	white-space: nowrap;
+	transition:
+		transform 160ms ease,
+		background-color 160ms ease;
+}
+/* --tint is what this app already uses for a control under the pointer, and it holds
+   the label's contrast in every palette and both modes */
+.scene-to-form:hover {
+	background: var(--tint);
+	transform: translateY(-1px);
+}
+.scene-to-form:active {
+	transform: translateY(0);
+}
+
+/* ---- back to the scene, from the form's header ---- */
+
+.scene-return {
+	/* the shortest band that still reads as the same ornament; below this the
+	   crosses between the diamonds close up into a line */
+	--stitch: 6px;
+	/* this one does sit inside .app-shell, so its surface follows the chosen palette
+	   and the light/dark switch with it */
+	background: var(--card);
+	color: var(--text);
+	gap: 7px;
+	height: 34px;
+	padding: 0 calc(var(--stitch) + 9px);
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+.scene-return:hover {
+	background: var(--tint);
+}
+.scene-return-label {
+	letter-spacing: 0.01em;
+}
+
+@media (max-width: 560px) {
+	.welcome-button {
+		--stitch: 10px;
+		font-size: 16px;
+		padding: calc(var(--stitch) + 14px) calc(var(--stitch) + 18px);
+	}
+	/* the music card is 220px of a 390px screen and now owns the top right corner, so
+	   the button cannot stay beside it up there without being covered; it goes to the
+	   bottom left, which is also the half of a phone a thumb reaches */
+	.scene-to-form {
+		--stitch: 8px;
+		top: auto;
+		bottom: 16px;
+		left: 12px;
+		font-size: 13px;
+	}
+}
+
+/* an honest switch-off: the light does not travel slowly, it does not travel */
+@media (prefers-reduced-motion: reduce) {
+	.welcome-button::after,
+	.scene-to-form::after,
+	.scene-return::after {
+		display: none;
+	}
+	.welcome-button,
+	.scene-to-form {
+		transition: none;
+	}
+	.welcome-button:hover,
+	.scene-to-form:hover {
+		transform: none;
+	}
+}

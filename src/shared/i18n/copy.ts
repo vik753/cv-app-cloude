@@ -31,6 +31,11 @@ export interface Translation {
 	linkedin: string;
 	mode: string;
 	palette: string;
+	/* the toolbar folds its once-a-session controls into one menu on a narrow screen:
+	   the trigger's name, and the group heading that keeps the interface's own language
+	   apart from the spoken languages the form asks for */
+	menuLabel: string;
+	interfaceLanguage: string;
 	light: string;
 	dark: string;
 	fields: string;
@@ -40,15 +45,15 @@ export interface Translation {
 	previewHide: string;
 	previewShow: string;
 	previewLabel: string;
-	minimize: string;
-	restore: string;
 	music: string;
 	musicCredit: string;
 	musicSource: string;
-	sceneHide: string;
-	sceneShow: string;
-	sceneOn: string;
-	sceneOff: string;
+	/* the welcome button picks the brand's own name out in colour, so the sentence
+	   arrives here in three pieces rather than as one string */
+	welcomeStart: { before: string; brand: string; after: string };
+	sceneStart: string;
+	sceneContinue: string;
+	sceneBack: string;
 	addSkill: string;
 	languages: string;
 	languageLabel: string;
@@ -133,6 +138,8 @@ export const translations: Record<Language, Translation> = {
 		linkedin: "LinkedIn",
 		mode: "Color mode",
 		palette: "Palette",
+		menuLabel: "More settings",
+		interfaceLanguage: "Interface language",
 		light: "Light",
 		dark: "Dark",
 		fields: "fields",
@@ -142,15 +149,13 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Hide preview",
 		previewShow: "Show preview",
 		previewLabel: "Preview",
-		minimize: "Minimize",
-		restore: "Restore",
 		music: "Scene music",
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
-		sceneHide: "Turn off animated background",
-		sceneShow: "Turn on animated background",
-		sceneOn: "On",
-		sceneOff: "Off",
+		welcomeStart: { before: "Welcome to the ", brand: "not boring CV", after: ". Click to begin." },
+		sceneStart: "Start building your CV",
+		sceneContinue: "Continue CV",
+		sceneBack: "Back to the scene",
 		addSkill: "Add a skill",
 		languages: "Languages",
 		languageLabel: "Language",
@@ -233,6 +238,8 @@ export const translations: Record<Language, Translation> = {
 		linkedin: "LinkedIn",
 		mode: "Колірний режим",
 		palette: "Палітра",
+		menuLabel: "Більше налаштувань",
+		interfaceLanguage: "Мова інтерфейсу",
 		light: "Світла",
 		dark: "Темна",
 		fields: "полів",
@@ -242,15 +249,13 @@ export const translations: Record<Language, Translation> = {
 		previewHide: "Сховати попередній перегляд",
 		previewShow: "Показати попередній перегляд",
 		previewLabel: "Прев'ю",
-		minimize: "Згорнути",
-		restore: "Розгорнути",
 		music: "Музика сцени",
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
-		sceneHide: "Вимкнути анімований фон",
-		sceneShow: "Увімкнути анімований фон",
-		sceneOn: "Увімк",
-		sceneOff: "Вимк",
+		welcomeStart: { before: "Ласкаво просимо до ", brand: "не нудного CV", after: ". Натисніть, щоб почати." },
+		sceneStart: "Почати створювати CV",
+		sceneContinue: "Продовжити CV",
+		sceneBack: "Повернутися до сцени",
 		addSkill: "Додати навичку",
 		languages: "Мови",
 		languageLabel: "Мова",

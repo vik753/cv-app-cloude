@@ -4,15 +4,18 @@ import type { Language, Translation } from "@/shared/i18n";
 import { quotes } from "@/shared/config";
 import type { Resume } from "@/entities/resume";
 import { Minus, Plus } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type Ref } from "react";
 
 interface ResumePreviewProps {
 	resume: Resume;
 	t: Translation;
 	language: Language;
+	/* a handle on the sheet itself, for the page to scroll to when it is switched on
+	   below the form on a narrow screen. Nothing else about the preview is exposed. */
+	ref?: Ref<HTMLElement>;
 }
 
-export function ResumePreview({ resume, t, language }: ResumePreviewProps) {
+export function ResumePreview({ resume, t, language, ref }: ResumePreviewProps) {
 	const [zoom, setZoom] = useState(92);
 	const pages = useMemo(
 		() => Math.max(1, Math.ceil((resume.experience.length * 120 + resume.summary.length / 4 + 360) / 650)),
@@ -21,6 +24,7 @@ export function ResumePreview({ resume, t, language }: ResumePreviewProps) {
 	const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
 	return (
 		<aside
+			ref={ref}
 			className='print-preview min-w-0 border-t border-[#d7d8d0] bg-[#e7e6df] px-5 py-8 sm:px-8 lg:border-l lg:border-t-0 lg:px-[3vw] lg:py-11'
 			aria-label={t.preview}
 		>

@@ -29,6 +29,10 @@
 @import "./panels.css";
 @import "./ui.css";
 @import "./resume.css";
+/* entry.css can sit anywhere in this list and is placed here only to read in flow:
+   every selector in it is a class no other file mentions, and it sets no property on
+   an element any other file touches. */
+@import "./entry.css";
 
 @import "./scene/stage.css";
 @import "./scene/sky.css";
@@ -39,6 +43,10 @@
 @import "./scene/river.css";
 @import "./scene/homestead.css";
 @import "./scene/weather.css";
+/* paused.css wins by !important rather than by position, so it is order-independent;
+   it is last of the animation files because that is where it reads, not because the
+   cascade needs it there. */
+@import "./scene/paused.css";
 @import "./scene/reduced-motion.css";
 
 @import "./print.css";
