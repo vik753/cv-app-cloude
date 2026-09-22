@@ -133,6 +133,31 @@
 	transform: rotate(180deg);
 	color: inherit;
 }
+/* The phone's one menu button, built to the same pattern as the controls it stands
+   beside: 32px square splits the difference between the preview toggle's 30 and the
+   back-to-scene button's 34, and the border, radius and open state are the palette
+   trigger's, because this is the same kind of control. */
+.header-menu-trigger {
+	display: grid;
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	place-items: center;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: transparent;
+	color: var(--label);
+}
+.header-menu-trigger:hover {
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--on-tint);
+}
+.header-menu-trigger[data-state="open"] {
+	background: var(--tint);
+	border-color: var(--accent);
+	color: var(--on-tint);
+}
 .swatch {
 	width: 14px;
 	height: 14px;
@@ -150,7 +175,13 @@
 .swatch.slate {
 	background: #4f6473;
 }
-.palette-menu {
+/* Two menus now: the palette's own dropdown and the one the header folds its
+   controls into on a phone. The surface, the rows and the check mark were always
+   generic, so both names live on the same rules rather than one borrowing the
+   other's look. The .palette-menu-* names are the older pair and stay first; they
+   describe the menu this app happened to build first, not what the rules do. */
+.palette-menu,
+.header-menu {
 	z-index: 50;
 	min-width: 232px;
 	padding: 6px;
@@ -162,10 +193,12 @@
 	transform-origin: var(--radix-dropdown-menu-content-transform-origin);
 	animation: tooltip-in 140ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.palette-menu[data-state="closed"] {
+.palette-menu[data-state="closed"],
+.header-menu[data-state="closed"] {
 	animation: tooltip-out 100ms ease-in forwards;
 }
-.palette-menu-item {
+.palette-menu-item,
+.header-menu-item {
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -174,33 +207,90 @@
 	cursor: pointer;
 	outline: none;
 }
-.palette-menu-item[data-highlighted] {
+.palette-menu-item[data-highlighted],
+.header-menu-item[data-highlighted] {
 	background: var(--tint);
 }
-.palette-menu-item[data-state="checked"] {
+.palette-menu-item[data-state="checked"],
+.header-menu-item[data-state="checked"] {
 	background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
-.palette-menu-text {
+.palette-menu-text,
+.header-menu-text {
 	display: flex;
 	min-width: 0;
 	flex: 1;
 	flex-direction: column;
 	gap: 1px;
 }
-.palette-menu-text strong {
+.palette-menu-text strong,
+.header-menu-text strong {
 	font-size: 12.5px;
 	font-weight: 600;
 	color: var(--text);
 }
-.palette-menu-text small {
+.palette-menu-text small,
+.header-menu-text small {
 	font-size: 10.5px;
 	color: var(--muted);
 }
-.palette-menu-check {
+.palette-menu-check,
+.header-menu-check {
 	display: grid;
 	flex-shrink: 0;
 	place-items: center;
 	color: var(--accent-text);
+}
+
+/* ---- the header's own menu ----
+   A palette row carries a <strong> and a <small>; these rows carry one bare string,
+   so the size the palette's name gets from its <strong> has to be set on the box
+   itself. Deliberately no colour: the row above owns that, which is what lets the
+   Clear row tint itself without fighting a more specific selector. */
+.header-menu-text {
+	font-size: 12.5px;
+	font-weight: 600;
+}
+/* the three group headings. Uppercase and small, the same voice the toolbar's own
+   PREVIEW label speaks in, so they read as headings rather than as rows you can
+   choose — and in --label rather than --muted, which is the difference between 5.8:1
+   and 4.7:1 on this surface */
+.header-menu-label {
+	padding: 9px 9px 4px;
+	color: var(--label);
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+/* Radix renders this as an empty div, so it has no height of its own to show */
+.header-menu-separator {
+	height: 1px;
+	margin: 5px 4px;
+	background: var(--divider);
+}
+/* the language code sits where the other rows keep their icon, at the icon's own
+   width, so all four groups start their text on the same line; УКР is two pixels
+   wider than that box on each side and is allowed to be */
+.header-menu-code {
+	width: 15px;
+	flex-shrink: 0;
+	font: 10.5px var(--font-mono);
+	text-align: center;
+}
+/* Clear is the one row that can lose work, and it says so in the app's danger colour
+   — but on the icon, not on the label. That colour is #b8503f against this surface:
+   4.56:1 resting, which clears AA for 12.5px text by a hair, and 4.26:1 once the row
+   is highlighted, which does not. An icon is a graphic and answers to 3:1, so it
+   keeps the colour and the label keeps its contrast in both states. */
+.header-menu-danger {
+	color: var(--danger-text);
+}
+.header-menu-danger .header-menu-text {
+	color: var(--text);
+}
+.header-menu-danger[data-highlighted] {
+	background: color-mix(in srgb, var(--danger-border) 12%, transparent);
 }
 .autosave {
 	display: flex;
