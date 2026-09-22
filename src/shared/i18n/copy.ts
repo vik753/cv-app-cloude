@@ -43,7 +43,9 @@ export interface Translation {
 	music: string;
 	musicCredit: string;
 	musicSource: string;
-	welcomeStart: string;
+	/* the welcome button picks the brand's own name out in colour, so the sentence
+	   arrives here in three pieces rather than as one string */
+	welcomeStart: { before: string; brand: string; after: string };
 	sceneStart: string;
 	sceneContinue: string;
 	sceneBack: string;
@@ -143,9 +145,9 @@ export const translations: Record<Language, Translation> = {
 		music: "Scene music",
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
-		welcomeStart: "Welcome to the not boring CV. Click to begin.",
+		welcomeStart: { before: "Welcome to the ", brand: "not boring CV", after: ". Click to begin." },
 		sceneStart: "Start building your CV",
-		sceneContinue: "Continue",
+		sceneContinue: "Continue CV",
 		sceneBack: "Back to the scene",
 		addSkill: "Add a skill",
 		languages: "Languages",
@@ -241,9 +243,9 @@ export const translations: Record<Language, Translation> = {
 		music: "Музика сцени",
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
-		welcomeStart: "Ласкаво просимо до не нудного CV. Натисніть, щоб почати.",
+		welcomeStart: { before: "Ласкаво просимо до ", brand: "не нудного CV", after: ". Натисніть, щоб почати." },
 		sceneStart: "Почати створювати CV",
-		sceneContinue: "Продовжити",
+		sceneContinue: "Продовжити CV",
 		sceneBack: "Повернутися до сцени",
 		addSkill: "Додати навичку",
 		languages: "Мови",

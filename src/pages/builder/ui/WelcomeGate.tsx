@@ -1,5 +1,6 @@
 interface WelcomeGateProps {
-	label: string;
+	/* three pieces of one sentence, with the brand's name picked out in the middle */
+	label: { before: string; brand: string; after: string };
 	onStart: () => void;
 }
 
@@ -12,7 +13,9 @@ export function WelcomeGate({ label, onStart }: WelcomeGateProps) {
 	return (
 		<div className='welcome-gate'>
 			<button className='welcome-button' type='button' onClick={onStart}>
-				{label}
+				{label.before}
+				<span className='welcome-brand'>{label.brand}</span>
+				{label.after}
 			</button>
 		</div>
 	);

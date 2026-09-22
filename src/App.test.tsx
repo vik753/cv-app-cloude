@@ -48,7 +48,7 @@ describe("App", () => {
 		render(<App />);
 		await enterForm(user);
 		await user.click(screen.getByRole("button", { name: /back to the scene/i }));
-		expect(screen.getByRole("button", { name: /^continue$/i })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /continue cv/i })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: /start building your cv/i })).not.toBeInTheDocument();
 	});
 
