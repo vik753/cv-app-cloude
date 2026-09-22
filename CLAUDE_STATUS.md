@@ -444,3 +444,78 @@ our own count of animation frames.
   it any more, and the scene's own z-indexes are written against it.
 - Nothing guards a CSS deletion. The suite passed identically before and after 268 lines
   came out; the only real check was a screenshot comparison done by hand.
+
+## 2026-09-22 (later) — the header on a phone
+
+Committed: the phone header and the scroll to the preview (`dacaef6`), its styling and
+two dead rules removed (`2860a98`).
+
+Below 560px four controls stay visible — the brand, Download PDF, the preview toggle and
+the embroidered button back to the scene, which keeps its ornament and loses its visible
+text while keeping its accessible name — and four fold into one flat menu: colour mode,
+palette, interface language and Clear. Flat rather than nested: a submenu at 390px has
+nowhere to fly out to and costs a keyboard user two steps per choice. The two
+arrangements are **not** both rendered with CSS hiding one, because that puts two
+controls with the same accessible name in the tree, which is how an accessibility score
+is quietly given back. One `matchMedia` boolean decides.
+
+The palette and language rows are exported from their own slices and reused by the
+switchers they came from, so each set of options exists once.
+
+**The scroll to the preview is not a breakpoint.** It measures how much of the preview is
+actually on screen and acts only when most of it is not. The first version used the
+toolbar's 560px and therefore did nothing between 561 and 900px, where the columns have
+already stacked — a feature silently dead across a 340px band. `visibleFraction` divides
+the visible part by `min(panelHeight, viewportHeight)`, so a panel taller than the screen
+is not judged against a height it could never reach. Beside the form it measures 1.0,
+stacked below it measures 0. There is a trap recorded in the code: the switched-off
+preview sits near the top of the page at `opacity: 0` and measures as 0.87 visible, so
+the measurement has to wait for the entrance transition to land.
+
+The header keeps two rows on a phone, and this was measured rather than guessed: one row
+needs 445px in English and 463px in Ukrainian against a 390px viewport, and the only way
+to find those 50px is to delete both text labels, including Download PDF's.
+
+Clear's row colours its icon, not its label: the danger red is 4.56:1 resting and 4.26:1
+highlighted, so as text it fails the moment anyone points at it, and no tint rescues it.
+An icon answers to 3:1.
+
+Two accessible names were wrong and are fixed: the language switcher had its group name
+hardcoded in English inside the component, and Clear answered to the whole warning
+sentence, which is unusable in a screen reader's list of buttons. The sentence is still
+the tooltip.
+
+### Open, and worth taking first next session
+
+- **The settings menu never sees the palette or the mode.** It is portalled to
+  `document.body`, and `data-palette`/`data-mode` live on `.app-shell`, so every token
+  resolves to its `:root` value: in dark mode the phone's settings menu is a light panel
+  over a dark app, measured identical in all six palette/mode combinations. This is
+  pre-existing — the desktop palette dropdown has always been portalled the same way —
+  but it matters far more now that this menu is the only way to reach four settings on a
+  phone. **It cannot be fixed in CSS**; the portalled node has no themed ancestor. Either
+  pass Radix a `container` pointing at the shell, or lift `data-mode`/`data-palette` to
+  `<html>`. The second also fixes the scene button's inability to follow the palette,
+  recorded earlier as a deliberate non-fix — if that decision is revisited, these two
+  are one job.
+- **The YouTube iframe holds the first tab stop for about three seconds after leaving the
+  scene.** The music card outlives the switch by one fade, and while it is there `Tab`
+  lands inside the player rather than on the toolbar — twelve presses to escape it.
+- **Neither menu's open/close animation is switched off under `prefers-reduced-motion`.**
+  Pre-existing, one selector list.
+- **The hidden preview still occupies the layout**: with the preview off at 390px the
+  document is roughly 1,300px longer than it looks, so there is a long empty scroll below
+  the form. Raised with the owner, not yet decided.
+- `.header-menu-*` no longer needs the doubled `.palette-menu-*` classes in the markup;
+  dropping them is now a free two-file change, after which renaming the family to one
+  neutral name is cosmetic.
+
+### None of this session's product work has been reviewed
+
+The measurement rig was reviewed twice and its fixes are still waiting on a third round.
+The entry-flow redesign, the ornament, the dead-CSS deletion, the phone header and the
+preview scroll have had **no** review pass at all — they were verified by their authors
+in a browser, thoroughly and with numbers, and committed on that basis. That is the
+honest state, and a reviewer should see them before this goes anywhere near `main`.
+
+**Not deployed.** GitHub Pages still serves the version from before all of it.
