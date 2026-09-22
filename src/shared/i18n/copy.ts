@@ -31,6 +31,11 @@ export interface Translation {
 	linkedin: string;
 	mode: string;
 	palette: string;
+	/* the toolbar folds its once-a-session controls into one menu on a narrow screen:
+	   the trigger's name, and the group heading that keeps the interface's own language
+	   apart from the spoken languages the form asks for */
+	menuLabel: string;
+	interfaceLanguage: string;
 	light: string;
 	dark: string;
 	fields: string;
@@ -133,6 +138,8 @@ export const translations: Record<Language, Translation> = {
 		linkedin: "LinkedIn",
 		mode: "Color mode",
 		palette: "Palette",
+		menuLabel: "More settings",
+		interfaceLanguage: "Interface language",
 		light: "Light",
 		dark: "Dark",
 		fields: "fields",
@@ -231,6 +238,8 @@ export const translations: Record<Language, Translation> = {
 		linkedin: "LinkedIn",
 		mode: "Колірний режим",
 		palette: "Палітра",
+		menuLabel: "Більше налаштувань",
+		interfaceLanguage: "Мова інтерфейсу",
 		light: "Світла",
 		dark: "Темна",
 		fields: "полів",

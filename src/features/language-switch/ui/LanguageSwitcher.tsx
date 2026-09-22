@@ -1,3 +1,4 @@
+import { languageLabels } from "@/features/language-switch/config/languageLabels";
 import { Tooltip } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
 
@@ -7,14 +8,9 @@ interface LanguageSwitcherProps {
 	onChange: (language: Language) => void;
 }
 
-const labels: Record<Language, string> = {
-	en: "EN",
-	uk: "УКР",
-};
-
 export function LanguageSwitcher({ language, t, onChange }: LanguageSwitcherProps) {
 	return (
-		<div className='language-switcher flex gap-0.5 rounded border p-0.5' aria-label='Language'>
+		<div className='language-switcher flex gap-0.5 rounded border p-0.5' aria-label={t.interfaceLanguage}>
 			{(["en", "uk"] as const).map((option) => (
 				<Tooltip key={option} label={option === "en" ? t.switchToEnglish : t.switchToUkrainian}>
 					<button
@@ -22,7 +18,7 @@ export function LanguageSwitcher({ language, t, onChange }: LanguageSwitcherProp
 						type='button'
 						onClick={() => onChange(option)}
 					>
-						{labels[option]}
+						{languageLabels[option]}
 					</button>
 				</Tooltip>
 			))}

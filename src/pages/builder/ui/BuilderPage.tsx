@@ -1,4 +1,5 @@
 import { computeCompletion } from "@/pages/builder/lib/completion";
+import { visibleFraction } from "@/pages/builder/lib/visibility";
 import type { BuilderView } from "@/pages/builder/types";
 import { BuilderHeader } from "@/pages/builder/ui/BuilderHeader";
 import { WelcomeGate } from "@/pages/builder/ui/WelcomeGate";
@@ -8,7 +9,17 @@ import { ResumeForm } from "@/features/resume-form";
 import { ResumePreview } from "@/features/resume-preview";
 import { DayNightScene, SceneMusic } from "@/widgets/scene";
 import { AppFooter } from "@/widgets/app-footer";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+
+/* The entrance the preview arrives with, and the same number layout.css transitions the
+   columns over. Anything that has to happen once it has landed waits this long. */
+const PREVIEW_ENTER_MS = 360;
+
+/* How much of the preview has to be on screen already for a scroll to be an
+   interruption rather than a help. Half of what the screen could show of it: beside the
+   form it is the whole right-hand column and well past this, stacked below the form it
+   is nowhere near. */
+const PREVIEW_IN_VIEW = 0.5;
 
 interface BuilderPageProps {
 	/* which of the three entry states is on screen; App owns it, the page draws it */
@@ -36,6 +47,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 	const [notice, setNotice] = useState(t.autoSave);
 	const [previewVisible, setPreviewVisible] = useState(false);
 	const [previewEntering, setPreviewEntering] = useState(false);
+	const preview = useRef<HTMLElement>(null);
 
 	const completion = useMemo(() => computeCompletion(resume), [resume]);
 
@@ -52,7 +64,29 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 		}
 		setPreviewVisible(true);
 		setPreviewEntering(true);
-		window.setTimeout(() => setPreviewEntering(false), 360);
+		window.setTimeout(() => {
+			setPreviewEntering(false);
+			/* A tap that changes nothing you can see reads as a broken button, and that is
+			   what switching the preview on does wherever it opens stacked below the form
+			   instead of beside it. The test is the preview's own place on screen rather
+			   than a screen width: being out of sight is what the problem actually is, a
+			   width is only one symptom of it, and the widths at which the columns stack
+			   live in a stylesheet this file cannot read. Beside the form it is already in
+			   view and this does nothing, by construction rather than by memory.
+
+			   It waits for the entrance instead of riding the same tick as the state: the
+			   columns are still being transitioned while that runs, and a scroll aimed at
+			   a target that has not landed yet arrives somewhere else. On the way on only —
+			   a page that scrolls itself in both directions feels possessed. */
+			const sheet = preview.current;
+			if (!sheet) return;
+			if (visibleFraction(sheet.getBoundingClientRect(), window.innerHeight) >= PREVIEW_IN_VIEW) return;
+			sheet.scrollIntoView({
+				/* a long smooth scroll is the very motion some people cannot take */
+				behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+				block: "start",
+			});
+		}, PREVIEW_ENTER_MS);
 	};
 
 	return (
@@ -132,7 +166,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 									/>
 								</div>
 							</section>
-							<ResumePreview resume={resume} t={t} language={language} />
+							<ResumePreview ref={preview} resume={resume} t={t} language={language} />
 						</div>
 						<AppFooter t={t} />
 					</div>
