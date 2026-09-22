@@ -373,3 +373,74 @@ measured `TaskDuration` 0.146s over 5s against 0.003s without it (0.248s vs 0.00
 welcome screen). `LayoutDuration` is zero throughout — it paints, it never lays out. The
 owner asked for the shimmer on all three buttons, so it was not second-guessed; making it
 composited would need a real child element, i.e. markup.
+
+## 2026-09-22 — the first trustworthy baseline, and the polish pass
+
+Committed: the entry buttons settled after the owner looked at them (`40dc3fc`), the dead
+styling deleted (`c0647d2`), `CLAUDE.md` brought in line with the performance the project
+actually has (`227e0a5`).
+
+### Baseline, taken against the new design at `227e0a5`
+
+Mobile, `devtools` throttling, three runs, median with best-worst spread. Machine load
+average 9.24, no foreign preview servers, and the rig confirmed it was serving this build
+by its own content hash.
+
+|                            | old design (provisional) | new design          |
+| -------------------------- | ------------------------ | ------------------- |
+| Total blocking time        | 5,504 ms (spread 2,656)  | **0 ms (spread 0)** |
+| Main-thread time on our JS | 21,916 ms                | **279 ms**          |
+| bootup-time                | 3,207 ms                 | **213 ms**          |
+| Long tasks, count          | 20                       | **3**               |
+| Long tasks, total          | 2,258 ms                 | **372 ms**          |
+| Performance under devtools | 52, 52, 50               | **90, 91, 91**      |
+
+Regression guard, mobile simulated: Performance 87 (informational), **Accessibility 96**,
+Best Practices 100, SEO 90. Accessibility rose from 90 — the entry buttons carry real text
+labels where the old controls carried icons.
+
+Bundle unchanged at one chunk, 641.67 kB raw / 199.01 kB gzip, plus 71.52 kB / 15.75 kB of
+CSS after the deletion.
+
+**Read these numbers precisely.** Lighthouse measures the initial load, and the initial
+load is now the welcome screen with the scene frozen. The running scene costs exactly what
+it always cost; what changed is that it no longer runs during load, nor while anyone is
+filling in the form. That is a real improvement for a real visitor, but "the scene got
+cheaper" would be false. The old-design column is also provisional: it was captured on a
+loaded machine before the rig could prove it was measuring our own build.
+
+One thing worth keeping: `NO_TTI_CPU_IDLE_PERIOD` no longer occurs. Every run computed
+blocking time, with zero spread. Lighthouse previously could not find a quiet moment on
+the main thread at all, so this is independent evidence that the pause works — not just
+our own count of animation frames.
+
+### Decisions the owner made, so nobody later reads them as defects
+
+- **In dark mode the embroidery's black thread is invisible** (contrast 1.03–1.46:1) and
+  the ornament reads as a red frame rather than вишиванка. Measured, reported with three
+  options, and **deliberately left as it is**. Light mode is unaffected.
+- **The button over the scene cannot follow the chosen palette**, because `data-palette`
+  and `data-mode` live on `.app-shell`, which does not exist while the scene is on screen.
+  It always uses the `:root` defaults. Left that way on purpose; fixing it would mean
+  lifting those attributes to `<html>`, which touches the whole app.
+- `.welcome-button` is `inline-block`, not the shared `inline-flex`, because a flex
+  container makes each text run its own item and strips the spaces around the coloured
+  brand span — the label rendered with no gaps around it.
+
+### Still open
+
+- The rig has **never had its third review round**. The two regressions the reviewer found
+  (every raw bundle size printed as `NaN`, and a SIGINT handler that leaked a detached
+  headless Chrome) are fixed and the fixes are proved, but unreviewed.
+- Not deployed. GitHub Pages still serves the old design; the owner has not been asked for
+  a push to `main`.
+- `backdrop-filter: none !important` on `.print-paper` is a cancel with nothing left to
+  cancel. One line, whenever someone wants it.
+- `.scene-music`'s comment still says the card sits above the badge; the badge is gone and
+  the card moved to the top right.
+- `.print-note` has no screen-mode styling at all now — pre-existing, not caused by the
+  deletion.
+- `.app-shell`'s `position`/`z-index` pair is live but unexercised: nothing stacks against
+  it any more, and the scene's own z-indexes are written against it.
+- Nothing guards a CSS deletion. The suite passed identically before and after 268 lines
+  came out; the only real check was a screenshot comparison done by hand.

@@ -182,8 +182,9 @@ never stops: the same build scores 92 under simulated throttling and 52 under re
 throttling. The acceptance metrics are blocking time, main-thread time, bootup and
 long-task count, taken with `throttlingMethod: "devtools"` over three runs and reported as
 a median **and a spread**. The spread is not decoration — it is what tells you whether an
-improvement is real, and it is how we learned blocking time is too noisy here to accept
-on (median 5,504 ms, spread 2,656 ms) while long-task count is rock steady.
+improvement is real. On the old design it was what exposed blocking time as too noisy to
+judge anything by: median 5,504 ms with a spread of 2,656 ms, while long-task count held
+rock steady at 20.
 
 What is genuinely expensive is the scene, and only while it is on screen. Under real CPU
 throttling Lighthouse sometimes cannot compute blocking time for it at all, failing with
