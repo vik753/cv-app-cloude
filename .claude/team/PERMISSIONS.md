@@ -14,7 +14,16 @@ Every file has one owner. Nobody edits another agent's zone; they ask the team l
 | `src/index.css`, `src/app/styles/**`, all CSS and scene visuals                                                  | `ui-styles`     |
 | `**/*.test.ts(x)`, `vitest.config.ts`, test helpers and fixtures                                                 | `qa-engineer`   |
 | `.github/**`, `.husky/**`, `eslint.config.js`, `.prettierrc`, `tsconfig*.json`, `vite.config.ts`, `package.json` | `devops`        |
+| `.gitignore`, `.prettierignore`, `.lintstagedrc.json`, `.nvmrc`                                                  | `devops`        |
+| `scripts/**` — a script belongs to whoever the check serves                                                      | see below       |
 | review — no write zone at all                                                                                    | `code-reviewer` |
+
+`scripts/` holds the checks that cannot live in the test suite, because they need a real
+browser: `performance-audit.mjs` belongs to `devops`, who measures the build, and the
+print check belongs to `qa-engineer`, who owns what proves the product still works. A new
+script is assigned by the team lead when it is commissioned, and the assignment is written
+here rather than assumed — a directory where everyone may write is a directory nobody
+maintains.
 
 Overlaps are resolved by the team lead. The common case: `frontend-dev` moves a
 component and its styles need to move with it — that is a coordinated pair of tasks,
