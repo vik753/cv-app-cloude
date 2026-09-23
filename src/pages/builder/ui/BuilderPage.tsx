@@ -4,6 +4,7 @@ import type { BuilderView } from "@/pages/builder/types";
 import { BuilderHeader } from "@/pages/builder/ui/BuilderHeader";
 import { WelcomeGate } from "@/pages/builder/ui/WelcomeGate";
 import { translations, useLanguage } from "@/shared/i18n";
+import { PortalContainerContext } from "@/shared/ui";
 import { useResumeStore } from "@/entities/resume";
 import { ResumeForm } from "@/features/resume-form";
 import { ResumePreview } from "@/features/resume-preview";
@@ -47,6 +48,14 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 	const [notice, setNotice] = useState(t.autoSave);
 	const [previewVisible, setPreviewVisible] = useState(false);
 	const preview = useRef<HTMLElement>(null);
+	/* The shell is what carries data-palette and data-mode, so it is also what the
+	   header's menus portal into — outside it they land in document.body, where neither
+	   attribute is in scope and every token falls back to its :root default. It is held
+	   in state rather than in a ref because a ref's node arrives without a re-render,
+	   and the value has to be on the context by the time a menu is opened. The callback
+	   is React's own setter, so it is stable and the portal is not torn down and rebuilt
+	   on every render. */
+	const [shell, setShell] = useState<HTMLElement | null>(null);
 
 	const completion = useMemo(() => computeCompletion(resume), [resume]);
 
@@ -101,70 +110,72 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 			    card stays mounted past the switch away so the music can fade out */}
 			<SceneMusic playing={view === "scene"} label={t.music} dragLabel={t.musicMove} />
 			{view === "form" ? (
-				<main data-palette={palette} data-mode={mode} className='app-shell'>
-					<div className='app-window'>
-						<BuilderHeader
-							t={t}
-							notice={notice}
-							previewVisible={previewVisible}
-							onTogglePreview={togglePreview}
-							onBackToScene={onEnterScene}
-							mode={mode}
-							onModeChange={(nextMode) => {
-								setMode(nextMode);
-								onModeChosen();
-							}}
-							palette={palette}
-							onPaletteChange={setPalette}
-							language={language}
-							onLanguageChange={(nextLanguage) => {
-								setLanguage(nextLanguage);
-								setNotice(translations[nextLanguage].autoSave);
-							}}
-							onClearDraft={clearDraft}
-						/>
-						<div className={`print-workspace app-body ${previewVisible ? "" : "preview-hidden"}`}>
-							<section className='print-editor form-column' aria-label={t.create}>
-								<div className='form-card'>
-									<div className='form-hero'>
-										<h1>
-											{language === "en" ? (
-												<>
-													Build a resume,
-													<br />
-													<em>that gets noticed.</em>
-												</>
-											) : (
-												<>
-													Зберіть резюме,
-													<br />
-													<em>яке помітять.</em>
-												</>
-											)}
-										</h1>
-										<div className='completion'>
-											<strong>{completion.percent}%</strong>
-											<span>
-												{completion.filled} of {completion.total} {t.fields}
-											</span>
-											<i>
-												<b style={{ width: `${completion.percent}%` }} />
-											</i>
+				<main ref={setShell} data-palette={palette} data-mode={mode} className='app-shell'>
+					<PortalContainerContext value={shell}>
+						<div className='app-window'>
+							<BuilderHeader
+								t={t}
+								notice={notice}
+								previewVisible={previewVisible}
+								onTogglePreview={togglePreview}
+								onBackToScene={onEnterScene}
+								mode={mode}
+								onModeChange={(nextMode) => {
+									setMode(nextMode);
+									onModeChosen();
+								}}
+								palette={palette}
+								onPaletteChange={setPalette}
+								language={language}
+								onLanguageChange={(nextLanguage) => {
+									setLanguage(nextLanguage);
+									setNotice(translations[nextLanguage].autoSave);
+								}}
+								onClearDraft={clearDraft}
+							/>
+							<div className={`print-workspace app-body ${previewVisible ? "" : "preview-hidden"}`}>
+								<section className='print-editor form-column' aria-label={t.create}>
+									<div className='form-card'>
+										<div className='form-hero'>
+											<h1>
+												{language === "en" ? (
+													<>
+														Build a resume,
+														<br />
+														<em>that gets noticed.</em>
+													</>
+												) : (
+													<>
+														Зберіть резюме,
+														<br />
+														<em>яке помітять.</em>
+													</>
+												)}
+											</h1>
+											<div className='completion'>
+												<strong>{completion.percent}%</strong>
+												<span>
+													{completion.filled} of {completion.total} {t.fields}
+												</span>
+												<i>
+													<b style={{ width: `${completion.percent}%` }} />
+												</i>
+											</div>
 										</div>
+										<ResumeForm
+											resume={resume}
+											t={t}
+											onChange={updateField}
+											onExperienceChange={updateExperience}
+											onResumeChange={updateResume}
+										/>
 									</div>
-									<ResumeForm
-										resume={resume}
-										t={t}
-										onChange={updateField}
-										onExperienceChange={updateExperience}
-										onResumeChange={updateResume}
-									/>
-								</div>
-							</section>
-							<ResumePreview ref={preview} resume={resume} t={t} language={language} />
+								</section>
+								<ResumePreview ref={preview} resume={resume} t={t} language={language} />
+							</div>
+							<AppFooter t={t} />
 						</div>
-						<AppFooter t={t} />
-					</div>
+					</PortalContainerContext>
 				</main>
 			) : null}
 		</>

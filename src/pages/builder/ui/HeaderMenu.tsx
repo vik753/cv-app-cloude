@@ -1,4 +1,4 @@
-import { Tooltip } from "@/shared/ui";
+import { Tooltip, usePortalContainer } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
 import type { Mode, Palette } from "@/entities/resume";
 import { LanguageOptions } from "@/features/language-switch";
@@ -40,6 +40,9 @@ export function HeaderMenu({
 	onClearDraft,
 }: HeaderMenuProps) {
 	const modeLabels: Record<Mode, string> = { dark: t.dark, light: t.light };
+	/* the shell, not document.body: data-palette and data-mode live on the shell, and a
+	   menu portalled outside it reads the :root defaults whatever the visitor chose */
+	const portalContainer = usePortalContainer();
 
 	return (
 		<DropdownMenu.Root>
@@ -50,7 +53,7 @@ export function HeaderMenu({
 					</button>
 				</DropdownMenu.Trigger>
 			</Tooltip>
-			<DropdownMenu.Portal>
+			<DropdownMenu.Portal container={portalContainer}>
 				{/* Two classes on purpose: .palette-menu is the only menu surface this app has
 				    — its z-index, card colour, padding and open animation — and sharing it
 				    keeps the two menus identical instead of inventing a second look. The
