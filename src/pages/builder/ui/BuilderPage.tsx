@@ -102,7 +102,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 			) : null}
 			{/* the scene gets its tune, from YouTube, while it has the whole screen; the
 			    card stays mounted past the switch away so the music can fade out */}
-			<SceneMusic playing={view === "scene"} label={t.music} />
+			<SceneMusic playing={view === "scene"} label={t.music} dragLabel={t.musicMove} />
 			{view === "form" ? (
 				<main data-palette={palette} data-mode={mode} className='app-shell'>
 					<div className='app-window'>

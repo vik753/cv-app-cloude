@@ -259,6 +259,12 @@
 		flex: none;
 		overflow: visible;
 	}
+	/* Stacked, this is one track becoming two, which no browser can interpolate — so
+	   the delay layout.css puts on the collapse does not apply here and the columns
+	   change at once. Nothing shows: the emptied second column starts past the right
+	   edge of the window and .app-shell clips it, and the preview below the form is
+	   off screen anyway, since the button that switches it off lives in the header at
+	   the top of the page. The cross-fade itself is unaffected. */
 	.app-body.preview-hidden {
 		grid-template-columns: minmax(0, 1fr) 0px;
 	}

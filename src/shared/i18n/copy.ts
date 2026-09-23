@@ -46,6 +46,9 @@ export interface Translation {
 	previewShow: string;
 	previewLabel: string;
 	music: string;
+	/* the music card's grab handle: it is dragged with a pointer and nudged with the
+	   arrow keys, and the name has to describe both */
+	musicMove: string;
 	musicCredit: string;
 	musicSource: string;
 	/* the welcome button picks the brand's own name out in colour, so the sentence
@@ -150,6 +153,7 @@ export const translations: Record<Language, Translation> = {
 		previewShow: "Show preview",
 		previewLabel: "Preview",
 		music: "Scene music",
+		musicMove: "Move the music player — drag, or use the arrow keys",
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
 		welcomeStart: { before: "Welcome to the ", brand: "not boring CV", after: ". Click to begin." },
@@ -250,6 +254,7 @@ export const translations: Record<Language, Translation> = {
 		previewShow: "Показати попередній перегляд",
 		previewLabel: "Прев'ю",
 		music: "Музика сцени",
+		musicMove: "Перемістити плеєр музики — перетягніть або скористайтеся стрілками",
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
 		welcomeStart: { before: "Ласкаво просимо до ", brand: "не нудного CV", after: ". Натисніть, щоб почати." },

@@ -46,11 +46,27 @@
 		max-width: none !important;
 	}
 
+	/* The preview is the export, and it is hidden on screen by a fade rather than by
+	   being unmounted. Both halves of that fade have to be cancelled here or a print
+	   taken while the preview is switched off comes out blank: opacity nought hides the
+	   whole panel and visibility is inherited by everything inside it, and no rule
+	   below would bring either back. */
 	.print-preview {
 		display: block !important;
 		padding: 0 !important;
 		border: 0 !important;
 		background: #fff !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transition: none !important;
+	}
+
+	/* On screen the stage holds the sheet away from the panel's edges. In print the page
+	   *is* the sheet, and those 40px of side padding narrow the containing block below
+	   210mm — the paper cannot shrink to fit, so it sits against the left of the padding
+	   and hangs the same distance off the right of the page. */
+	.paper-stage {
+		padding: 0 !important;
 	}
 
 	.print-paper {
