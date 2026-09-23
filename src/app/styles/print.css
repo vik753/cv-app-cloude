@@ -61,6 +61,14 @@
 		transition: none !important;
 	}
 
+	/* On screen the stage holds the sheet away from the panel's edges. In print the page
+	   *is* the sheet, and those 40px of side padding narrow the containing block below
+	   210mm — the paper cannot shrink to fit, so it sits against the left of the padding
+	   and hangs the same distance off the right of the page. */
+	.paper-stage {
+		padding: 0 !important;
+	}
+
 	.print-paper {
 		width: 210mm;
 		min-height: 297mm;
