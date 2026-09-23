@@ -32,11 +32,17 @@
 		print-color-adjust: exact;
 	}
 
+	/* The menus are portalled into the shell so they can read the palette, which also
+	   puts them inside the printed tree. A menu left open when someone reaches for ⌘P
+	   would print over the résumé — the Download button closes it first, so only the
+	   keyboard shortcut can get there, and it should not. */
 	.app-footer,
 	.print-editor,
 	.print-header,
 	.print-toolbar,
-	.print-note {
+	.print-note,
+	.palette-menu,
+	.header-menu {
 		display: none !important;
 	}
 
