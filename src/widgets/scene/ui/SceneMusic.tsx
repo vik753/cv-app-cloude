@@ -1,4 +1,5 @@
 import { MUSIC } from "@/shared/config";
+import { useDraggableCard } from "@/widgets/scene/model/useDraggableCard";
 import { useEffect, useRef, useState } from "react";
 
 /* The tune that plays while the form is minimized and the scene has the stage.
@@ -63,15 +64,21 @@ interface SceneMusicProps {
 	/* true while the form is minimized */
 	playing: boolean;
 	label: string;
+	/* the accessible name of the grab handle */
+	dragLabel: string;
 }
 
-export function SceneMusic({ playing, label }: SceneMusicProps) {
+export function SceneMusic({ playing, label, dragLabel }: SceneMusicProps) {
 	/* the card outlives `playing` by one fade, so the music can bow out gently */
 	const [mounted, setMounted] = useState(false);
 	const host = useRef<HTMLDivElement>(null);
 	const player = useRef<YouTubePlayer | null>(null);
 	const fade = useRef(0);
 	const unmountTimer = useRef(0);
+	/* the card can be pushed out of the way of the sun, the moon and the birds, which
+	   all fly through the corner it sits in; only while it is on stage, because the
+	   exit keyframe owns the card's movement during the fade */
+	const { cardRef, handle } = useDraggableCard(playing);
 
 	/* minimizing brings the card back immediately; React allows this render-phase
 	   update and it avoids a second render from an effect */
@@ -133,7 +140,14 @@ export function SceneMusic({ playing, label }: SceneMusicProps) {
 	if (!mounted) return null;
 
 	return (
-		<div className={`scene-music${playing ? "" : " leaving"}`} aria-label={label}>
+		/* on its way out the card is already unreachable by pointer, and `inert` says the
+		   same to the keyboard: without it the iframe holds the first tab stop for the
+		   whole exit fade, and Tab lands inside YouTube's player instead of the toolbar */
+		<div ref={cardRef} className={`scene-music${playing ? "" : " leaving"}`} aria-label={label} inert={!playing}>
+			{/* the drag listens here and not on the card: the iframe is cross-origin, so
+			    the moment the pointer crosses into it the events belong to YouTube and the
+			    gesture dies. A strip of our own keeps it */}
+			<button type='button' className='scene-music-grab' aria-label={dragLabel} {...handle} />
 			<div ref={host} className='scene-music-player' />
 		</div>
 	);

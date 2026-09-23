@@ -497,6 +497,52 @@
 		transform: none;
 	}
 }
+/* The strip you take hold of. It carries the whole gesture because it is the only
+   part of this card our own code can listen on: below it is a cross-origin iframe,
+   and a pointer that enters it belongs to YouTube from that moment. So it has to be
+   a real target — full width, and deep enough for a fingertip rather than a cursor.
+
+   touch-action is not decoration here. Without it a finger on the strip scrolls the
+   page and the card stays where it is, which means the feature does not exist on a
+   phone at all. */
+.scene-music-grab {
+	display: block;
+	width: 100%;
+	height: 20px;
+	padding: 0;
+	border: 0;
+	/* the card clips to 14px and this sits inside its 1px border */
+	border-radius: 13px 13px 0 0;
+	appearance: none;
+	background: #161616;
+	touch-action: none;
+	user-select: none;
+	cursor: grab;
+}
+/* a grip, so the strip reads as something to take hold of rather than as a bar of
+   letterboxing above the video */
+.scene-music-grab::before {
+	content: "";
+	display: block;
+	width: 34px;
+	height: 4px;
+	margin: 8px auto 0;
+	border-radius: 2px;
+	background: rgba(255, 255, 255, 0.4);
+}
+.scene-music-grab:hover::before,
+.scene-music-grab:focus-visible::before {
+	background: rgba(255, 255, 255, 0.78);
+}
+.scene-music-grab:active {
+	cursor: grabbing;
+}
+/* .scene-music hides its overflow, so a ring drawn outside this button would be cut
+   off along the card's rounded corners; a negative offset puts it inside the strip */
+.scene-music-grab:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: -2px;
+}
 .scene-music-player,
 .scene-music iframe {
 	display: block;
@@ -504,9 +550,15 @@
 	height: 201px;
 	border: 0;
 }
+/* --exit-x is the signed distance that clears whichever edge the card is nearest,
+   set on the card as it starts to leave: the drag means it can be anywhere, and a
+   fixed 320px to the right sends a card parked on the left across the whole sky and
+   still leaves it short of the edge on a wide window. The fallback is that old
+   320px, so this keyframe behaves exactly as it always did until the property
+   arrives, and neither half has to wait for the other. */
 @keyframes music-out {
 	to {
-		transform: translateX(320px);
+		transform: translateX(var(--exit-x, 320px));
 	}
 }
 @media (max-width: 560px) {
