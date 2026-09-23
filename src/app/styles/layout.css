@@ -354,6 +354,11 @@
 	background: var(--tint);
 	color: var(--on-tint);
 }
+/* Switching the preview on and off is a cross-fade and nothing else. The columns
+   themselves are not animated: the width the form gives up changes in one step, and
+   the step is placed where the preview cannot be seen — immediately on the way in,
+   after the fade has finished on the way out. That is what the zero-duration
+   transition below is: not a movement, a jump at a chosen moment. */
 .app-body {
 	display: grid;
 	flex: 1;
@@ -362,43 +367,37 @@
 	grid-template-rows: minmax(0, 1fr);
 	align-items: stretch;
 	overflow: hidden;
-	transition: grid-template-columns 360ms ease;
+	transition: none;
 }
 .app-body.preview-hidden {
 	grid-template-columns: minmax(0, 1fr) 0px;
+	transition: grid-template-columns 0s linear 200ms;
 }
 .app-body .form-column {
 	width: 100%;
 	max-width: 1100px;
 	margin-inline: auto;
 	justify-self: center;
-	opacity: 1;
-	transform: translateX(0);
-	transition:
-		opacity 360ms ease,
-		transform 360ms ease,
-		border-color 360ms ease;
 }
-.app-body.preview-entering .form-column {
-	opacity: 0.55;
-	transform: translateX(14px);
-}
+/* visibility carries the fade's other half: at opacity 0 alone the panel keeps its
+   buttons in the tab order, which is a focus stop in a panel nobody can see. It is
+   switched at the far end of the fade on the way out and at the near end on the way
+   in, so it never clips the dissolve. */
 .app-body .print-preview {
 	min-width: 0;
 	opacity: 1;
-	transform: translateX(0);
+	visibility: visible;
 	transition:
-		opacity 260ms ease,
-		transform 360ms ease;
-}
-.app-body:not(.preview-hidden) .print-preview {
-	transition-delay: 360ms;
+		opacity 240ms ease,
+		visibility 0s;
 }
 .app-body.preview-hidden .print-preview {
 	opacity: 0;
-	transform: translateX(18px);
+	visibility: hidden;
 	pointer-events: none;
-	transition-delay: 0ms;
+	transition:
+		opacity 200ms ease,
+		visibility 0s linear 200ms;
 }
 .form-column {
 	height: 100%;
@@ -576,6 +575,13 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.app-window {
+		transition: none;
+	}
+	/* a dissolve is motion too, and the answer to "less of it" is the new state at
+	   once rather than a gentler version of the same half-second */
+	.app-body.preview-hidden,
+	.app-body .print-preview,
+	.app-body.preview-hidden .print-preview {
 		transition: none;
 	}
 }
