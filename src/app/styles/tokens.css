@@ -37,6 +37,14 @@
 	--paper-lang-chip-ink: #8a4a2e;
 	--danger-text: #b8503f;
 	--danger-border: #c9695a;
+	/* The tooltip is the one surface in the app that deliberately inverts against
+	   everything around it, so it needs a light tone in dark mode. Inverting --text
+	   gets one for free, but in dark mode --text is a near-white built for thin glyphs
+	   on a dark ground, and a whole filled chip of it reads as a flashbulb. Light mode
+	   has no such problem, so the default is exactly the old inversion and only the
+	   dark palettes below take it down to a softer tone of their own. The label keeps
+	   reading var(--ground), which is the ink either way. */
+	--tooltip-surface: var(--text);
 }
 
 /* Registering these as <color> lets the browser interpolate the custom
@@ -217,6 +225,7 @@
 	--lang-on-tint: #a9d0fb;
 	--paper-lang-chip: #f7e3cf;
 	--paper-lang-chip-ink: #8a5a2e;
+	--tooltip-surface: #d2cfe2;
 }
 .app-shell[data-palette="blurple"][data-mode="light"] {
 	--ground: #f3f5fe;
@@ -266,6 +275,7 @@
 	--lang-tint: #4a2f1c;
 	--lang-chip-border: #6b4a2c;
 	--lang-on-tint: #f0c896;
+	--tooltip-surface: #ded2c3;
 }
 .app-shell[data-palette="slate"][data-mode="light"] {
 	--ground: #f5f6f7;
@@ -324,4 +334,5 @@
 	--lang-on-tint: #3d4a55;
 	--paper-lang-chip: transparent;
 	--paper-lang-chip-ink: #3d4a55;
+	--tooltip-surface: #ccd4d9;
 }

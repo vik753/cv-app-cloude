@@ -1,3 +1,4 @@
+import { usePortalContainer } from "@/shared/ui/portalContainer";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import type { ReactNode } from "react";
 
@@ -10,10 +11,14 @@ interface TooltipProps {
 }
 
 export function Tooltip({ label, children, side = "top" }: TooltipProps) {
+	/* into the shell rather than the body, so the tooltip resolves the palette and mode
+	   the app is actually wearing; outside a provider this is null, which is what Radix
+	   reads as document.body */
+	const container = usePortalContainer();
 	return (
 		<TooltipPrimitive.Root delayDuration={250}>
 			<TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-			<TooltipPrimitive.Portal>
+			<TooltipPrimitive.Portal container={container}>
 				<TooltipPrimitive.Content className='tooltip-content' side={side} sideOffset={8} collisionPadding={8}>
 					{label}
 					<TooltipPrimitive.Arrow className='tooltip-arrow' />

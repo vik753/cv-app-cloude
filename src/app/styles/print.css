@@ -32,17 +32,21 @@
 		print-color-adjust: exact;
 	}
 
-	/* The menus are portalled into the shell so they can read the palette, which also
-	   puts them inside the printed tree. A menu left open when someone reaches for ⌘P
-	   would print over the résumé — the Download button closes it first, so only the
-	   keyboard shortcut can get there, and it should not. */
+	/* The menus and the tooltips are portalled into the shell so they can read the
+	   palette, which also puts them inside the printed tree. One left open when someone
+	   reaches for ⌘P would print over the résumé — the Download button closes the menus
+	   first, so only the keyboard shortcut can get there, and it should not. A tooltip
+	   has no such guard at all: it is up for as long as the pointer rests on the control,
+	   and ⌘P is a keystroke away the whole time. .tooltip-arrow is not named here because
+	   Radix renders it inside .tooltip-content, so it goes with its parent. */
 	.app-footer,
 	.print-editor,
 	.print-header,
 	.print-toolbar,
 	.print-note,
 	.palette-menu,
-	.header-menu {
+	.header-menu,
+	.tooltip-content {
 		display: none !important;
 	}
 
@@ -53,10 +57,12 @@
 	}
 
 	/* The preview is the export, and it is hidden on screen by a fade rather than by
-	   being unmounted. Both halves of that fade have to be cancelled here or a print
+	   being unmounted. All three parts of that fade have to be cancelled here or a print
 	   taken while the preview is switched off comes out blank: opacity nought hides the
-	   whole panel and visibility is inherited by everything inside it, and no rule
-	   below would bring either back. */
+	   whole panel, visibility is inherited by everything inside it, display nought takes
+	   the panel out of the printed tree entirely, and no rule below would bring any of
+	   them back. The display override is also what lets the on-screen rule use
+	   display: none at all — !important beats it wherever it is written. */
 	.print-preview {
 		display: block !important;
 		padding: 0 !important;
