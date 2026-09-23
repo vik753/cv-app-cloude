@@ -2,11 +2,11 @@ import { MUSIC } from "@/shared/config";
 import { useDraggableCard } from "@/widgets/scene/model/useDraggableCard";
 import { useEffect, useRef, useState } from "react";
 
-/* The tune that plays while the form is minimized and the scene has the stage.
-   It is streamed through YouTube's own embedded player rather than a file of our
-   own: nothing copyrighted lives in this repo and the plays count for the artist.
-   YouTube's terms require that player to stay visible and at least 200x200, so it
-   appears as a small card above the badge instead of playing invisibly. */
+/* The tune that plays while the scene has the screen to itself. It is streamed through
+   YouTube's own embedded player rather than a file of our own: nothing copyrighted
+   lives in this repo and the plays count for the artist. Their terms require that
+   player to stay visible and at least 200x200, which is why it rides in a card the
+   visitor can drag out of the way rather than playing out of sight. */
 const VIDEO_ID = MUSIC.videoId;
 
 /* quiet enough to sit under whatever else is going on, loud enough to follow */

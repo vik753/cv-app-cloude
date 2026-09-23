@@ -1,7 +1,6 @@
-import type { Mode } from "@/pages/builder/types";
 import { Tooltip } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
-import type { Palette } from "@/entities/resume";
+import type { Mode, Palette } from "@/entities/resume";
 import { LanguageOptions } from "@/features/language-switch";
 import { PaletteOptions } from "@/features/palette-switch";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";

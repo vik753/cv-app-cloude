@@ -6,7 +6,7 @@ export { initialResume, createEmptyExperience } from "@/entities/resume/model/in
 export { resumeSchema, languageLevels } from "@/entities/resume/model/resumeSchema";
 export type { Experience, ExperienceField, Resume, ResumeField } from "@/entities/resume/model/resumeSchema";
 export { useResumeStore } from "@/entities/resume/model/resumeStore";
-export type { Palette } from "@/entities/resume/model/resumeStore";
+export type { Mode, Palette } from "@/entities/resume/model/resumeStore";
 export { getSkillIconUrl, skillIconSuggestions } from "@/entities/resume/lib/skillIcons";
 export { languageSuggestions } from "@/entities/resume/config/languageSuggestions";
 export { SkillIcon } from "@/entities/resume/ui/SkillIcon";

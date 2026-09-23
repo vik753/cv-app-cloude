@@ -46,7 +46,6 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 	const { language, setLanguage, t } = useLanguage();
 	const [notice, setNotice] = useState(t.autoSave);
 	const [previewVisible, setPreviewVisible] = useState(false);
-	const [previewEntering, setPreviewEntering] = useState(false);
 	const preview = useRef<HTMLElement>(null);
 
 	const completion = useMemo(() => computeCompletion(resume), [resume]);
@@ -63,9 +62,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 			return;
 		}
 		setPreviewVisible(true);
-		setPreviewEntering(true);
 		window.setTimeout(() => {
-			setPreviewEntering(false);
 			/* A tap that changes nothing you can see reads as a broken button, and that is
 			   what switching the preview on does wherever it opens stacked below the form
 			   instead of beside it. The test is the preview's own place on screen rather
@@ -126,9 +123,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 							}}
 							onClearDraft={clearDraft}
 						/>
-						<div
-							className={`print-workspace app-body ${previewVisible ? "" : "preview-hidden"} ${previewEntering ? "preview-entering" : ""}`}
-						>
+						<div className={`print-workspace app-body ${previewVisible ? "" : "preview-hidden"}`}>
 							<section className='print-editor form-column' aria-label={t.create}>
 								<div className='form-card'>
 									<div className='form-hero'>
