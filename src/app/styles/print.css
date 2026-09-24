@@ -26,6 +26,22 @@
 		background: #fff;
 	}
 
+	/* The page below the sheet's last line belongs to no element: only the root's
+	   background reaches it, so without these the last page of a long résumé is paper
+	   down to the quote and bare white beneath. The root cannot read --paper — the
+	   palette is set on .app-shell, below it — so it takes the palette's named paper
+	   from :root, the same token --paper itself is set from. Dark modes share their
+	   palette's paper. */
+	html:has(.app-shell[data-palette="cream"]) {
+		background: var(--paper-cream);
+	}
+	html:has(.app-shell[data-palette="blurple"]) {
+		background: var(--paper-blurple);
+	}
+	html:has(.app-shell[data-palette="slate"]) {
+		background: var(--paper-slate);
+	}
+
 	body {
 		-webkit-print-color-adjust: exact;
 		print-color-adjust: exact;
@@ -96,6 +112,12 @@
 		box-shadow: none !important;
 		background: var(--paper) !important;
 		transform: none !important;
+		/* A long résumé is one box cut into pages, and by default the cut takes no
+		   padding with it: page one loses its bottom 16mm, page two starts flush with
+		   the top edge. clone gives every page's piece of the sheet the full padding
+		   and its own background. */
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
 	}
 
 	.resume-content {
@@ -108,6 +130,12 @@
 		column-count: initial;
 		column-gap: 10mm;
 		gap: 0 10mm;
+	}
+
+	/* a heading stranded at the foot of a page, its first entry overleaf */
+	.resume-section-heading {
+		break-after: avoid;
+		page-break-after: avoid;
 	}
 
 	.resume-experience-entry {

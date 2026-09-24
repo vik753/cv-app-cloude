@@ -8,6 +8,12 @@
 }
 
 :root {
+	/* Each palette's paper, named once. The palettes below take --paper from these,
+	   and so does print.css for the root's background — the root sits above
+	   .app-shell and cannot see the palette's --paper, only these. */
+	--paper-cream: #fbfaf5;
+	--paper-blurple: #f3f5fe;
+	--paper-slate: #ffffff;
 	--ground: #f2f1eb;
 	--panel: #e7e6df;
 	--card: #f7f6f0;
@@ -23,7 +29,7 @@
 	--accent-text: #d36f48;
 	--chip-x: #91a095;
 	--accent: #d36f48;
-	--paper: #fbfaf5;
+	--paper: var(--paper-cream);
 	--paper-ink: #263832;
 	--paper-muted: #758079;
 	--paper-border: #deded5;
@@ -126,6 +132,8 @@
 	inherits: true;
 	initial-value: #d36f48;
 }
+/* initial-value must be a literal — a registered property cannot start from var() —
+   so it repeats --paper-cream; it is only ever seen before any rule applies */
 @property --paper {
 	syntax: "<color>";
 	inherits: true;
@@ -213,7 +221,7 @@
 	--accent-text: #b5abfc;
 	--chip-x: #7972a9;
 	--accent: #9184d9;
-	--paper: #f3f5fe;
+	--paper: var(--paper-blurple);
 	--paper-ink: #2b293a;
 	--paper-muted: #5c5783;
 	--paper-border: #cfd3e5;
@@ -243,7 +251,7 @@
 	--accent-text: #5d5294;
 	--chip-x: #796cbf;
 	--accent: #9184d9;
-	--paper: #f3f5fe;
+	--paper: var(--paper-blurple);
 	--paper-ink: #2b293a;
 	--paper-muted: #5c5783;
 	--paper-border: #cfd3e5;
@@ -293,7 +301,7 @@
 	--accent-text: #4f6473;
 	--chip-x: #98a0a7;
 	--accent: #4f6473;
-	--paper: #ffffff;
+	--paper: var(--paper-slate);
 	--paper-ink: #1b2126;
 	--paper-muted: #6b7480;
 	--paper-border: #dde1e5;
@@ -322,7 +330,7 @@
 	--accent-text: #a3b7c5;
 	--chip-x: #7d848b;
 	--accent: #a3b7c5;
-	--paper: #ffffff;
+	--paper: var(--paper-slate);
 	--paper-ink: #1b2126;
 	--paper-muted: #6b7480;
 	--paper-border: #dde1e5;

@@ -12,7 +12,7 @@ _Last consolidated: 2026-09-24._
 - `main` holds everything up to PR #17. The consolidation pass (the dead
   `useDayNightCycle` deleted, the colour-mode fix, the print check in CI, new tests and
   small debts) is in a pull request from `dev`.
-- 145 tests in 18 files, all green. `npm run print-check` 8/8.
+- 153 tests, all green. `npm run print-check` 9/9.
 
 ## The app
 
@@ -57,8 +57,13 @@ follows `prefers-color-scheme` live until the switch is used; a hand choice is s
 `resume-canvas-mode-v2` and wins from then on.
 
 **Export** is `window.print()`. The print sheet takes the width it is given, capped at
-210mm, with its own 16mm padding; menus and tooltips are hidden; the preview is forced
-visible even when toggled off on screen.
+210mm, with its own 16mm padding, repeated on every page by `box-decoration-break:
+clone`; the root takes the palette's paper colour so the last page is paper to the
+bottom, reading the named `--paper-cream`/`-blurple`/`-slate` tokens on `:root` that each
+palette's `--paper` is itself set from. Menus and tooltips
+are hidden; the preview is forced visible even when toggled off on screen. For the
+length of a print the document title is the person's name (`Ihor_Korenets_CV`), which
+browsers use as the PDF's file name.
 
 ## Tooling
 
@@ -68,8 +73,10 @@ visible even when toggled off on screen.
   on the runner's own Chrome). The `print` job has not yet run on GitHub.
 - **`npm run print-check`**: builds, serves through `vite preview`, renders under print
   media at A4, US Letter, A4 with 10mm and with 0.5in margins, preview on and off. Fails
-  on a blank sheet, horizontal or bottom overflow, or unequal side insets. Proved by
-  re-injecting each historical bug and watching it fail.
+  on a blank sheet, horizontal or bottom overflow, or unequal side insets. A ninth
+  combination prints a long draft to a real PDF and reads it with `pdfjs-dist`
+  (devDependency, owner-approved), requiring 14mm of clearance above and below the text
+  on every page. Proved by re-injecting each historical bug and watching it fail.
 - **`npm run lighthouse`**: mobile, `throttlingMethod: "devtools"`, three runs, median and
   spread. Refuses to run if port 4173 is busy, and confirms it is serving this build by
   polling the build's own content-hashed asset. `simulate` is kept only as a guard for
