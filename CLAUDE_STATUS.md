@@ -9,11 +9,9 @@ _Last consolidated: 2026-09-24._
 ## Where things stand
 
 - All five stages of the team's plan are done (see `.claude/team/README.md`).
-- `main` holds everything up to PR #16. **PR #17** (the printed sheet fits the page it is
-  given: phones, US Letter, margined dialogs) is open and waiting for the owner.
-- `dev` carries, on top of #17, the consolidation pass: the dead `useDayNightCycle`
-  deleted, the colour-mode fix, the print check in CI, new tests and small debts. Not
-  pushed yet — the owner pushes it.
+- `main` holds everything up to PR #17. The consolidation pass (the dead
+  `useDayNightCycle` deleted, the colour-mode fix, the print check in CI, new tests and
+  small debts) is in a pull request from `dev`.
 - 145 tests in 18 files, all green. `npm run print-check` 8/8.
 
 ## The app
@@ -106,21 +104,16 @@ changed is that it no longer runs during load or behind the form.
   the scene→form button sits bottom left** so the player does not cover it.
 - **No frosted glass**: the form never has a scene behind it any more.
 - **Stage 4 was accepted on blocking time and long tasks, not on the score.**
+- **Everyone's colour mode resets to the system once.** The unversioned
+  `resume-canvas-mode` was written on every load and could not tell a choice from a first
+  visit, so it is ignored and removed; anyone who had picked a mode picks it again.
+  Accepted by the owner.
+- **The empty space under the form is gone**, confirmed by the owner after the hidden
+  preview stopped holding a box.
 - `.welcome-button` is `inline-block`: a flex container strips the spaces around the
   coloured brand span.
 
 ## Open
-
-**Needs the owner**
-
-- **Merge PR #17**, then push `dev`.
-- **Everyone's colour mode resets to the system once.** The old `resume-canvas-mode` was
-  written on every load, so it could not tell a choice from a first visit; it is now
-  ignored and removed. Someone who had deliberately picked dark will see the system's
-  scheme once and pick again. Reversible, but it is a visible change.
-- **The empty space under the form.** The hidden preview no longer holds a box, but the
-  ~1,300px the owner saw never reproduced (only 487px, on a text-heavy draft). Which width
-  and which draft?
 
 **Worth doing**
 
