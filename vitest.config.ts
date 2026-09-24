@@ -18,6 +18,10 @@ export default mergeConfig(
 			   site it eventually surfaces in. Disabling Node's own implementation lets
 			   jsdom's populate step install its working one, same as on older Node. */
 			execArgv: ["--no-experimental-webstorage"],
+			/* Vitest hands every stylesheet to a test as an empty string, `?raw` included.
+			   One file is let through, because a test holds a number in it to its copy in
+			   TypeScript (useCompactViewport.test.ts); everything else stays skipped. */
+			css: { include: [/src\/app\/styles\/panels\.css/] },
 			coverage: {
 				provider: "v8",
 				reporter: ["text", "html"],

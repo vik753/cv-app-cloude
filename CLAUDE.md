@@ -198,9 +198,7 @@ welcome screen freezes it — each animation loop draws one frame and stops.
 The bundle is one chunk, about 640 kB raw and 200 kB gzipped, and stays that way
 deliberately: 322 KiB transferred, blocking time 0 and TTI 1.1 s on the deployed site mean
 code splitting would fix nothing. The stylesheet carries 52 `@keyframes` and two animating
-`filter` declarations in `scene/weather.css`. One `backdrop-filter` survives —
-`none !important` on `.print-paper` — and it is a leftover cancel that now cancels
-nothing. The frosted-glass surfaces that used to composite over the moving scene are gone,
+`filter` declarations in `scene/weather.css`, and no `backdrop-filter` at all. The frosted-glass surfaces that used to composite over the moving scene are gone,
 because the form never has a scene behind it any more.
 
 When measuring by hand, use a clean Chrome profile and the production build. Extensions

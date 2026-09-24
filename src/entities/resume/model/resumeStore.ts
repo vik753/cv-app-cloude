@@ -23,13 +23,19 @@ const readLegacyDraft = (): Resume => {
 export type Palette = "blurple" | "cream" | "slate";
 export type Mode = "light" | "dark";
 
+/* What a menu or a stored string hands back is a plain string; these are how it
+   becomes a Palette or a Mode without a cast vouching for it. */
+export const isPalette = (value: string | null): value is Palette =>
+	value === "blurple" || value === "cream" || value === "slate";
+export const isMode = (value: string | null): value is Mode => value === "light" || value === "dark";
+
 /* The palette and the colour mode live in keys of their own and only there: the draft's
    blob below is narrowed to the draft, so these readers are the one source of truth, and
    the two setters are the only writers. */
 const PALETTE_KEY = "resume-canvas-palette";
 const readPalette = (): Palette => {
 	const saved = localStorage.getItem(PALETTE_KEY);
-	return saved === "blurple" || saved === "slate" ? saved : "cream";
+	return isPalette(saved) ? saved : "cream";
 };
 
 /* A stored mode means someone chose it with the switch. Without one the app follows the
@@ -42,7 +48,7 @@ const readSystemMode = (): Mode => (window.matchMedia("(prefers-color-scheme: da
 const readChosenMode = (): Mode | null => {
 	localStorage.removeItem("resume-canvas-mode");
 	const saved = localStorage.getItem(MODE_KEY);
-	return saved === "light" || saved === "dark" ? saved : null;
+	return isMode(saved) ? saved : null;
 };
 
 interface ResumeStore {
