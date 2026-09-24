@@ -12,7 +12,7 @@ _Last consolidated: 2026-09-24._
 - `main` holds everything up to PR #17. The consolidation pass (the dead
   `useDayNightCycle` deleted, the colour-mode fix, the print check in CI, new tests and
   small debts) is in a pull request from `dev`.
-- 153 tests, all green. `npm run print-check` 9/9.
+- 161 tests, all green. `npm run print-check` 9/9.
 
 ## The app
 
@@ -63,7 +63,13 @@ bottom, reading the named `--paper-cream`/`-blurple`/`-slate` tokens on `:root` 
 palette's `--paper` is itself set from. Menus and tooltips
 are hidden; the preview is forced visible even when toggled off on screen. For the
 length of a print the document title is the person's name (`Ihor_Korenets_CV`), which
-browsers use as the PDF's file name.
+browsers use as the PDF's file name. Download's tooltip tells people to choose "Save as
+PDF" and turn off the browser's headers and footers.
+
+**Photo.** Decoded through an `<img>` and redrawn to at most 400px JPEG before it is
+stored (`features/resume-form/lib/photo.ts`), because the draft is one `localStorage`
+value and a raw phone picture is past the quota — every save after it failed. A file
+that cannot be decoded shows a message and keeps the old photo.
 
 ## Tooling
 
@@ -128,16 +134,11 @@ changed is that it no longer runs during load or behind the form.
   fall out of the view.
 - `DayNightScene.tsx` is 523 lines and carries the plane's and the station's geometry,
   which `ARCHITECTURE.md` places in `assets/svg`.
-- A failed photo read (`FileReader`) is silent, and nothing guards a large photo against
-  the `localStorage` quota.
-- Tooltip in/out animations are not switched off under `prefers-reduced-motion`.
 - The README would take a GIF; recording one needs `ffmpeg`.
 
 **Small**
 
-- The builder's `h1` copy is an inline language ternary, not in the i18n dictionaries.
 - `computeCompletion` is résumé knowledge sitting in `pages/builder/lib`.
-- `src/assets/hero.png` is referenced by nothing.
 - `main.tsx`, `App.test.tsx`, `setupTests.ts` and `test-utils/` sit outside every layer,
   so the boundary lint does not see them.
 - `.header-menu-*` no longer needs the doubled `.palette-menu-*` classes in its markup.
