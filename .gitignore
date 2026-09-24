@@ -24,3 +24,8 @@ artifacts
 *.njsproj
 *.sln
 *.sw?
+
+# Exported résumés. Printing is the export, so PDFs get saved next to the project
+# while testing it — and one carrying real personal details was committed by a
+# blanket `git add -A`. Only the root is ignored; nothing in the tree is a PDF.
+/*.pdf
