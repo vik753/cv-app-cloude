@@ -20,6 +20,7 @@ export interface Translation {
 	photo: string;
 	photoAdded: string;
 	photoHint: string;
+	photoError: string;
 	name: string;
 	position: string;
 	about: string;
@@ -129,7 +130,8 @@ export const translations: Record<Language, Translation> = {
 		educationHint: "Add relevant learning",
 		photo: "Add photo",
 		photoAdded: "Photo added",
-		photoHint: "JPG or PNG · up to 2 MB",
+		photoHint: "JPG or PNG, any size",
+		photoError: "Could not read this image. Try another file.",
 		name: "Full name",
 		position: "Desired position",
 		about: "About you",
@@ -230,7 +232,8 @@ export const translations: Record<Language, Translation> = {
 		educationHint: "Додайте релевантне навчання",
 		photo: "Додати фото",
 		photoAdded: "Фото додано",
-		photoHint: "JPG або PNG · до 2 МБ",
+		photoHint: "JPG або PNG, будь-якого розміру",
+		photoError: "Не вдалося прочитати зображення. Спробуйте інший файл.",
 		name: "Ім'я та прізвище",
 		position: "Бажана посада",
 		about: "Коротко про себе",
