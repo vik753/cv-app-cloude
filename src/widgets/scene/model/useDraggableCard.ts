@@ -48,16 +48,35 @@ const applyOffset = (node: HTMLElement, offset: CardOffset) => {
 	node.style.translate = `${offset.x}px ${offset.y}px`;
 };
 
-/* Subtracting the drag gives the box the stylesheet put the card in, which is what the
-   clamp is measured against. The reading is only true while no keyframe is mid-flight —
-   `music-in` moves the card for its first 400ms — so it is taken at the start of a
-   gesture, never during one. */
-const measureBox = (node: HTMLElement, offset: CardOffset): CardBox => {
-	const rect = node.getBoundingClientRect();
-	return { left: rect.left - offset.x, top: rect.top - offset.y, width: rect.width, height: rect.height };
-};
+/* The box the stylesheet put the card in, which is what the clamp is measured against.
+   It comes from the offset properties rather than from a rect on purpose: those are
+   layout positions, so neither the drag's own `translate` nor a keyframe mid-flight
+   shows up in them. A rect does show both, and reading one while `music-in` is still
+   running — a gesture is allowed to start there — measures a base position the card
+   does not have, which is how a hard drag used to park it past the edge.
+
+   The card is `position: fixed`, so `offsetParent` is null and these are viewport
+   coordinates, unaffected by page scroll. Verified in Chrome rather than assumed. */
+const measureBase = (node: HTMLElement): CardBox => ({
+	left: node.offsetLeft,
+	top: node.offsetTop,
+	width: node.offsetWidth,
+	height: node.offsetHeight,
+});
 
 const readViewport = (): Viewport => ({ width: window.innerWidth, height: window.innerHeight });
+
+/* Pulls a remembered offset back inside the current viewport and writes it out. The
+   clamp during a gesture is not enough on its own: the offset outlives the card — it is
+   kept so that leaving the scene and coming back does not throw the position away — and
+   the viewport can change in the meantime, or while the card is away entirely. An
+   offset measured against a window that no longer exists puts the card outside the one
+   that does, still playing, which is the very thing YouTube's terms forbid. */
+const settle = (node: HTMLElement, offset: CardOffset): CardOffset => {
+	const next = clampOffset(offset, measureBase(node), readViewport());
+	applyOffset(node, next);
+	return next;
+};
 
 export interface DragHandleProps {
 	onPointerDown: (event: ReactPointerEvent<HTMLElement>) => void;
@@ -92,7 +111,9 @@ export function useDraggableCard(enabled: boolean): DraggableCard {
 
 	const cardRef = useCallback((node: HTMLDivElement | null) => {
 		card.current = node;
-		if (node) applyOffset(node, offset.current);
+		/* a fresh node inherits where the card was left, clamped to the window it is
+		   arriving in rather than the one it was dragged in */
+		if (node) offset.current = settle(node, offset.current);
 	}, []);
 
 	const onPointerDown = useCallback(
@@ -100,7 +121,7 @@ export function useDraggableCard(enabled: boolean): DraggableCard {
 			const node = card.current;
 			/* a secondary mouse button opens the context menu; that is not a drag */
 			if (!enabled || !node || (event.pointerType === "mouse" && event.button !== 0)) return;
-			box.current = measureBox(node, offset.current);
+			box.current = measureBase(node);
 			origin.current = { x: event.clientX - offset.current.x, y: event.clientY - offset.current.y };
 			dragging.current = true;
 			/* capture keeps the gesture reporting to the handle even when the cursor runs
@@ -163,7 +184,7 @@ export function useDraggableCard(enabled: boolean): DraggableCard {
 			event.preventDefault();
 			offset.current = clampOffset(
 				{ x: offset.current.x + dx, y: offset.current.y + dy },
-				measureBox(node, offset.current),
+				measureBase(node),
 				readViewport(),
 			);
 			applyOffset(node, offset.current);
@@ -177,29 +198,39 @@ export function useDraggableCard(enabled: boolean): DraggableCard {
 	   which was right while the card was pinned to the right corner and leaves a card
 	   dropped by the left edge of a wide window stranded in mid-sky. Written before the
 	   browser paints, or the first frame of the exit uses the fallback and jumps. */
-	useLayoutEffect(() => {
-		const node = card.current;
-		if (enabled || !node) return;
-		const rect = node.getBoundingClientRect();
-		const offLeft = -(rect.right + EXIT_CLEARANCE_PX);
-		const offRight = window.innerWidth - rect.left + EXIT_CLEARANCE_PX;
+	const writeExitDistance = useCallback((node: HTMLElement) => {
+		const base = measureBase(node);
+		const left = base.left + offset.current.x;
+		const offLeft = -(left + base.width + EXIT_CLEARANCE_PX);
+		const offRight = readViewport().width - left + EXIT_CLEARANCE_PX;
 		const exit = Math.abs(offLeft) <= offRight ? offLeft : offRight;
 		node.style.setProperty("--exit-x", `${Math.round(exit)}px`);
-	}, [enabled]);
+	}, []);
+
+	/* Coming back on stage is the other moment the remembered offset has to be checked:
+	   the card is unmounted for the whole time the form is up, so a window resized in
+	   between is never seen by the listener below. */
+	useLayoutEffect(() => {
+		const node = card.current;
+		if (!node) return;
+		if (enabled) offset.current = settle(node, offset.current);
+		else writeExitDistance(node);
+	}, [enabled, writeExitDistance]);
 
 	/* A card parked against an edge would end up outside a shrunken window — rotate a
-	   phone and it is gone for good — so the offset is pulled back in on every resize. */
+	   phone and it is gone for good — so the offset is pulled back in on every resize.
+	   Ungated: during the exit fade the music is still playing and the card still has to
+	   be on screen, and its remaining travel is re-measured from where the clamp left it. */
 	useEffect(() => {
-		if (!enabled) return;
 		const onResize = () => {
 			const node = card.current;
 			if (!node) return;
-			offset.current = clampOffset(offset.current, measureBox(node, offset.current), readViewport());
-			applyOffset(node, offset.current);
+			offset.current = settle(node, offset.current);
+			if (!enabled) writeExitDistance(node);
 		};
 		window.addEventListener("resize", onResize);
 		return () => window.removeEventListener("resize", onResize);
-	}, [enabled]);
+	}, [enabled, writeExitDistance]);
 
 	return { cardRef, handle: { onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp, onKeyDown } };
 }

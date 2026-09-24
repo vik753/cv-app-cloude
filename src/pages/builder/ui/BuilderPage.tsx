@@ -12,8 +12,11 @@ import { DayNightScene, SceneMusic } from "@/widgets/scene";
 import { AppFooter } from "@/widgets/app-footer";
 import { useMemo, useRef, useState } from "react";
 
-/* The entrance the preview arrives with, and the same number layout.css transitions the
-   columns over. Anything that has to happen once it has landed waits this long. */
+/* How long anything that measures the preview waits before it looks. The coupling is
+   with the entrance in layout.css — a 240ms opacity fade, with the column track
+   switching 200ms in — and the requirement is only that this outlasts it: a rect read
+   while the preview is still arriving describes a place it is no longer in. It is a
+   ceiling over those durations, not a copy of one, so it survives them being retuned. */
 const PREVIEW_ENTER_MS = 360;
 
 /* How much of the preview has to be on screen already for a scroll to be an
