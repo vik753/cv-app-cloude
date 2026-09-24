@@ -68,10 +68,15 @@ export function BuilderHeader({
 				</span>
 			</div>
 			<div className='header-center'>
-				<button className='header-download' type='button' onClick={() => window.print()}>
-					<DownloadSimple size={16} />
-					{t.download}
-				</button>
+				{/* The export is the browser's print dialog, and the two things that spoil a PDF
+				    most often are picking a printer instead of a file and leaving the browser's
+				    own date-and-address margins on — so the button says so before it is used. */}
+				<Tooltip label={t.downloadHint}>
+					<button className='header-download' type='button' onClick={() => window.print()}>
+						<DownloadSimple size={16} />
+						{t.download}
+					</button>
+				</Tooltip>
 				<Tooltip label={previewVisible ? t.previewHide : t.previewShow}>
 					<button
 						className={`preview-toggle${previewVisible ? " active" : ""}`}

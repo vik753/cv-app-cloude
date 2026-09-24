@@ -4,6 +4,7 @@ export interface Translation {
 	autoSave: string;
 	clear: string;
 	download: string;
+	downloadHint: string;
 	create: string;
 	notice: string;
 	completion: string;
@@ -117,6 +118,7 @@ export const translations: Record<Language, Translation> = {
 		autoSave: "Draft is saved automatically",
 		clear: "Clear",
 		download: "Download PDF",
+		downloadHint: "Opens the print dialog: choose “Save as PDF” and turn off headers and footers.",
 		create: "Create your resume",
 		notice: "Everything stays in this browser.",
 		completion: "complete",
@@ -220,6 +222,7 @@ export const translations: Record<Language, Translation> = {
 		autoSave: "Чернетка зберігається автоматично",
 		clear: "Очистити",
 		download: "Завантажити PDF",
+		downloadHint: "Відкриє вікно друку: оберіть «Зберегти як PDF» і вимкніть колонтитули.",
 		create: "Створіть своє резюме",
 		notice: "Усі дані залишаються у цьому браузері.",
 		completion: "заповнено",
