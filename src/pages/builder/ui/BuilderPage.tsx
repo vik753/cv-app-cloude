@@ -1,5 +1,6 @@
 import { computeCompletion } from "@/pages/builder/lib/completion";
 import { visibleFraction } from "@/pages/builder/lib/visibility";
+import { usePrintFileName } from "@/pages/builder/model/usePrintFileName";
 import type { BuilderView } from "@/pages/builder/types";
 import { BuilderHeader } from "@/pages/builder/ui/BuilderHeader";
 import { WelcomeGate } from "@/pages/builder/ui/WelcomeGate";
@@ -36,6 +37,7 @@ interface BuilderPageProps {
 
 export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm }: BuilderPageProps) {
 	const resume = useResumeStore((state) => state.resume);
+	usePrintFileName();
 	const updateField = useResumeStore((state) => state.updateField);
 	const updateExperience = useResumeStore((state) => state.updateExperience);
 	const updateResume = useResumeStore((state) => state.updateResume);
