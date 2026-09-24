@@ -17,10 +17,11 @@ describe("COMPACT_QUERY", () => {
 	   is the narrowest step, and that is the one this query has to name */
 	it("is the narrowest breakpoint panels.css lays the header out at", () => {
 		const css = stylesheets["/src/app/styles/panels.css"];
-		const headerWidths = css
-			.split("@media")
-			.filter((block) => block.includes(".app-header"))
-			.map((block) => widthOf(block.slice(0, block.indexOf("{"))))
+		/* each @media block with the rules nested one level inside it, so a plain rule
+		   after a block is never mistaken for part of it */
+		const headerWidths = [...css.matchAll(/@media([^{]*)\{((?:[^{}]*\{[^{}]*\})*)[^{}]*\}/g)]
+			.filter(([, , body]) => body.includes(".app-header"))
+			.map(([, query]) => widthOf(query))
 			.filter((width) => !Number.isNaN(width));
 		expect(headerWidths.length).toBeGreaterThan(0);
 		expect(Math.min(...headerWidths)).toBe(widthOf(COMPACT_QUERY));

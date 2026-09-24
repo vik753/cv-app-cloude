@@ -19,9 +19,10 @@ export default mergeConfig(
 			   jsdom's populate step install its working one, same as on older Node. */
 			execArgv: ["--no-experimental-webstorage"],
 			/* Vitest hands every stylesheet to a test as an empty string, `?raw` included.
-			   One file is let through, because a test holds a number in it to its copy in
-			   TypeScript (useCompactViewport.test.ts); everything else stays skipped. */
-			css: { include: [/src\/app\/styles\/panels\.css/] },
+			   One file's raw text is let through, because a test holds a number in it to its
+			   copy in TypeScript (useCompactViewport.test.ts). Only the `?raw` request: the
+			   stylesheet itself stays skipped, so no test's computed styles see it. */
+			css: { include: [/src\/app\/styles\/panels\.css\?raw/] },
 			coverage: {
 				provider: "v8",
 				reporter: ["text", "html"],

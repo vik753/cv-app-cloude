@@ -7,7 +7,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
    the sky here is an element whose getAnimations reports one, frozen at a known time. */
 const SKY_TIME_MS = 11_500; // a quarter of the 46s cycle
 
-function Figure({ draw }: { draw: (f: number, seconds: number) => void }) {
+interface FigureProps {
+	draw: (f: number, seconds: number) => void;
+}
+
+function Figure({ draw }: FigureProps) {
 	useCycleFrame(draw);
 	return null;
 }
