@@ -40,13 +40,17 @@ const PORT = 4173; // vite preview's own default; pinned (with --strictPort) so 
 const BASE_PATH = "/cv-app-cloude/"; // must match vite.config.ts `base` — nothing is served at "/"
 const URL_UNDER_TEST = `http://localhost:${PORT}${BASE_PATH}`;
 
-/* The two page widths the task asks for, in CSS pixels: A4 at 96dpi (210mm) and US
-   Letter at 96dpi (8.5in). Both are below the 900px breakpoint at which the on-screen
-   layout would stack into one column — irrelevant here only because `.print-workspace`
-   forces `display: block !important` under print regardless, but worth knowing. */
-const PAGE_WIDTHS = [
-	{ label: "A4", widthPx: 794 },
-	{ label: "Letter", widthPx: 816 },
+/* The printable areas to fit, in CSS pixels at 96dpi. The first two are whole sheets —
+   what a browser gives when it honours `@page { margin: 0 }`, as desktop Chrome does.
+   The last two are the same A4 sheet with the margins a browser imposes when it ignores
+   that rule, which mobile browsers routinely do: the only cases where the check can see
+   a sheet sized to the physical page overflow the area it is actually given. Testing
+   whole sheets alone is how a clipped, two-page mobile export got past this check. */
+const PAGE_AREAS = [
+	{ label: "A4", widthPx: 794, heightPx: 1123 },
+	{ label: "Letter", widthPx: 816, heightPx: 1056 },
+	{ label: "A4, 10mm margins", widthPx: 718, heightPx: 1047 },
+	{ label: "A4, 0.5in margins", widthPx: 698, heightPx: 1027 },
 ];
 
 /* One pixel, per the task's own tolerance ("within a pixel"). Kept as a named constant
@@ -180,7 +184,7 @@ async function waitForServer(url, child, timeoutMs = 30_000) {
  * mechanism bug 1 exploited, so a real render-visibility regression is what this must
  * catch, not merely "the markup is still in the DOM somewhere".
  */
-async function measureCombination(browser, { widthPx, previewOn, faultCss }) {
+async function measureCombination(browser, { widthPx, heightPx, previewOn, faultCss }) {
 	const page = await browser.newPage();
 	try {
 		/* runs before the build's own scripts on every navigation this page makes,
@@ -221,7 +225,7 @@ async function measureCombination(browser, { widthPx, previewOn, faultCss }) {
 			await page.addStyleTag({ content: faultCss });
 		}
 
-		await page.setViewport({ width: widthPx, height: 1400 });
+		await page.setViewport({ width: widthPx, height: heightPx });
 		await page.emulateMediaType("print");
 
 		const measured = await page.evaluate(() => {
@@ -234,7 +238,9 @@ async function measureCombination(browser, { widthPx, previewOn, faultCss }) {
 				left: rect.left,
 				right: rect.right,
 				width: rect.width,
+				bottom: rect.bottom,
 				innerWidth: globalThis.innerWidth,
+				innerHeight: globalThis.innerHeight,
 				previewOpacity: style.opacity,
 				previewVisibility: style.visibility,
 				renderedTextLength: preview.innerText.trim().length,
@@ -247,20 +253,25 @@ async function measureCombination(browser, { widthPx, previewOn, faultCss }) {
 
 		const overflowLeft = Math.max(0, -measured.left);
 		const overflowRight = Math.max(0, measured.right - measured.innerWidth);
+		/* past the bottom of the area is a second page, however little is on it */
+		const overflowBottom = Math.max(0, measured.bottom - measured.innerHeight);
 		const leftInset = measured.left;
 		const rightInset = measured.innerWidth - measured.right;
 		const insetDiff = Math.abs(leftInset - rightInset);
 
 		return {
 			widthPx,
+			heightPx,
 			previewOn,
 			...measured,
 			overflowLeft,
 			overflowRight,
+			overflowBottom,
 			leftInset,
 			rightInset,
 			insetDiff,
-			fitsPage: overflowLeft <= PIXEL_TOLERANCE && overflowRight <= PIXEL_TOLERANCE,
+			fitsPage:
+				overflowLeft <= PIXEL_TOLERANCE && overflowRight <= PIXEL_TOLERANCE && overflowBottom <= PIXEL_TOLERANCE,
 			insetsEqual: insetDiff <= PIXEL_TOLERANCE,
 			notBlank: measured.renderedTextLength > 0,
 		};
@@ -272,16 +283,17 @@ async function measureCombination(browser, { widthPx, previewOn, faultCss }) {
 function formatResult(pageLabel, result) {
 	const status = result.fitsPage && result.insetsEqual && result.notBlank ? "PASS" : "FAIL";
 	const lines = [
-		`[${status}] page=${pageLabel} (${result.widthPx}px) preview=${result.previewOn ? "on" : "off"}`,
+		`[${status}] page=${pageLabel} (${result.widthPx}x${result.heightPx}px) preview=${result.previewOn ? "on" : "off"}`,
 		`  paper: left=${result.leftInset.toFixed(1)} right=${result.rightInset.toFixed(1)} width=${result.width.toFixed(1)} ` +
 			`page-width=${result.widthPx} overflow-left=${result.overflowLeft.toFixed(1)} overflow-right=${result.overflowRight.toFixed(1)} ` +
-			`inset-diff=${result.insetDiff.toFixed(1)}`,
+			`overflow-bottom=${result.overflowBottom.toFixed(1)} inset-diff=${result.insetDiff.toFixed(1)}`,
 		`  content: rendered-text-length=${result.renderedTextLength} preview-opacity=${result.previewOpacity} preview-visibility=${result.previewVisibility}`,
 	];
 	if (!result.fitsPage) {
 		lines.push(
 			`  FAIL reason: sheet overflows the page (overflow-left=${result.overflowLeft.toFixed(1)}px, ` +
-				`overflow-right=${result.overflowRight.toFixed(1)}px, tolerance=${PIXEL_TOLERANCE}px)`,
+				`overflow-right=${result.overflowRight.toFixed(1)}px, overflow-bottom=${result.overflowBottom.toFixed(1)}px, ` +
+				`tolerance=${PIXEL_TOLERANCE}px)`,
 		);
 	}
 	if (!result.insetsEqual) {
@@ -346,9 +358,9 @@ async function main() {
 		);
 
 		const results = [];
-		for (const { label, widthPx } of PAGE_WIDTHS) {
+		for (const { label, widthPx, heightPx } of PAGE_AREAS) {
 			for (const previewOn of [false, true]) {
-				const result = await measureCombination(browser, { widthPx, previewOn, faultCss });
+				const result = await measureCombination(browser, { widthPx, heightPx, previewOn, faultCss });
 				results.push({ label, result });
 			}
 		}
