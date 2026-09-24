@@ -38,10 +38,14 @@ and those strings live in the i18n dictionaries, not inline in components.
 - **Type-check only:** `npm run typecheck`
 - **Lint:** `npm run lint`
 - **Test:** `npm run test` (Vitest)
+- **Print check:** `npm run print-check` — renders the production build under print media
+  at four page sizes; also a CI job
+- **Measure:** `npm run lighthouse` — see Performance below
 - **Preview build:** `npm run preview`
 - **Clean:** `rm -rf dist node_modules`
 
-Node 22, npm (the lockfile is `package-lock.json`). CI uses the same.
+Node 24, pinned in `.nvmrc`, npm (the lockfile is `package-lock.json`). Both workflows read
+`.nvmrc`, so CI uses the same.
 
 ## 🛠 Tech Stack
 
@@ -122,8 +126,8 @@ and `opacity` attributes directly; React renders each figure once. This is a con
 performance decision, not legacy. Do not "fix" it into React state — you will lose both
 the frame rate and the smoothness.
 
-**One cycle is 46 seconds.** `CYCLE_MS` appears in `useSceneClock`, `useDayNightCycle`
-and `DayNightScene`, and the CSS keyframes are authored against it. All copies must agree.
+**One cycle is 46 seconds.** `CYCLE_MS` appears in `useSceneClock` and `DayNightScene`,
+and the CSS keyframes are authored against it. All copies must agree.
 
 **Scene constants are tuned by eye.** `COMET_CUE_MS`, `BANNER_FONT_MIN`, `STAR_COUNT`
 and their neighbours were picked to make the picture look right. They are not arbitrary

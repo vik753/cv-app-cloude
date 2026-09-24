@@ -61,12 +61,15 @@ The next wave does not begin until the reviewer has accepted the previous one.
    `shared` and styles → `widgets/scene` → `entities`/`features`/`pages`.
    Each wave ends with a full check run and a review.
 4. **Performance** — `frontend-dev` and `ui-styles`, measured by `qa-engineer`.
-   Target: Performance ≥ 85, with no visual loss and no regression in the other scores.
+   Opened to lift a Performance score of 35 to 85; that 35 turned out to be the dev
+   server with extensions loaded, and the deployed site scored 96. The stage was
+   narrowed to the scene's cost on the main thread and accepted on blocking time and
+   long tasks, not the score — see Performance in `CLAUDE.md`.
 5. **Consolidation** — `CLAUDE.md` brought in line with reality, `CLAUDE_STATUS.md`
    and `README.md` updated.
 
-The order is fixed. Tests before the refactor are the only way to tell "it moved"
-from "it broke".
+All five are done. The order was fixed: tests before the refactor are the only way to
+tell "it moved" from "it broke".
 
 ## What a task costs
 
