@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { RIVER_PATH } from "@/widgets/scene/lib/landscape";
 import type { CSSProperties } from "react";
 

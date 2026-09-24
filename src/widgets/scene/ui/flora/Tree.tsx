@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import type { Point } from "@/widgets/scene/lib/landscape";
 import { between } from "@/widgets/scene/ui/flora/planting";
 import { seededRandom } from "@/shared/lib";

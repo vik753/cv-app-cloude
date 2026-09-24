@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { APPLE_TREE, UPPER_BUSH, upperGround } from "@/widgets/scene/lib/landscape";
 import { lerp, presence, TAU } from "@/widgets/scene/lib/choreography";
 import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";

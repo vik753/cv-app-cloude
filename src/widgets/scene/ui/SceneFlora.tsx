@@ -1,5 +1,5 @@
 import { WheatField } from "@/widgets/scene/ui/SceneField";
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import {
 	APPLE_TREE,
 	BACK_RIDGE,

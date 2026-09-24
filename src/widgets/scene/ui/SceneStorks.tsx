@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
 import { TAU } from "@/widgets/scene/lib/choreography";
 import { HOMESTEAD } from "@/widgets/scene/lib/landscape";

@@ -1,4 +1,4 @@
-import { nextSeason, type Season } from "@/widgets/scene/model/useDayNightCycle";
+import { nextSeason, type Season } from "@/widgets/scene/lib/season";
 import { describe, expect, it } from "vitest";
 
 describe("nextSeason", () => {

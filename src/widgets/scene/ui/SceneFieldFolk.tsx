@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { upperGround } from "@/widgets/scene/lib/landscape";
 import { DRESSES } from "@/widgets/scene/ui/field-folk/dress";
 import { Reaper } from "@/widgets/scene/ui/field-folk/Reaper";

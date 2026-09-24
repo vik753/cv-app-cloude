@@ -71,8 +71,8 @@ src/
   widgets/
     scene/             the whole day/night scene (~4500 lines today)
       ui/              SceneCritters, SceneFlora, SceneField, ...
-      model/           routes, timings, useSceneClock, useDayNightCycle
-      lib/             landscape, catmull/lerp
+      model/           useSceneClock, useDraggableCard, sceneMotion
+      lib/             landscape, choreography (catmull/lerp), season
       assets/svg/      inline SVG geometry lifted out of the components
       types.ts index.ts
     app-footer/

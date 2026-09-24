@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /* Contract-level only: the scene is driven by requestAnimationFrame against a live
    CSS animation and by Math.random-seeded comets/stars/quotes. None of that is
-   stably assertable here (see useSceneClock.test.ts for the maths itself). What is
+   stably assertable here (see lib/choreography.test.ts for the maths itself). What is
    worth locking down is the contract every consumer relies on: it mounts and
    unmounts without throwing, and it actually reacts to its `active` prop. */
 describe("DayNightScene", () => {
