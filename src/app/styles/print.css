@@ -29,16 +29,17 @@
 	/* The page below the sheet's last line belongs to no element: only the root's
 	   background reaches it, so without these the last page of a long résumé is paper
 	   down to the quote and bare white beneath. The root cannot read --paper — the
-	   palette is set on .app-shell, below it — so each palette's paper is named here
-	   and must match tokens.css. Dark modes share their palette's paper. */
+	   palette is set on .app-shell, below it — so it takes the palette's named paper
+	   from :root, the same token --paper itself is set from. Dark modes share their
+	   palette's paper. */
 	html:has(.app-shell[data-palette="cream"]) {
-		background: #fbfaf5;
+		background: var(--paper-cream);
 	}
 	html:has(.app-shell[data-palette="blurple"]) {
-		background: #f3f5fe;
+		background: var(--paper-blurple);
 	}
 	html:has(.app-shell[data-palette="slate"]) {
-		background: #ffffff;
+		background: var(--paper-slate);
 	}
 
 	body {

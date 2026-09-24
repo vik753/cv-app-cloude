@@ -59,7 +59,8 @@ follows `prefers-color-scheme` live until the switch is used; a hand choice is s
 **Export** is `window.print()`. The print sheet takes the width it is given, capped at
 210mm, with its own 16mm padding, repeated on every page by `box-decoration-break:
 clone`; the root takes the palette's paper colour so the last page is paper to the
-bottom (those three colours are copies of `--paper` in `tokens.css`). Menus and tooltips
+bottom, reading the named `--paper-cream`/`-blurple`/`-slate` tokens on `:root` that each
+palette's `--paper` is itself set from. Menus and tooltips
 are hidden; the preview is forced visible even when toggled off on screen. For the
 length of a print the document title is the person's name (`Ihor_Korenets_CV`), which
 browsers use as the PDF's file name.
