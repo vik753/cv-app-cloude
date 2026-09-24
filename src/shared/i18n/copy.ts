@@ -55,6 +55,8 @@ export interface Translation {
 	/* the welcome button picks the brand's own name out in colour, so the sentence
 	   arrives here in three pieces rather than as one string */
 	welcomeStart: { before: string; brand: string; after: string };
+	/* the form's heading breaks onto a second, emphasised line */
+	formHeading: { lead: string; emphasis: string };
 	sceneStart: string;
 	sceneContinue: string;
 	sceneBack: string;
@@ -159,6 +161,7 @@ export const translations: Record<Language, Translation> = {
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
 		welcomeStart: { before: "Welcome to the ", brand: "not boring CV", after: ". Click to begin." },
+		formHeading: { lead: "Build a resume,", emphasis: "that gets noticed." },
 		sceneStart: "Start building your CV",
 		sceneContinue: "Continue CV",
 		sceneBack: "Back to the scene",
@@ -261,6 +264,7 @@ export const translations: Record<Language, Translation> = {
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
 		welcomeStart: { before: "Ласкаво просимо до ", brand: "не нудного CV", after: ". Натисніть, щоб почати." },
+		formHeading: { lead: "Зберіть резюме,", emphasis: "яке помітять." },
 		sceneStart: "Почати створювати CV",
 		sceneContinue: "Продовжити CV",
 		sceneBack: "Повернутися до сцени",

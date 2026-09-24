@@ -137,19 +137,9 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm }: Bu
 									<div className='form-card'>
 										<div className='form-hero'>
 											<h1>
-												{language === "en" ? (
-													<>
-														Build a resume,
-														<br />
-														<em>that gets noticed.</em>
-													</>
-												) : (
-													<>
-														Зберіть резюме,
-														<br />
-														<em>яке помітять.</em>
-													</>
-												)}
+												{t.formHeading.lead}
+												<br />
+												<em>{t.formHeading.emphasis}</em>
 											</h1>
 											<div className='completion'>
 												<strong>{completion.percent}%</strong>
