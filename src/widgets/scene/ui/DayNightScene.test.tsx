@@ -43,6 +43,29 @@ describe("DayNightScene", () => {
 		expect(() => unmount()).not.toThrow();
 	});
 
+	/* the welcome screen: CSS reads the attribute, SMIL has to be stopped by hand */
+	it("marks both layers paused and stops SMIL on every svg root while paused", () => {
+		const pause = vi.fn();
+		const unpause = vi.fn();
+		Object.assign(SVGSVGElement.prototype, { pauseAnimations: pause, unpauseAnimations: unpause });
+		try {
+			const { container, rerender } = render(<DayNightScene active={true} paused={true} language='en' />);
+			const layers = container.querySelectorAll("[data-paused='true']");
+			expect(layers).toHaveLength(2);
+			const roots = container.querySelectorAll("svg").length;
+			expect(roots).toBeGreaterThan(0);
+			expect(pause).toHaveBeenCalledTimes(roots);
+			expect(unpause).not.toHaveBeenCalled();
+
+			rerender(<DayNightScene active={true} paused={false} language='en' />);
+			expect(container.querySelectorAll("[data-paused]")).toHaveLength(0);
+			expect(unpause).toHaveBeenCalledTimes(roots);
+		} finally {
+			Reflect.deleteProperty(SVGSVGElement.prototype, "pauseAnimations");
+			Reflect.deleteProperty(SVGSVGElement.prototype, "unpauseAnimations");
+		}
+	});
+
 	it("renders the same landscape contract regardless of the selected language", () => {
 		const en = render(<DayNightScene active={true} language='en' />);
 		const uk = render(<DayNightScene active={true} language='uk' />);
