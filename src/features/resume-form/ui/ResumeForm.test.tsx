@@ -8,6 +8,11 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 
+/* jsdom decodes no images, so the shrinking itself is checked in a real browser; here
+   it is replaced, and what is tested is what the form does with its answer */
+const shrinkPhoto = vi.hoisted(() => vi.fn<(file: Blob) => Promise<string>>());
+vi.mock("@/features/resume-form/lib/photo", () => ({ shrinkPhoto }));
+
 const t = translations.en;
 
 /* ResumeForm is a controlled component: it reports every change upward and expects
@@ -173,5 +178,42 @@ describe("ResumeForm - languages", () => {
 		const chip = screen.getByText("French B1").closest("span")!;
 		await user.click(within(chip).getByRole("button", { name: t.remove }));
 		expect(screen.queryByText("French B1")).not.toBeInTheDocument();
+	});
+});
+
+describe("ResumeForm - photo", () => {
+	const pickPhoto = async (user: ReturnType<typeof userEvent.setup>) => {
+		const input = document.querySelector<HTMLInputElement>("input[type=file]")!;
+		await user.upload(input, new File(["x"], "me.jpg", { type: "image/jpeg" }));
+	};
+
+	it("stores the shrunk photo, not the file it was given", async () => {
+		shrinkPhoto.mockResolvedValueOnce("data:image/jpeg;base64,small");
+		const user = userEvent.setup();
+		render(<ControlledResumeForm />);
+		await pickPhoto(user);
+		expect(await screen.findByAltText(t.photoAdded)).toHaveAttribute("src", "data:image/jpeg;base64,small");
+		expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+	});
+
+	it("says so when the file cannot be read, and keeps the photo it had", async () => {
+		shrinkPhoto.mockRejectedValueOnce(new Error("not an image"));
+		const user = userEvent.setup();
+		render(<ControlledResumeForm initial={{ photo: "data:image/jpeg;base64,old" }} />);
+		await pickPhoto(user);
+		expect(await screen.findByRole("alert")).toHaveTextContent(t.photoError);
+		expect(screen.getByAltText(t.photoAdded)).toHaveAttribute("src", "data:image/jpeg;base64,old");
+	});
+
+	it("clears the message once a photo is read successfully", async () => {
+		shrinkPhoto.mockRejectedValueOnce(new Error("not an image"));
+		shrinkPhoto.mockResolvedValueOnce("data:image/jpeg;base64,good");
+		const user = userEvent.setup();
+		render(<ControlledResumeForm />);
+		await pickPhoto(user);
+		await screen.findByRole("alert");
+		await pickPhoto(user);
+		expect(await screen.findByAltText(t.photoAdded)).toHaveAttribute("src", "data:image/jpeg;base64,good");
+		expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 	});
 });

@@ -608,4 +608,13 @@
 	.app-body.preview-hidden .print-preview {
 		transition: none;
 	}
+	/* the menus grow in and shrink out; here they simply appear and go. Radix waits
+	   for an exit animation only when there is one, so none unmounts at once. The
+	   tooltips' twin of this rule sits beside their own animation, in ui.css. */
+	.palette-menu,
+	.header-menu,
+	.palette-menu[data-state="closed"],
+	.header-menu[data-state="closed"] {
+		animation: none;
+	}
 }

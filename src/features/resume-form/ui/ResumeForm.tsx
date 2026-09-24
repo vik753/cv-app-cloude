@@ -12,6 +12,7 @@ import {
 	type Resume,
 	type ResumeField,
 } from "@/entities/resume";
+import { shrinkPhoto } from "@/features/resume-form/lib/photo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera, Plus, Trash, X } from "@phosphor-icons/react";
 import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode } from "react";
@@ -137,16 +138,20 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 			selectSkillSuggestion(skillSuggestions[highlightedSkill].label);
 		}
 	};
+	const [photoFailed, setPhotoFailed] = useState(false);
 	const handlePhoto = (event: ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0];
+		const input = event.target;
+		const file = input.files?.[0];
 		if (!file) return;
-		const reader = new FileReader();
-		/* readAsDataURL resolves to a string, but the result is typed as a union: anything
-		   else has to be ignored rather than stringified into the saved draft. */
-		reader.onload = () => {
-			if (typeof reader.result === "string") onChange("photo", reader.result);
-		};
-		reader.readAsDataURL(file);
+		/* cleared so choosing the same file again after a failure still fires a change */
+		input.value = "";
+		shrinkPhoto(file).then(
+			(photo) => {
+				setPhotoFailed(false);
+				onChange("photo", photo);
+			},
+			() => setPhotoFailed(true),
+		);
 	};
 	const section = "border-b border-[#d7d8d0] py-8";
 	return (
@@ -171,7 +176,13 @@ export function ResumeForm({ resume, t, onChange, onExperienceChange, onResumeCh
 							)}
 						</span>
 						<strong className='text-[11px] text-[#30423b]'>{resume.photo ? t.photoAdded : t.photo}</strong>
-						<small className='mt-1 text-[9px] text-[#98a19a]'>{t.photoHint}</small>
+						{photoFailed ? (
+							<small className='mt-1 text-[9px] text-[var(--danger-text)]' role='alert'>
+								{t.photoError}
+							</small>
+						) : (
+							<small className='mt-1 text-[9px] text-[#98a19a]'>{t.photoHint}</small>
+						)}
 					</label>
 					<div className='grid gap-4 sm:grid-cols-2'>
 						<Field label={t.name} error={errors.name?.message}>

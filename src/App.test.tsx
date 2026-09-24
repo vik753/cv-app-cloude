@@ -99,6 +99,14 @@ describe("App", () => {
 		expect(printSpy).toHaveBeenCalledTimes(1);
 	});
 
+	it("explains the print dialog before Download opens it", async () => {
+		const user = userEvent.setup();
+		render(<App />);
+		await enterForm(user);
+		await user.hover(screen.getByRole("button", { name: /download pdf/i }));
+		expect(await screen.findByRole("tooltip")).toHaveTextContent(/save as pdf/i);
+	});
+
 	it("switches between light and dark mode", async () => {
 		const user = userEvent.setup();
 		render(<App />);

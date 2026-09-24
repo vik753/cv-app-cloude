@@ -4,6 +4,7 @@ export interface Translation {
 	autoSave: string;
 	clear: string;
 	download: string;
+	downloadHint: string;
 	create: string;
 	notice: string;
 	completion: string;
@@ -20,6 +21,7 @@ export interface Translation {
 	photo: string;
 	photoAdded: string;
 	photoHint: string;
+	photoError: string;
 	name: string;
 	position: string;
 	about: string;
@@ -54,6 +56,8 @@ export interface Translation {
 	/* the welcome button picks the brand's own name out in colour, so the sentence
 	   arrives here in three pieces rather than as one string */
 	welcomeStart: { before: string; brand: string; after: string };
+	/* the form's heading breaks onto a second, emphasised line */
+	formHeading: { lead: string; emphasis: string };
 	sceneStart: string;
 	sceneContinue: string;
 	sceneBack: string;
@@ -114,6 +118,7 @@ export const translations: Record<Language, Translation> = {
 		autoSave: "Draft is saved automatically",
 		clear: "Clear",
 		download: "Download PDF",
+		downloadHint: "Opens the print dialog: choose “Save as PDF” and turn off headers and footers.",
 		create: "Create your resume",
 		notice: "Everything stays in this browser.",
 		completion: "complete",
@@ -129,7 +134,8 @@ export const translations: Record<Language, Translation> = {
 		educationHint: "Add relevant learning",
 		photo: "Add photo",
 		photoAdded: "Photo added",
-		photoHint: "JPG or PNG · up to 2 MB",
+		photoHint: "JPG or PNG, any size",
+		photoError: "Could not read this image. Try another file.",
 		name: "Full name",
 		position: "Desired position",
 		about: "About you",
@@ -157,6 +163,7 @@ export const translations: Record<Language, Translation> = {
 		musicCredit: "Music:",
 		musicSource: "Played via the YouTube player. All rights belong to their owners.",
 		welcomeStart: { before: "Welcome to the ", brand: "not boring CV", after: ". Click to begin." },
+		formHeading: { lead: "Build a resume,", emphasis: "that gets noticed." },
 		sceneStart: "Start building your CV",
 		sceneContinue: "Continue CV",
 		sceneBack: "Back to the scene",
@@ -215,6 +222,7 @@ export const translations: Record<Language, Translation> = {
 		autoSave: "Чернетка зберігається автоматично",
 		clear: "Очистити",
 		download: "Завантажити PDF",
+		downloadHint: "Відкриє вікно друку: оберіть «Зберегти як PDF» і вимкніть колонтитули.",
 		create: "Створіть своє резюме",
 		notice: "Усі дані залишаються у цьому браузері.",
 		completion: "заповнено",
@@ -230,7 +238,8 @@ export const translations: Record<Language, Translation> = {
 		educationHint: "Додайте релевантне навчання",
 		photo: "Додати фото",
 		photoAdded: "Фото додано",
-		photoHint: "JPG або PNG · до 2 МБ",
+		photoHint: "JPG або PNG, будь-якого розміру",
+		photoError: "Не вдалося прочитати зображення. Спробуйте інший файл.",
 		name: "Ім'я та прізвище",
 		position: "Бажана посада",
 		about: "Коротко про себе",
@@ -258,6 +267,7 @@ export const translations: Record<Language, Translation> = {
 		musicCredit: "Музика:",
 		musicSource: "Відтворюється через плеєр YouTube. Усі права належать правовласникам.",
 		welcomeStart: { before: "Ласкаво просимо до ", brand: "не нудного CV", after: ". Натисніть, щоб почати." },
+		formHeading: { lead: "Зберіть резюме,", emphasis: "яке помітять." },
 		sceneStart: "Почати створювати CV",
 		sceneContinue: "Продовжити CV",
 		sceneBack: "Повернутися до сцени",

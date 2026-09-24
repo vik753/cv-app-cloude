@@ -25,6 +25,12 @@ textarea:focus-visible {
 .tooltip-content[data-state="closed"] {
 	animation: tooltip-out 110ms ease-in forwards;
 }
+@media (prefers-reduced-motion: reduce) {
+	.tooltip-content,
+	.tooltip-content[data-state="closed"] {
+		animation: none;
+	}
+}
 .tooltip-arrow {
 	fill: var(--tooltip-surface);
 }
