@@ -12,7 +12,7 @@ textarea:focus-visible {
 	max-width: 240px;
 	padding: 7px 11px;
 	border-radius: 8px;
-	background: var(--text);
+	background: var(--tooltip-surface);
 	color: var(--ground);
 	font: 11px var(--font-mono);
 	line-height: 1.45;
@@ -26,7 +26,7 @@ textarea:focus-visible {
 	animation: tooltip-out 110ms ease-in forwards;
 }
 .tooltip-arrow {
-	fill: var(--text);
+	fill: var(--tooltip-surface);
 }
 @keyframes tooltip-in {
 	from {

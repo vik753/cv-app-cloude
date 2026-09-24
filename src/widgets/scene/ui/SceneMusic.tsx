@@ -2,11 +2,11 @@ import { MUSIC } from "@/shared/config";
 import { useDraggableCard } from "@/widgets/scene/model/useDraggableCard";
 import { useEffect, useRef, useState } from "react";
 
-/* The tune that plays while the form is minimized and the scene has the stage.
-   It is streamed through YouTube's own embedded player rather than a file of our
-   own: nothing copyrighted lives in this repo and the plays count for the artist.
-   YouTube's terms require that player to stay visible and at least 200x200, so it
-   appears as a small card above the badge instead of playing invisibly. */
+/* The tune that plays while the scene has the screen to itself. It is streamed through
+   YouTube's own embedded player rather than a file of our own: nothing copyrighted
+   lives in this repo and the plays count for the artist. Their terms require that
+   player to stay visible and at least 200x200, which is why it rides in a card the
+   visitor can drag out of the way rather than playing out of sight. */
 const VIDEO_ID = MUSIC.videoId;
 
 /* quiet enough to sit under whatever else is going on, loud enough to follow */
@@ -61,7 +61,7 @@ const loadYouTubeApi = (): Promise<YouTubeApi> => {
 };
 
 interface SceneMusicProps {
-	/* true while the form is minimized */
+	/* true while the scene has the screen to itself */
 	playing: boolean;
 	label: string;
 	/* the accessible name of the grab handle */
@@ -80,11 +80,12 @@ export function SceneMusic({ playing, label, dragLabel }: SceneMusicProps) {
 	   exit keyframe owns the card's movement during the fade */
 	const { cardRef, handle } = useDraggableCard(playing);
 
-	/* minimizing brings the card back immediately; React allows this render-phase
+	/* stepping back onto the scene brings the card back at once; React allows this
+	   render-phase
 	   update and it avoids a second render from an effect */
 	if (playing && !mounted) setMounted(true);
 
-	/* creates the player on the first minimize and tears it down with the card */
+	/* creates the player the first time the card appears and tears it down with it */
 	useEffect(() => {
 		if (!mounted) return;
 		let cancelled = false;
@@ -92,7 +93,7 @@ export function SceneMusic({ playing, label, dragLabel }: SceneMusicProps) {
 			if (cancelled || !host.current || player.current) return;
 			player.current = new api.Player(host.current, {
 				videoId: VIDEO_ID,
-				/* autoplay rides on the click that minimized the form; browsers that
+				/* autoplay rides on the click that opened the scene; browsers that
 				   refuse it simply leave the play button for the viewer */
 				playerVars: { autoplay: 1, playsinline: 1, rel: 0, loop: 1, playlist: VIDEO_ID },
 				events: {
@@ -143,7 +144,15 @@ export function SceneMusic({ playing, label, dragLabel }: SceneMusicProps) {
 		/* on its way out the card is already unreachable by pointer, and `inert` says the
 		   same to the keyboard: without it the iframe holds the first tab stop for the
 		   whole exit fade, and Tab lands inside YouTube's player instead of the toolbar */
-		<div ref={cardRef} className={`scene-music${playing ? "" : " leaving"}`} aria-label={label} inert={!playing}>
+		/* a role, because a name on a plain div is ignored by assistive tech — this one
+		   was written and announced nowhere */
+		<div
+			ref={cardRef}
+			role='region'
+			className={`scene-music${playing ? "" : " leaving"}`}
+			aria-label={label}
+			inert={!playing}
+		>
 			{/* the drag listens here and not on the card: the iframe is cross-origin, so
 			    the moment the pointer crosses into it the events belong to YouTube and the
 			    gesture dies. A strip of our own keeps it */}

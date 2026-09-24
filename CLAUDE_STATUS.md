@@ -519,3 +519,96 @@ in a browser, thoroughly and with numbers, and committed on that basis. That is 
 honest state, and a reviewer should see them before this goes anywhere near `main`.
 
 **Not deployed.** GitHub Pages still serves the version from before all of it.
+
+## 2026-09-23 — the debts, and one blocker that must be fixed before `main`
+
+### Do not merge this branch yet
+
+**The draggable music card can end up entirely off screen.** YouTube's terms require
+their player to stay visible, so this is a licence problem and not only a bug. The review
+found two paths, both because the clamp only runs _during_ a gesture:
+
+- The resize effect in `useDraggableCard.ts` is gated on `enabled`, and `cardRef`
+  re-applies the stored offset on remount without clamping it. So: drag the card to the
+  left edge of a wide window, open the builder, resize the window or rotate the phone,
+  go back to the scene — the card mounts with a stale offset and renders outside the
+  viewport with the music playing. The comment above that effect names this exact
+  scenario as the reason it exists; the gate one line below is what lets it happen.
+- `measureBox` can be called inside the 400ms `music-in` keyframe, where the rect is
+  displaced by up to 320px, so the bounds are computed against a phantom base position.
+
+The fix, not yet written: re-clamp when a node attaches and when `enabled` turns true, and
+measure the base box from `offsetLeft`/`offsetTop` rather than from a rect a keyframe is
+in the middle of moving. `frontend-dev`'s zone.
+
+Everything else in the review was sound: no path loses a draft, `.sky-day`, `birch-gnaw`
+and the three `CYCLE_MS` copies are intact, the `localStorage` keys are unchanged, and no
+layer or public-API rule is broken. Two items it flagged as needing the owner's approval —
+`puppeteer-core` and the edits under `.claude/team/**` — had it; that is simply not
+visible from the commit history.
+
+### Closed today
+
+The print check (`npm run print-check`, four combinations, and it was proved by being made
+to fail); `scripts/` and the dotfiles have owners; the dead `preview-entering` state, the
+duplicated `Mode` union and a stale comment are gone; `visibleFraction` and `clampOffset`
+are tested, 133 tests now; the portalled menus and the tooltips see the theme; an open menu
+or tooltip no longer prints over the résumé; the hidden preview no longer holds a box.
+
+**Coverage, read properly.** 63% of statements overall, but that figure is dominated by
+the scene's figures, which are rAF-driven against a CSS animation and are deliberately not
+unit-tested. The layers that can be tested are in good shape — `widgets/scene/lib` and
+`shared/i18n` at 100%, `app` at 92% — and the real gap was the two functions written this
+week, made pure and exported _specifically_ to be testable and then not tested. Both are
+covered now; `visibility.ts` is at 100%.
+
+**Tooltips.** The surface is a token: `:root` resolves it to the old inversion so light
+mode is unchanged, and each dark palette overrides it with an off-white carrying its own
+cast. Contrast 11.5 / 12.2 / 9.0 to one against 11px type. The owner asked for light but
+not stark white, and the luminance drop is about a fifth from white.
+
+### Open questions for the owner
+
+- **The empty space under the form did not reproduce at the size described.** The hidden
+  panel really is huge — 1,467px on an empty draft, 3,040px on a filled one, because the
+  résumé rewraps to roughly a character a line in a zero-width track — but it shares a grid
+  row with the form and only lengthens the document when it is _taller_ than the form
+  column. On the shipped draft and on a realistic one it is not, and the document height
+  does not move; only a text-heavy draft showed a saving, of 487px. The fix is right in
+  mechanism and is worth keeping regardless, because it also stops the browser laying out a
+  full résumé at zero width on every keystroke. But if the owner measured ~1,300px, it was
+  with his own draft or at a width we did not try, and it is worth asking which.
+- **`useDayNightCycle` is dead code in a public API.** Nothing calls it since the entry-flow
+  redesign, yet `widgets/scene/index.ts` still exports it and the barrel's comment justifies
+  it by a consumer that no longer exists. It also holds the third of the three `CYCLE_MS`
+  copies, kept in sync by hand for a hook nobody calls. Deleting it needs the owner, and
+  `Season`/`nextSeason` live in the same file and are imported by 17 others, so they need a
+  home whose name is not a hook — a rename, and a separate commit.
+- **The colour mode is pinned to whatever the system said on the first visit.** `readMode`
+  consults `prefers-color-scheme` only when no key is stored, but the key is written on
+  every mount. The README promises the system preference is followed until the user says
+  otherwise. Fixing it means telling "seeded from the system" from "chosen by hand", which
+  lands squarely in the palette/mode double-storage gotcha `CLAUDE.md` says must be fixed in
+  both halves or neither.
+- **`CLAUDE.md` says Node 22.** `.nvmrc`, `package.json#engines`, both workflows and the new
+  README all say 24. The README is right.
+
+### Smaller, recorded rather than fixed
+
+- `PREVIEW_ENTER_MS = 360` is commented as "the same number layout.css transitions the
+  columns over". That number no longer exists in the stylesheet — the fade replaced it with
+  240ms in and 200ms out. The behaviour is accidentally still correct, because 360 > 240,
+  but the real coupling is now undocumented. This is the "two copies of a number" trap, and
+  it has already sprung once, silently.
+- `print-audit.mjs`'s blank-page signal is `innerText`, and its comment claims that comes
+  back empty for `display: none` as well as `visibility: hidden`. Only the second half is
+  true: `innerText` falls back to `textContent` for an unrendered element. It does not
+  weaken the check today, because print forces the preview to `display: block` and the other
+  two assertions are geometric — but the comment promises a guard it does not provide.
+- Tests worth having: nothing covers `DayNightScene`'s `paused` prop, and nothing walks the
+  `resume-canvas-scene === "off"` entry path — the returning-visitor branch.
+- `useSceneClock.test.ts` tests `lib/choreography`, not `useSceneClock`, and a comment in
+  `DayNightScene.test.tsx` points readers at it for "the maths itself", which makes the
+  misnomer load-bearing.
+- `.app-shell[data-palette="cream"][data-mode="light"]` does not exist; cream light falls
+  through to `:root`. It works, and it is why the tooltip token had to default there.

@@ -382,22 +382,47 @@
 /* visibility carries the fade's other half: at opacity 0 alone the panel keeps its
    buttons in the tab order, which is a focus stop in a panel nobody can see. It is
    switched at the far end of the fade on the way out and at the near end on the way
-   in, so it never clips the dissolve. */
+   in, so it never clips the dissolve.
+
+   display carries a third part, on the same schedule as the columns above: opacity and
+   visibility both leave the panel's box in the layout. Stacked on a phone that box is
+   still a grid item in the row, only squeezed into a track with no width, where the
+   résumé rewraps to roughly a character a line — 1,467px tall on an empty draft and
+   3,040px on a filled one, measured at 390px. Whenever that exceeds the form column it
+   sets the row's height, and the result is that much empty scroll below a page that
+   looks finished. Switching display off is a discrete change, so it needs
+   allow-discrete to be held back at all — without it display: none lands on the first
+   frame and the dissolve is a disappearance.
+
+   Coming back the other way display: block also lands on the first frame, which is
+   before the panel has ever been rendered, and a transition cannot start from a style
+   an element never had. @starting-style is where opacity 0 is written down for that
+   one frame, and it costs nothing on first paint because the preview starts switched
+   off: the panel's first render is always the one this fade is for. */
 .app-body .print-preview {
 	min-width: 0;
+	display: block;
 	opacity: 1;
 	visibility: visible;
 	transition:
 		opacity 240ms ease,
-		visibility 0s;
+		visibility 0s,
+		display 0s allow-discrete;
+}
+@starting-style {
+	.app-body .print-preview {
+		opacity: 0;
+	}
 }
 .app-body.preview-hidden .print-preview {
+	display: none;
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
 	transition:
 		opacity 200ms ease,
-		visibility 0s linear 200ms;
+		visibility 0s linear 200ms,
+		display 0s linear 200ms allow-discrete;
 }
 .form-column {
 	height: 100%;
@@ -462,9 +487,11 @@
 .form-card {
 	position: relative;
 }
-/* The scene's music comes from YouTube's own embedded player. Their terms require
-   it to stay visible and at least 200x200, so it sits as a small card above the
-   badge rather than playing out of sight. */
+/* The scene's music comes from YouTube's own embedded player. Their terms require it
+   to stay visible and at least 200x200, so it rides in a card the visitor can drag out
+   of the way rather than playing out of sight. The position below is only where the
+   card starts — the top right corner, clear of the header — and from the first drag
+   onwards useDraggableCard writes the card's own transform. */
 .scene-music {
 	position: fixed;
 	top: 20px;
@@ -574,9 +601,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.app-window {
-		transition: none;
-	}
 	/* a dissolve is motion too, and the answer to "less of it" is the new state at
 	   once rather than a gentler version of the same half-second */
 	.app-body.preview-hidden,

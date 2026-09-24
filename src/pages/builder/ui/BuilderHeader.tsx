@@ -1,8 +1,8 @@
 import { useCompactViewport } from "@/pages/builder/model/useCompactViewport";
-import type { Mode } from "@/pages/builder/types";
 import { HeaderMenu } from "@/pages/builder/ui/HeaderMenu";
 import { BrandLogo, Tooltip } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
+import type { Mode } from "@/entities/resume";
 import type { Palette } from "@/entities/resume";
 import { LanguageSwitcher } from "@/features/language-switch";
 import { PaletteSwitcher } from "@/features/palette-switch";
