@@ -81,9 +81,17 @@
 		padding: 0 !important;
 	}
 
+	/* The sheet fills the printable area rather than claiming the physical page. The
+	   @page rule asks for zero margins, and where a browser honours that the result is
+	   identical — but mobile browsers routinely ignore it and impose their own, and a
+	   sheet fixed at 210 x 297mm then overflows the narrower area: clipped on the right,
+	   spilled onto a second page. 100% and 100vh are the printable area, whatever
+	   margins the browser decided on; the sheet's own padding keeps the text off the
+	   edge either way. */
 	.print-paper {
-		width: 210mm;
-		min-height: 297mm;
+		width: 100%;
+		max-width: 210mm;
+		min-height: 100vh;
 		padding: 16mm !important;
 		margin: 0 auto;
 		box-shadow: none !important;
