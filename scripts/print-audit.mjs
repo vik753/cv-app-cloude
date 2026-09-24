@@ -180,9 +180,11 @@ async function waitForServer(url, child, timeoutMs = 30_000) {
  *
  * `.print-preview`'s `innerText` (never `textContent`) is the blank-page signal: unlike
  * `textContent`, `innerText` is computed from the actual render tree and comes back
- * empty for anything `visibility: hidden` or `display: none` — which is exactly the
- * mechanism bug 1 exploited, so a real render-visibility regression is what this must
- * catch, not merely "the markup is still in the DOM somewhere".
+ * empty for `visibility: hidden` descendants — which is exactly the mechanism bug 1
+ * exploited. It is not a guard against `display: none` on the preview itself: for an
+ * element that is not rendered at all, `innerText` falls back to `textContent` and
+ * returns the text anyway. That case is caught by the geometry instead: an unrendered
+ * sheet measures as a zero-size box at the left edge, so its insets cannot be equal.
  */
 async function measureCombination(browser, { widthPx, heightPx, previewOn, faultCss }) {
 	const page = await browser.newPage();

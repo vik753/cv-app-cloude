@@ -32,12 +32,9 @@ interface BuilderPageProps {
 	visitedForm: boolean;
 	onEnterScene: () => void;
 	onEnterForm: () => void;
-	/* the colour mode follows the system until the visitor picks one himself, and App
-	   is the one keeping that policy, so the choice is reported back up to it */
-	onModeChosen: () => void;
 }
 
-export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onModeChosen }: BuilderPageProps) {
+export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm }: BuilderPageProps) {
 	const resume = useResumeStore((state) => state.resume);
 	const updateField = useResumeStore((state) => state.updateField);
 	const updateExperience = useResumeStore((state) => state.updateExperience);
@@ -123,10 +120,7 @@ export function BuilderPage({ view, visitedForm, onEnterScene, onEnterForm, onMo
 								onTogglePreview={togglePreview}
 								onBackToScene={onEnterScene}
 								mode={mode}
-								onModeChange={(nextMode) => {
-									setMode(nextMode);
-									onModeChosen();
-								}}
+								onModeChange={setMode}
 								palette={palette}
 								onPaletteChange={setPalette}
 								language={language}

@@ -2,15 +2,15 @@ import { useSyncExternalStore } from "react";
 
 /* The width at which the toolbar stops fitting on one line. It is the 560px the
    stylesheets already speak in (layout.css, panels.css), and the two have to keep
-   agreeing: CSS lays the header out, this decides what is in it. Nothing checks that
-   for us — no test reads a computed style.
+   agreeing: CSS lays the header out, this decides what is in it. The test beside this
+   file holds the two together by reading the header's media query out of panels.css.
 
    This answers for the toolbar and nothing else. The preview's scroll used to ride the
    same boolean and no longer does: whether the preview needs scrolling to is a question
    about where it is on screen, not about how wide the window is, so it asks the element
    instead (`visibleFraction`, in lib/visibility.ts). One number in two places is already
    one too many. */
-const COMPACT_QUERY = "(max-width: 560px)";
+export const COMPACT_QUERY = "(max-width: 560px)";
 
 const subscribe = (onChange: () => void) => {
 	const query = window.matchMedia(COMPACT_QUERY);

@@ -1,6 +1,6 @@
 import { Tooltip, usePortalContainer } from "@/shared/ui";
 import type { Language, Translation } from "@/shared/i18n";
-import type { Mode, Palette } from "@/entities/resume";
+import { isMode, type Mode, type Palette } from "@/entities/resume";
 import { LanguageOptions } from "@/features/language-switch";
 import { PaletteOptions } from "@/features/palette-switch";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -65,7 +65,7 @@ export function HeaderMenu({
 					<DropdownMenu.RadioGroup
 						aria-label={t.mode}
 						value={mode}
-						onValueChange={(value) => onModeChange(value as Mode)}
+						onValueChange={(value) => isMode(value) && onModeChange(value)}
 					>
 						{MODES.map((option) => (
 							<DropdownMenu.RadioItem key={option} className='palette-menu-item header-menu-item' value={option}>

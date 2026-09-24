@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { HOMESTEAD, upperGround } from "@/widgets/scene/lib/landscape";
 import { ease, onRoute, presence, TAU, type Waypoint } from "@/widgets/scene/lib/choreography";
 import { set, show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";

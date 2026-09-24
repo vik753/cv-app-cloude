@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { show, useCycleFrame } from "@/widgets/scene/model/useSceneClock";
 import { lerp } from "@/widgets/scene/lib/choreography";
 import { BANDS, BIND_LAG, FIELD, fieldRow, mownAt } from "@/widgets/scene/lib/landscape";

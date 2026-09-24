@@ -1,4 +1,4 @@
-import type { Season } from "@/widgets/scene/model/useDayNightCycle";
+import type { Season } from "@/widgets/scene/lib/season";
 import { Kid } from "@/widgets/scene/ui/children/Kid";
 import { ICE_LOOKS, LOOKS, type Outfit } from "@/widgets/scene/ui/children/looks";
 import {

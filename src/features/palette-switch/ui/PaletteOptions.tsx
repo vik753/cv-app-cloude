@@ -1,5 +1,5 @@
 import type { Translation } from "@/shared/i18n";
-import type { Palette } from "@/entities/resume";
+import { isPalette, type Palette } from "@/entities/resume";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Check } from "@phosphor-icons/react";
 
@@ -31,7 +31,7 @@ export function PaletteOptions({ palette, t, onChange }: PaletteOptionsProps) {
 		<DropdownMenu.RadioGroup
 			aria-label={t.palette}
 			value={palette}
-			onValueChange={(value) => onChange(value as Palette)}
+			onValueChange={(value) => isPalette(value) && onChange(value)}
 		>
 			{THEMES.map((theme) => (
 				<DropdownMenu.RadioItem key={theme} className='palette-menu-item' value={theme}>

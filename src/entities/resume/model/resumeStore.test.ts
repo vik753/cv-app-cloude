@@ -135,10 +135,62 @@ describe("resumeStore persistence contract", () => {
 		expect(useResumeStore.getState().palette).toBe("cream");
 	});
 
-	it("reads a saved mode from its own legacy key when no draft has been persisted yet", async () => {
-		localStorage.setItem("resume-canvas-mode", "dark");
+	it("restores a mode chosen with the switch from resume-canvas-mode-v2", async () => {
+		localStorage.setItem("resume-canvas-mode-v2", "dark");
 		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
 		expect(useResumeStore.getState().mode).toBe("dark");
+		expect(useResumeStore.getState().modeChosen).toBe(true);
+	});
+
+	/* the unversioned key was written on every load, so it records the first visit, not a
+	   choice — honouring it is what pinned everyone to the system's scheme of that day */
+	it("ignores the unversioned mode key and removes it", async () => {
+		localStorage.setItem("resume-canvas-mode", "dark");
+		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
+		expect(useResumeStore.getState().mode).toBe("light");
+		expect(useResumeStore.getState().modeChosen).toBe(false);
+		expect(localStorage.getItem("resume-canvas-mode")).toBeNull();
+	});
+
+	it("writes the palette and the chosen mode to their own keys", async () => {
+		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
+		useResumeStore.getState().setPalette("slate");
+		useResumeStore.getState().setMode("dark");
+		expect(localStorage.getItem("resume-canvas-palette")).toBe("slate");
+		expect(localStorage.getItem("resume-canvas-mode-v2")).toBe("dark");
+	});
+
+	it("keeps the palette and the mode out of the draft's blob", async () => {
+		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
+		useResumeStore.getState().setPalette("slate");
+		useResumeStore.getState().setMode("dark");
+		useResumeStore.getState().updateField("name", "Someone");
+		expect(Object.keys(readPersistedEnvelope(localStorage.getItem("resume-canvas-draft-v2")!).state)).toEqual([
+			"resume",
+		]);
+	});
+
+	/* drafts saved before the blob was narrowed still carry both, and must not win */
+	it("lets the palette's own key win over a stale copy in an old draft blob", async () => {
+		localStorage.setItem("resume-canvas-palette", "slate");
+		localStorage.setItem(
+			"resume-canvas-draft-v2",
+			JSON.stringify({ state: { resume: { ...initialResume, name: "Kept" }, palette: "blurple", mode: "dark" } }),
+		);
+		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
+		expect(useResumeStore.getState().palette).toBe("slate");
+		expect(useResumeStore.getState().mode).toBe("light");
+		expect(useResumeStore.getState().resume.name).toBe("Kept");
+	});
+
+	it("follows the system until the switch is used, and ignores it after", async () => {
+		const { useResumeStore } = await import("@/entities/resume/model/resumeStore");
+		useResumeStore.getState().followSystemMode("dark");
+		expect(useResumeStore.getState().mode).toBe("dark");
+		expect(localStorage.getItem("resume-canvas-mode-v2")).toBeNull();
+		useResumeStore.getState().setMode("light");
+		useResumeStore.getState().followSystemMode("dark");
+		expect(useResumeStore.getState().mode).toBe("light");
 	});
 
 	it("falls back to the system color scheme when no mode is saved anywhere", async () => {

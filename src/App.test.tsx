@@ -59,6 +59,24 @@ describe("App", () => {
 		expect(screen.queryByRole("button", { name: /welcome to the not boring cv/i })).not.toBeInTheDocument();
 	});
 
+	/* the switch predates the entry flow: whoever turned the background off is not
+	   dropped onto a scene, even with nothing typed yet */
+	it("opens straight in the form for someone who switched the scene off, draft or not", () => {
+		localStorage.setItem("resume-canvas-scene", "off");
+		render(<App />);
+		expect(screen.getByRole("button", { name: /download pdf/i })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /welcome to the not boring cv/i })).not.toBeInTheDocument();
+	});
+
+	it("remembers the scene as off once the form is open, and as on once back on the scene", async () => {
+		const user = userEvent.setup();
+		render(<App />);
+		await enterForm(user);
+		expect(localStorage.getItem("resume-canvas-scene")).toBe("off");
+		await user.click(screen.getByRole("button", { name: /back to the scene/i }));
+		expect(localStorage.getItem("resume-canvas-scene")).toBe("on");
+	});
+
 	it("shows and hides the live preview", async () => {
 		const user = userEvent.setup();
 		render(<App />);

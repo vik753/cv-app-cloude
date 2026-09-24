@@ -5,7 +5,6 @@
 @media print {
 	.print-paper {
 		background: var(--paper) !important;
-		backdrop-filter: none !important;
 	}
 }
 

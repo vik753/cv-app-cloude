@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /* Contract-level only: the scene is driven by requestAnimationFrame against a live
    CSS animation and by Math.random-seeded comets/stars/quotes. None of that is
-   stably assertable here (see useSceneClock.test.ts for the maths itself). What is
+   stably assertable here (see lib/choreography.test.ts for the maths itself). What is
    worth locking down is the contract every consumer relies on: it mounts and
    unmounts without throwing, and it actually reacts to its `active` prop. */
 describe("DayNightScene", () => {
@@ -41,6 +41,29 @@ describe("DayNightScene", () => {
 	it("does not throw on unmount while active (timers and listeners tear down cleanly)", () => {
 		const { unmount } = render(<DayNightScene active={true} language='en' />);
 		expect(() => unmount()).not.toThrow();
+	});
+
+	/* the welcome screen: CSS reads the attribute, SMIL has to be stopped by hand */
+	it("marks both layers paused and stops SMIL on every svg root while paused", () => {
+		const pause = vi.fn();
+		const unpause = vi.fn();
+		Object.assign(SVGSVGElement.prototype, { pauseAnimations: pause, unpauseAnimations: unpause });
+		try {
+			const { container, rerender } = render(<DayNightScene active={true} paused={true} language='en' />);
+			const layers = container.querySelectorAll("[data-paused='true']");
+			expect(layers).toHaveLength(2);
+			const roots = container.querySelectorAll("svg").length;
+			expect(roots).toBeGreaterThan(0);
+			expect(pause).toHaveBeenCalledTimes(roots);
+			expect(unpause).not.toHaveBeenCalled();
+
+			rerender(<DayNightScene active={true} paused={false} language='en' />);
+			expect(container.querySelectorAll("[data-paused]")).toHaveLength(0);
+			expect(unpause).toHaveBeenCalledTimes(roots);
+		} finally {
+			Reflect.deleteProperty(SVGSVGElement.prototype, "pauseAnimations");
+			Reflect.deleteProperty(SVGSVGElement.prototype, "unpauseAnimations");
+		}
 	});
 
 	it("renders the same landscape contract regardless of the selected language", () => {

@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/vitest";
 
 /* jsdom implements neither matchMedia nor the Web Animations API. Both are read by
    production code that behaves correctly in every real browser (`resumeStore`'s
-   `readMode`, and `useSceneClock`'s `.sky-day` clock via `Element.getAnimations`);
+   `readSystemMode`, and `useSceneClock`'s `.sky-day` clock via `Element.getAnimations`);
    without a stub here, mounting anything that touches them throws in tests for a
    reason no real user would ever hit. Returning "no animation running" / "no
    preference" is also exactly what keeps `useCycleFrame`'s rAF loop from starting

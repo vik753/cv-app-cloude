@@ -38,10 +38,14 @@ and those strings live in the i18n dictionaries, not inline in components.
 - **Type-check only:** `npm run typecheck`
 - **Lint:** `npm run lint`
 - **Test:** `npm run test` (Vitest)
+- **Print check:** `npm run print-check` — renders the production build under print media
+  at four page sizes; also a CI job
+- **Measure:** `npm run lighthouse` — see Performance below
 - **Preview build:** `npm run preview`
 - **Clean:** `rm -rf dist node_modules`
 
-Node 22, npm (the lockfile is `package-lock.json`). CI uses the same.
+Node 24, pinned in `.nvmrc`, npm (the lockfile is `package-lock.json`). Both workflows read
+`.nvmrc`, so CI uses the same.
 
 ## 🛠 Tech Stack
 
@@ -122,8 +126,8 @@ and `opacity` attributes directly; React renders each figure once. This is a con
 performance decision, not legacy. Do not "fix" it into React state — you will lose both
 the frame rate and the smoothness.
 
-**One cycle is 46 seconds.** `CYCLE_MS` appears in `useSceneClock`, `useDayNightCycle`
-and `DayNightScene`, and the CSS keyframes are authored against it. All copies must agree.
+**One cycle is 46 seconds.** `CYCLE_MS` appears in `useSceneClock` and `DayNightScene`,
+and the CSS keyframes are authored against it. All copies must agree.
 
 **Scene constants are tuned by eye.** `COMET_CUE_MS`, `BANNER_FONT_MIN`, `STAR_COUNT`
 and their neighbours were picked to make the picture look right. They are not arbitrary
@@ -132,7 +136,7 @@ and do not get "cleaned up".
 **`localStorage` keys are a contract with real users.** The live draft key is
 `resume-canvas-draft-v2`, written by the Zustand `persist` middleware.
 `resume-canvas-draft-v1` is read once, by `readLegacyDraft`, to migrate drafts written
-before the shape changed. Alongside them: `resume-canvas-palette`, `resume-canvas-mode`,
+before the shape changed. Alongside them: `resume-canvas-palette`, `resume-canvas-mode-v2`,
 `resume-canvas-scene` and `resume-canvas-language`. Renaming any of them silently throws
 away someone's saved work. Changing the draft shape means bumping the version suffix and
 migrating the old key, not editing it in place.
@@ -144,14 +148,16 @@ and any v1 draft without an email was discarded whole. Fixed, and guarded by a t
 asserting `resumeSchema.safeParse(initialResume)` succeeds. Tighten a field here and you
 must check it against `initialResume`, or you reintroduce the same class of data loss.
 
-**The palette and mode are stored twice, and one copy is dead.** `resumeStore` has no
-`partialize`, so `persist` sweeps the whole state — including `palette` and `mode` — into
-`resume-canvas-draft-v2`, while `readPalette`/`readMode` seed them from their own keys and
-`App.tsx` writes those keys by hand. But `merge` lets the persisted blob win, so the
-standalone keys are written by three places and effectively read by none. Harmless today
-because every writer agrees. It stops being harmless the moment someone adds `partialize`
-to tidy the duplication: `readPalette` becomes load-bearing again and the read order
-starts to matter. Fix both halves together or neither.
+**The palette and the mode each live in one key, and only there.** The draft blob is
+narrowed to the draft by `partialize`, and `merge` takes `resume` out of it by name, so
+older blobs that still carry a palette and a mode cannot override anything. `setPalette`
+and `setMode` are the only writers; `readPalette` and `readChosenMode` the only readers.
+A stored mode means the visitor chose it with the switch — without one the app follows
+`prefers-color-scheme`, live, through `followSystemMode`, which does nothing once
+`modeChosen` is true. That is why the key is `resume-canvas-mode-v2`: the unversioned
+`resume-canvas-mode` was written on every load, so it recorded the first visit rather than
+a choice, and it is removed on sight instead of migrated. Do not bring back a write on
+mount: the moment the key is written without a choice, everyone is pinned again.
 
 **Printing is the export.** Anything under `@media print` is load-bearing product
 behaviour. Verify printing after touching layout.
@@ -196,9 +202,7 @@ welcome screen freezes it — each animation loop draws one frame and stops.
 The bundle is one chunk, about 640 kB raw and 200 kB gzipped, and stays that way
 deliberately: 322 KiB transferred, blocking time 0 and TTI 1.1 s on the deployed site mean
 code splitting would fix nothing. The stylesheet carries 52 `@keyframes` and two animating
-`filter` declarations in `scene/weather.css`. One `backdrop-filter` survives —
-`none !important` on `.print-paper` — and it is a leftover cancel that now cancels
-nothing. The frosted-glass surfaces that used to composite over the moving scene are gone,
+`filter` declarations in `scene/weather.css`, and no `backdrop-filter` at all. The frosted-glass surfaces that used to composite over the moving scene are gone,
 because the form never has a scene behind it any more.
 
 When measuring by hand, use a clean Chrome profile and the production build. Extensions

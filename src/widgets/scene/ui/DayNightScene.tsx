@@ -6,7 +6,7 @@ import { SceneSmoke } from "@/widgets/scene/ui/SceneSmoke";
 import { StorkWedge } from "@/widgets/scene/ui/SceneStorks";
 import { GroundWeather, SkyWeather } from "@/widgets/scene/ui/SceneWeather";
 import { ScenePausedContext } from "@/widgets/scene/model/sceneMotion";
-import { nextSeason, type Season } from "@/widgets/scene/model/useDayNightCycle";
+import { nextSeason, type Season } from "@/widgets/scene/lib/season";
 import type { Language } from "@/shared/i18n";
 import { RIVER_PATH } from "@/widgets/scene/lib/landscape";
 import { quotes, type Quote } from "@/shared/config";

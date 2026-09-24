@@ -1,7 +1,7 @@
 import { AppProviders } from "@/app/providers/AppProviders";
 import { initialResume, useResumeStore } from "@/entities/resume";
 import { BuilderPage, type BuilderView } from "@/pages/builder";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const readSceneEnabled = (): boolean => {
 	const saved = localStorage.getItem("resume-canvas-scene");
@@ -19,41 +19,29 @@ const hasSavedDraft = (): boolean => JSON.stringify(useResumeStore.getState().re
    off — dropping that one onto a scene is the opposite of honouring the switch. */
 const readInitialView = (): BuilderView => (readSceneEnabled() && !hasSavedDraft() ? "welcome" : "form");
 
-/* The composition root: the providers the whole tree sits in, the preferences that
-   outlive a page — palette, mode and the scene switch — and which of the three entry
-   states is on screen. The page below renders them but does not own them; keeping the
-   writes here also keeps them running after the page's own effects, which is where they
-   have always run. */
+/* The composition root: the providers the whole tree sits in, the scene switch, the
+   system's colour scheme, and which of the three entry states is on screen. The palette
+   and the mode are the store's to keep; the page below renders them. */
 export function App() {
-	const palette = useResumeStore((state) => state.palette);
-	const mode = useResumeStore((state) => state.mode);
-	const setMode = useResumeStore((state) => state.setMode);
+	const followSystemMode = useResumeStore((state) => state.followSystemMode);
 	const [view, setView] = useState<BuilderView>(readInitialView);
 	/* the button over the scene reads "Continue" to anyone who has seen the form already */
 	const [visitedForm, setVisitedForm] = useState(() => view === "form");
-	useEffect(() => {
-		localStorage.setItem("resume-canvas-palette", palette);
-		localStorage.setItem("resume-canvas-mode", mode);
-	}, [mode, palette]);
 	/* the stored preference keeps precisely its old meaning: the form is the one state
 	   with no animated background behind it */
 	useEffect(() => {
 		localStorage.setItem("resume-canvas-scene", view === "form" ? "off" : "on");
 	}, [view]);
 	/* The form used to take its colour mode from the sky; with the scene switched off
-	   behind it that source is gone, so it follows the operating system instead. The
-	   switch in the header still wins: once it has been used, the system is not
-	   consulted again. The store's own reader supplies the mode this session opens on. */
-	const chosenByHand = useRef(false);
+	   behind it that source is gone, so it follows the operating system instead — live,
+	   not only on load. The switch in the header wins: once it has been used, the store
+	   ignores the system, this session and every later one. */
 	useEffect(() => {
 		const query = window.matchMedia("(prefers-color-scheme: dark)");
-		const follow = (event: MediaQueryListEvent) => {
-			if (chosenByHand.current) return;
-			setMode(event.matches ? "dark" : "light");
-		};
+		const follow = (event: MediaQueryListEvent) => followSystemMode(event.matches ? "dark" : "light");
 		query.addEventListener("change", follow);
 		return () => query.removeEventListener("change", follow);
-	}, [setMode]);
+	}, [followSystemMode]);
 
 	return (
 		<AppProviders>
@@ -64,9 +52,6 @@ export function App() {
 				onEnterForm={() => {
 					setView("form");
 					setVisitedForm(true);
-				}}
-				onModeChosen={() => {
-					chosenByHand.current = true;
 				}}
 			/>
 		</AppProviders>

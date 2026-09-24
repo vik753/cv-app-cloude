@@ -26,3 +26,23 @@ jobs:
         run: npm run test
       - name: Build
         run: npm run build
+
+  # Printing is the export, and nothing in the unit suite can see a printed page. This
+  # renders the production build under print media at A4, US Letter and two margined
+  # page sizes, and fails if the sheet is blank, clipped or spills onto a second page.
+  # A job of its own so a print failure is named as one, and so it runs beside `check`
+  # rather than after it. The runner's own Chrome is used; nothing is downloaded.
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Print check
+        run: npm run print-check
